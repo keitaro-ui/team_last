@@ -30,7 +30,6 @@ void SceneGame::Initialize()
 	sprite = new Sprite("Data/Sprite/レティクル.png");
 	sprite_number = new Sprite("Data/Sprite/number.png");
 	sprite_text = new Sprite("Data/Sprite/残り時間.png");
-	RoadModel();
 	
 
 	//カメラ初期設定
@@ -122,7 +121,6 @@ void SceneGame::Update(float elapsedTime)
 	cameraController->Update(elapsedTime);
 
 	player->Update(elapsedTime);
-	targetCheck();
 
 	//ステージ更新処理
 	stage->Update(elapsedTime);
@@ -232,18 +230,4 @@ void SceneGame::DrawGUI()
 	//player->DrawDebugGUI();
 
 	
-}
-void SceneGame::targetCheck()
-{
-	if (answer == 0)
-		count_1++;
-	else if (answer == 1)
-		count_2++;
-	else if (answer == 2)
-		count_3++;
-	else if (answer == 3)
-		count_4++;
-
-	answer = -1;
-
 }

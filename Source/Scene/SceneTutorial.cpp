@@ -10,7 +10,6 @@
 #include "SceneTitle.h"
 #include "SceneGame.h"
 #include "SceneLoading.h"
-#include "SceneGameproject.h"
 
 
 // 初期化
@@ -28,8 +27,6 @@ void SceneTutorial::Initialize()
 	sprite3 = new Sprite("Data/Sprite/チュートリアル解答.png");
 
 	//レティクル関数
-	SceneGame::RoadModel();
-	
 	
 	//カメラ初期設定
 	Graphics& graphics = Graphics::Instance();
@@ -182,7 +179,7 @@ void SceneTutorial::Update(float elapsedTime)
 		//シーン遷移
 		if (gamePad.GetButtonDown() & anyButton)
 		{
-			SceneManager::Instance().ChangeScene(new SceneLoading(new SceneGameproject));
+			SceneManager::Instance().ChangeScene(new SceneLoading(new SceneGame));
 		}
 		break;
 	};

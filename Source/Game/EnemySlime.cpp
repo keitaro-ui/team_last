@@ -45,7 +45,7 @@ void EnemySlime::Update(float elapsedTime)
 //•`‰æˆ—
 void EnemySlime::Render(const RenderContext& rc, ModelRenderer* renderer)
 {
-	renderer->Render(rc, transform, models[model_index], ShaderId::Lambert);
+	//renderer->Render(rc, transform, models[model_index], ShaderId::Lambert);
 
 }
 
