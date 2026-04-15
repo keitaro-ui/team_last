@@ -20,16 +20,16 @@ extern int answer, count_1, count_2, count_3, count_4;
 void SceneGame::Initialize()
 {
 	//ステージ初期化
-	stage = new Stage();
+	stage = std::make_unique<Stage>();
 	game_timer = 15;
 
 	//プレイヤー初期化
-	player = new Player();
+	player = std::make_unique<Player>();
 
 	//モデル読み込み
-	sprite = new Sprite("Data/Sprite/レティクル.png");
-	sprite_number = new Sprite("Data/Sprite/number.png");
-	sprite_text = new Sprite("Data/Sprite/残り時間.png");
+	sprite = std::make_unique<Sprite>("Data/Sprite/レティクル.png");
+	sprite_number = std::make_unique<Sprite>("Data/Sprite/number.png");
+	sprite_text = std::make_unique<Sprite>("Data/Sprite/残り時間.png");
 	
 
 	//カメラ初期設定
@@ -47,8 +47,8 @@ void SceneGame::Initialize()
 		1000.0f//クリップ距離（遠）
 	);
 	//カメラコントローラー初期化
-	cameraController = new CameraController();
-	player->cameraController = cameraController;
+	cameraController = std::make_unique<CameraController>();
+	player->cameraController = cameraController.get();
 
 	//エネミー初期化
 	EnemyManager& enemyManager = EnemyManager::Instance();
@@ -85,26 +85,6 @@ void SceneGame::Finalize()
 {
 	Input::Instance().GetMouse().Unlock();
 
-	//カメラコントローラー終了化
-	if (cameraController != nullptr)
-	{
-		delete cameraController;
-		cameraController = nullptr;
-	}
-
-	//ステージ終了化
-	if (stage != nullptr)
-	{
-		delete stage;
-		stage = nullptr;
-	}
-
-	//プレイヤー終了化
-	if (player != nullptr)
-	{
-		delete player;
-		player = nullptr;
-	}
 	//エネミー終了化
 	EnemyManager::Instance().Clear();
 
@@ -126,6 +106,7 @@ void SceneGame::Update(float elapsedTime)
 	stage->Update(elapsedTime);
 
 	//プレイヤー更新処理
+	player->Update(elapsedTime);
 
 	//エネミー更新処理
 	EnemyManager::Instance().Update(elapsedTime);
@@ -138,8 +119,8 @@ void SceneGame::Update(float elapsedTime)
 
 	//game_timer++;
 
-	game_timer -= elapsedTime;
 
+	//game_timer -= elapsedTime;
 	if (game_timer < 0)
 	//if (gamePad.GetButtonDown() & anyButton)
 	{

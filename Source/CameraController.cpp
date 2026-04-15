@@ -27,8 +27,10 @@ void CameraController::Update(float elapsedTime)
 	float ax = mouseDeltaPosX * movePower;
 	float ay = mouseDeltaPosY * movePower;
 	
-	angle.x -= ay * 0.2f;
-	angle.y += ax * 0.2f;
+	float senci = 0.02f;
+
+	angle.x -= ay * senci;
+	angle.y += ax * senci;
 
 
 	//X²‚ÌƒJƒƒ‰‰ñ“]‚ğ§ŒÀ
@@ -40,7 +42,8 @@ void CameraController::Update(float elapsedTime)
 	{
 		angle.x = maxAngleX;
 	}
-
+	
+	//Y²‚ÌƒJƒƒ‰‰ñ“]‚ğ§ŒÀ
 	if (angle.y < minAngleY)
 	{
 		angle.y = minAngleY;
@@ -48,17 +51,6 @@ void CameraController::Update(float elapsedTime)
 	if (angle.y > maxAngleY)
 	{
 		angle.y = maxAngleY;
-	}
-
-
-	//Y²‚Ì‰ñ“]’l‚ğ-3.14`3.14‚Éû‚Ü‚é‚æ‚¤‚É‚·‚é
-	if (angle.y < -DirectX::XM_PI)
-	{
-		angle.y += DirectX::XM_2PI;
-	}
-	if (angle.y > DirectX::XM_PI)
-	{
-		angle.y -= DirectX::XM_2PI;
 	}
 
 	//ƒJƒƒ‰‰ñ“]’l‚ğ‰ñ“]s—ñ‚É•ÏŠ·

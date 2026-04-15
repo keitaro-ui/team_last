@@ -32,16 +32,18 @@ public:
 private:
 	float game_timer;
 
-	Stage* stage = nullptr;
+	//Stage* stage = nullptr;
+	std::unique_ptr<Stage> stage = nullptr;
 
-	Player* player = nullptr;
+	//Player* player = nullptr;
+	std::unique_ptr<Player> player = nullptr;
 
 	//ƒŒƒeƒBƒNƒ‹ŠÖ”
-	Sprite* sprite = nullptr;
-	Sprite* sprite_number = nullptr;
-	Sprite* sprite_text = nullptr;
+	std::unique_ptr<Sprite> sprite = nullptr;
+	std::unique_ptr<Sprite> sprite_number = nullptr;
+	std::unique_ptr<Sprite> sprite_text = nullptr;
 
-	CameraController* cameraController = nullptr;
+	std::unique_ptr<CameraController> cameraController = nullptr;
 public:
 
 };
