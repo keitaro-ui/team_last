@@ -44,14 +44,14 @@ void CameraController::Update(float elapsedTime)
 	}
 	
 	//Y軸のカメラ回転を制限
-	if (angle.y < minAngleY)
+	/*if (angle.y < minAngleY)
 	{
 		angle.y = minAngleY;
 	}
 	if (angle.y > maxAngleY)
 	{
 		angle.y = maxAngleY;
-	}
+	}*/
 
 	//カメラ回転値を回転行列に変換
 	DirectX::XMMATRIX Transform = DirectX::XMMatrixRotationRollPitchYaw(angle.x, angle.y, angle.z);

@@ -26,8 +26,8 @@ public:
 	void DrawGUI() override;
 
 private:
-	Sprite* sprite = nullptr;
-	Sprite* sprite2 = nullptr;
-	Sprite* sprite3 = nullptr;
+	std::unique_ptr<Sprite> sprite = nullptr;
+	std::unique_ptr<Sprite> sprite2 = nullptr;
+	std::unique_ptr<Sprite> sprite3 = nullptr;
 	
 };

@@ -12,9 +12,6 @@
 #include "System/Audio.h"
 
 
-int answer = -1, count_1, count_2, count_3, count_4;
-
-
 //ƒRƒ“ƒXƒgƒ‰ƒNƒ^
 Player::Player()
 {
@@ -267,7 +264,7 @@ void Player::DrawDebugGUI()
 //•`‰æˆ—
 void Player::Render(const RenderContext& rc, ModelRenderer* renderer)
 {
-	renderer->Render(rc, transform, model, ShaderId::Lambert);
+	//renderer->Render(rc, transform, model, ShaderId::Lambert);
 
 	//’eŠÛ•`‰æˆ—
 	projectileManager.Render(rc, renderer);
@@ -397,8 +394,6 @@ void Player::CollisionProjectilesVsEnemies()
 				enemy->GetRadius(),
 				outPosition))
 			{
-				answer = enemy->model_index;
-
 				//ƒ_ƒ[ƒW‚ð—^‚¦‚é
 				if (enemy->ApplyDamage(1, 0.5f))
 				{

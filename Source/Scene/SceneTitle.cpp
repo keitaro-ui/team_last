@@ -12,12 +12,11 @@
 void SceneTitle::Initialize()
 {
 	//スプライト初期化
-	sprite = new Sprite("Data/Sprite/title.png");
-    sprite2 = new Sprite("Data/Sprite/start.png");
-    sprite3 = new Sprite("Data/Sprite/tutorial.png");
+	sprite = std::make_unique<Sprite>("Data/Sprite/title.png");
+    sprite2 = std::make_unique<Sprite>("Data/Sprite/start.png");
+    sprite3 = std::make_unique<Sprite>("Data/Sprite/tutorial.png");
 
     ShowCursor(true);
-    //extern int count_1=0,count_2=0,count_3=0,count_4=0
 }
 
 extern POINT cursorPos;
@@ -25,15 +24,7 @@ extern POINT cursorPos;
 //終了化
 void SceneTitle::Finalize()
 {
-	//スプライト終了化
-	if (sprite != nullptr)
-	{
-		delete sprite;
-		sprite = nullptr;
-	}
-
-    ShowCursor(false);
-	
+    ShowCursor(false);	
 }
 
 //更新処理
