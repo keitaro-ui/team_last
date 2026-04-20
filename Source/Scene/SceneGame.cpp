@@ -21,6 +21,8 @@ void SceneGame::Initialize()
 {
 	//ステージ初期化
 	stage = std::make_unique<Stage>();
+	stage->SetPosition(DirectX::XMFLOAT3(10, 0, 10));
+
 	game_timer = 15;
 
 	//プレイヤー初期化

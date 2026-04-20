@@ -22,7 +22,7 @@
     <Filter Include="Source\Game">
       <UniqueIdentifier>{66dbbbe2-fa44-458f-a1b2-89ae4b089b72}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Scene">
+    <Filter Include="Source\Game\Scene">
       <UniqueIdentifier>{463505d5-151d-4786-bb26-dfcf8f6a1725}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -159,32 +159,32 @@
     <ClInclude Include="Source\Game\Player.h">
       <Filter>Source\Game</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Game\Stage.h">
-      <Filter>Source\Game</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Scene\Scene.h">
-      <Filter>Source\Scene</Filter>
+      <Filter>Source\Game\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scene\SceneGame.h">
-      <Filter>Source\Scene</Filter>
+      <Filter>Source\Game\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scene\SceneLoading.h">
-      <Filter>Source\Scene</Filter>
+      <Filter>Source\Game\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scene\SceneManager.h">
-      <Filter>Source\Scene</Filter>
+      <Filter>Source\Game\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scene\SceneTitle.h">
-      <Filter>Source\Scene</Filter>
+      <Filter>Source\Game\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Source\Game\Character.h">
       <Filter>Source\Game</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scene\SceneResult.h">
-      <Filter>Source\Scene</Filter>
+      <Filter>Source\Game\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scene\SceneTutorial.h">
-      <Filter>Source\Scene</Filter>
+      <Filter>Source\Game\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Game\Stage.h">
+      <Filter>Source\Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -306,28 +306,28 @@
       <Filter>Source\Game</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scene\Main.cpp">
-      <Filter>Source\Scene</Filter>
+      <Filter>Source\Game\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scene\SceneGame.cpp">
-      <Filter>Source\Scene</Filter>
+      <Filter>Source\Game\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scene\SceneLoading.cpp">
-      <Filter>Source\Scene</Filter>
+      <Filter>Source\Game\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scene\SceneManager.cpp">
-      <Filter>Source\Scene</Filter>
+      <Filter>Source\Game\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scene\SceneTitle.cpp">
-      <Filter>Source\Scene</Filter>
+      <Filter>Source\Game\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Source\Game\Character.cpp">
       <Filter>Source\Game</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scene\SceneResult.cpp">
-      <Filter>Source\Scene</Filter>
+      <Filter>Source\Game\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scene\SceneTutorial.cpp">
-      <Filter>Source\Scene</Filter>
+      <Filter>Source\Game\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

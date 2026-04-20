@@ -7,8 +7,8 @@
 #include <imgui.h>
 #include "SceneTitle.h"
 
-extern int board_answer, count_1, count_2, count_3, count_4;
-int result = -1, point = 0;
+//extern int board_answer, count_1, count_2, count_3, count_4;
+//int result = -1, point = 0;
 
 //初期化
 void SceneResult::Initialize()
@@ -97,11 +97,11 @@ void SceneResult::Render()
 	) const
 		*/
 
-		int n[2]{};
+		//int n[2]{};
 		//n[0] = point / 100 % 10;
-		n[0] = point / 10 % 10;
-		n[1] = point % 10;
-		if (point <= 0)
+		//n[0] = point / 10 % 10;
+		//n[1] = point % 10;
+		/*if (point <= 0)
 		{
 			for (int i = 0; i < 2; i++)
 			{
@@ -128,7 +128,7 @@ void SceneResult::Render()
 					0,
 					1, 1, 1, 1);
 			}
-		}
+		}*/
 	}
 }
 
@@ -142,38 +142,38 @@ void SceneResult::DrawGUI()
 
 void SceneResult::answerCheck()
 {
-	if (board_answer == 1 || board_answer == 4 || board_answer == 5 || board_answer == 20)
-		result = 0;
+	//if (board_answer == 1 || board_answer == 4 || board_answer == 5 || board_answer == 20)
+	//	result = 0;
 
-	 if (board_answer == 2 || board_answer == 8 || board_answer == 10 || board_answer == 12 ||
-	board_answer == 15 || board_answer == 17 || board_answer == 19)
-	result = 1;
+	// if (board_answer == 2 || board_answer == 8 || board_answer == 10 || board_answer == 12 ||
+	//board_answer == 15 || board_answer == 17 || board_answer == 19)
+	//result = 1;
 
-	 if (board_answer == 9 || board_answer == 11 || board_answer == 14 || board_answer == 18)
-	result = 2;
+	// if (board_answer == 9 || board_answer == 11 || board_answer == 14 || board_answer == 18)
+	//result = 2;
 
-	 if (board_answer == 3 || board_answer == 6 || board_answer == 7 || board_answer == 13 ||
-		board_answer == 16)
-		result = 3;
+	// if (board_answer == 3 || board_answer == 6 || board_answer == 7 || board_answer == 13 ||
+	//	board_answer == 16)
+	//	result = 3;
 
-	//最終ポイント
-	if (result == 0)
-	{
-		point = count_1 * 2 - count_2 - count_3 - count_4;
-	}
-	else if (result == 1)
-	{
-		point = count_2 * 2 - count_1 - count_3 - count_4;
-	}
-	else if (result == 2)
-	{
-		point = count_3 * 2 - count_2 - count_1 - count_4;
-	}
-	else if (result == 3)
-	{
-		point = count_4 * 2 - count_2 - count_3 - count_1;
-	}
+	////最終ポイント
+	//if (result == 0)
+	//{
+	//	point = count_1 * 2 - count_2 - count_3 - count_4;
+	//}
+	//else if (result == 1)
+	//{
+	//	point = count_2 * 2 - count_1 - count_3 - count_4;
+	//}
+	//else if (result == 2)
+	//{
+	//	point = count_3 * 2 - count_2 - count_1 - count_4;
+	//}
+	//else if (result == 3)
+	//{
+	//	point = count_4 * 2 - count_2 - count_3 - count_1;
+	//}
 
-	board_answer = -1;
+	//board_answer = -1;
 
 }
