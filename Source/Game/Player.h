@@ -80,6 +80,9 @@ private:
 
     bool showcussor = false;
 
+    //“–‚½‚è”»’è‚Ì”¼Œa
+    float hitRadius = 0.55f;
+
 public:
     CameraController* cameraController = nullptr;
 
@@ -104,5 +107,5 @@ public:
         showcussor = value;
     }
 
-
+    float GethitRadius() { return hitRadius; }
 };

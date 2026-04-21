@@ -145,6 +145,7 @@ void SceneGame::Update(float elapsedTime)
 
 	//プレイヤー更新処理
 	player->Update(elapsedTime);
+	player->SetPosition(physics.CircleVsStage(player->GetPosition(), player->GethitRadius()));
 
 	//エネミー更新処理
 	EnemyManager::Instance().Update(elapsedTime);
