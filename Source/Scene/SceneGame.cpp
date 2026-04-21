@@ -13,15 +13,12 @@
 #include "SceneLoading.h"
 #include "SceneResult.h"
 
-//float game_timer;
-extern int answer, count_1, count_2, count_3, count_4;
-
 // 初期化
 void SceneGame::Initialize()
 {
 	//ステージ初期化
 	stage = std::make_unique<Stage>();
-	stage->SetPosition(DirectX::XMFLOAT3(10, 0, 10));
+	stage->SetPosition(DirectX::XMFLOAT3(10, -5, 10));
 
 	game_timer = 15;
 
@@ -54,28 +51,67 @@ void SceneGame::Initialize()
 
 	//エネミー初期化
 	EnemyManager& enemyManager = EnemyManager::Instance();
-	for (int i = 0; i < 35; i++)
+	//EnemySlime* target = new EnemySlime();
+	//enemyManager.Register(target);
+
+	//当たり判定
 	{
-		EnemySlime* target = new EnemySlime();
+		xDis = 9.0f;
+		zDis = 6.6f;
+		//debugDoorSize = 2.5f;
+		blockSize = { 3.0f, 0.0f, 1.6f };
 
-		Board* board = new Board();
+		//外枠
+		physics.AddObb({ 0, 0, 0 }, { xDis, 0, zDis }, 0);
 
-		//エネミー位置
-		std::random_device rd;
-		std::mt19937 gen(rd());
-		std::uniform_real_distribution<float>dist (-4.0f, 4.0f);
-		std::uniform_real_distribution<float>dist2(0.5f, 4.0f);
-		std::uniform_real_distribution<float>dist3(5.0f, 10.0f);
+		//int map[5][6] =
+		//{
+		//	// 1列目
+		//	{ 1, 1, 0, 1, 1, 1 },
 
-		target->SetPosition(DirectX::XMFLOAT3(dist(gen), dist2(gen), dist3(gen)));
-		target->SetAngle(DirectX::XMFLOAT3(0, DirectX::XM_PI, 0));
-		
+		//	// 2列目
+		//	{ 1, -1, 1, 0, 0, -1 },
 
-		board->SetPosition(DirectX::XMFLOAT3(0, 1.0f, 3));
-		board->SetAngle(DirectX::XMFLOAT3(0, DirectX::XM_PI, 0));
-		
-		enemyManager.Register(target);
-		//enemyManager.Register(board);
+		//	// 3列目
+		//	{ 1, 1, 1, 0, 1, 1 },
+
+		//	// 4列目
+		//	{ -1, 0, -1, 1, 1, 0 },
+
+		//	// 5列目
+		//	{ 0, 1, 0, -1, 0, 1 }
+		//};
+
+		//for (int z = 0; z < 5; z++)
+		//{
+		//	for (int x = 0; x < 6; x++)
+		//	{
+		//		DirectX::XMFLOAT3 pos = { -22.5f + x * xDis, 0.0f, zDis * (2 - z) };
+
+		//		int v = map[z][x];
+
+		//		if (v == 0)
+		//		{
+		//			// 壁
+		//			physics.AddObb(pos, blockSize, 0.0f);
+		//		}
+		//		else
+		//		{
+		//			// ドアの方向
+		//			//DirectX::XMFLOAT3 dir = { 0, 0, (float)v };
+		//			//physics.AddDoorObb(pos, blockSize, 0.0f, dir, debugDoorSize, 3.05f);
+		//		}
+		//	}
+		//}
+
+		//通路塞ぐ壁
+		{
+			/*physics.AddObb({ -22.5f + 3 * xDis, 0.0f, zDis * 1.5f }, blockSize, 0.0f);
+			physics.AddObb({ -22.5f + 3 * xDis, 0.0f, zDis * 0.5f }, blockSize, 0.0f);
+
+			physics.AddObb({ -22.5f + 2 * xDis, 0.0f, zDis * -0.5f }, blockSize, 0.0f);
+			physics.AddObb({ 0.0f, 0.0f, 0.0f }, blockSize, 0.0f);*/
+		}
 	}
 
 	//マウス位置の取得とロック
@@ -173,8 +209,10 @@ void SceneGame::Render()
 		//player->RenderDebugPrimitive(rc, shapeRenderer);
 
 		//エネミーデバッグプリミティブ描画
-		EnemyManager::Instance();
-			//.RenderDebugPrimitive(rc, shapeRenderer);
+		//EnemyManager::Instance().RenderDebugPrimitive(rc, shapeRenderer);
+
+		//当たり判定デバッグプリミティブ描画
+		physics.RenderDebugPrimitive(rc, shapeRenderer);
 	}
 
 	// 2Dスプライト描画
@@ -212,5 +250,10 @@ void SceneGame::DrawGUI()
 	//プレーヤーデバッグ処理
 	//player->DrawDebugGUI();
 
-	
+	ImGui::Begin("Debug");
+
+	ImGui::DragFloat("xDis", &xDis, 0.1f);
+	ImGui::DragFloat("zDis", &zDis, 0.1f);
+
+	ImGui::End();
 }

@@ -6,6 +6,8 @@
 #include "DirectXMath.h"
 #include "Scene.h"
 #include "System/Sprite.h"
+#include <PhysicsSystem2d.h>
+#include "imgui.h"
 
 // ÉQÅ[ÉÄÉVÅ[Éì
 class SceneGame : public Scene
@@ -44,6 +46,12 @@ private:
 	std::unique_ptr<Sprite> sprite_text = nullptr;
 
 	std::unique_ptr<CameraController> cameraController = nullptr;
+
+	//ìñÇΩÇËîªíË
+	PhysicsSystem2d physics;
+	float xDis = 0.0f;
+	float zDis = 0.0f;
+	DirectX::XMFLOAT3 blockSize = {0.0f, 0.0f, 0.0f};
 public:
 
 };

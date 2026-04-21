@@ -12,6 +12,13 @@ public:
 	ShapeRenderer(ID3D11Device* device);
 	~ShapeRenderer() {}
 
+	void RenderLine(
+		const RenderContext& rc,
+		const DirectX::XMFLOAT3& start,
+		const DirectX::XMFLOAT3& end,
+		const DirectX::XMFLOAT4& color
+	)const;
+
 	// ” •`‰æ
 	void RenderBox(
 		const RenderContext& rc,
@@ -43,6 +50,17 @@ public:
 		float height,
 		const DirectX::XMFLOAT4& color) const;
 
+	// ‰~‚ğ•`‰æ
+	void RenderCircle(
+		const RenderContext& rc,
+		const DirectX::XMFLOAT3& position,
+		float radius,
+		const DirectX::XMFLOAT4& color) const;
+
+	void DrawQuad(const RenderContext& rc, float x, float y, float width, float height, const DirectX::XMFLOAT4& color);
+
+	void RenderPoint2D(const RenderContext& rc, float x, float y, float size, const DirectX::XMFLOAT4& color);
+
 private:
 	struct Mesh
 	{
@@ -55,6 +73,7 @@ private:
 		DirectX::XMFLOAT4X4		worldViewProjection;
 		DirectX::XMFLOAT4		color;
 	};
+
 	// •`‰æÀs
 	void Render(const RenderContext& rc, const Mesh& mesh, const DirectX::XMFLOAT4X4& transform, const DirectX::XMFLOAT4& color) const;
 
@@ -63,6 +82,9 @@ private:
 
 	// ” ƒƒbƒVƒ…ì¬
 	void CreateBoxMesh(ID3D11Device* device, float width, float height, float depth);
+
+	// üì¬
+	void CreateLineMesh(ID3D11Device* device);
 
 	// ‹…ƒƒbƒVƒ…ì¬
 	void CreateSphereMesh(ID3D11Device* device, float radius, int subdivisions);
@@ -73,7 +95,9 @@ private:
 	// ‰~’Œ
 	void CreateCylinderMesh(ID3D11Device* device, float radius1, float radius2, float start, float height, int subdivisions);
 
+
 private:
+	Mesh										lineMesh;
 	Mesh										boxMesh;
 	Mesh										sphereMesh;
 	Mesh										halfSphereMesh;
@@ -82,4 +106,5 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11PixelShader>	pixelShader;
 	Microsoft::WRL::ComPtr<ID3D11InputLayout>	inputLayout;
 	Microsoft::WRL::ComPtr<ID3D11Buffer>		constantBuffer;
+
 };
