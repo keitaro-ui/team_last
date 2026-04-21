@@ -192,6 +192,9 @@
     <ClInclude Include="Source\SoundManager.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Game\PlayerManager.h">
+      <Filter>Source\Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="External\imgui-docking\imgui.cpp">
@@ -340,6 +343,9 @@
     </ClCompile>
     <ClCompile Include="Source\SoundManager.cpp">
       <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Game\PlayerManager.cpp">
+      <Filter>Source\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
