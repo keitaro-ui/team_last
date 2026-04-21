@@ -56,8 +56,8 @@ void SceneGame::Initialize()
 
 	//“–‚½‚è”»’è
 	{
-		xDis = 9.0f;
-		zDis = 6.6f;
+		xDis = 900.0f;
+		zDis = 600.0f;
 		//debugDoorSize = 2.5f;
 		blockSize = { 3.0f, 0.0f, 1.6f };
 
