@@ -68,6 +68,7 @@ void Player::Update(float elapsedTime)
 	//弾丸と敵の衝突処理
 	CollisionProjectilesVsEnemies();
 
+	
 	//マウス操作
 	SStws();
 
@@ -88,6 +89,27 @@ void Player::Update(float elapsedTime)
 	}
 
 	//mouse.Update();
+	Mouse& mouse = Input::Instance().GetMouse();
+	static bool prevRight = false;
+
+	bool nowRight = (mouse.GetButtonDown() & Mouse::BTN_RIGHT) != 0;
+
+	// 押した瞬間だけ反転
+	if (nowRight && !prevRight)
+	{
+		showcussor = !showcussor;
+	}
+
+	// ShowCursorは状態が変わったときだけ呼ぶのが安全
+	static bool prevShow = false;
+	if (showcussor != prevShow)
+	{
+		ShowCursor(showcussor);
+		prevShow = showcussor;
+	}
+
+	prevRight = nowRight;
+
 }
 
 //移動入力処理
@@ -442,6 +464,8 @@ void Player::SStws()
 
 	w_pos = { STORE.x,STORE.y,STORE.z };
 }
+
+
 
 //着地したときに呼ばれる
 void Player::OnLanding()

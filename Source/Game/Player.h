@@ -78,6 +78,8 @@ private:
 
     float v_angle = 0;
 
+    bool showcussor = false;
+
 public:
     CameraController* cameraController = nullptr;
 
@@ -89,5 +91,18 @@ public:
     //std::chrono::system_clock::time_point minutes;
 
     void coolgun(float elapsedTime);
+
+    // Getter
+    bool GetShowCursor() const
+    {
+        return showcussor;
+    }
+
+    // Setter
+    void SetShowCursor(bool value)
+    {
+        showcussor = value;
+    }
+
 
 };
