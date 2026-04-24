@@ -29,6 +29,8 @@ void SceneGame::Initialize()
 	sprite = std::make_unique<Sprite>("Data/Sprite/レティクル.png");
 	sprite_number = std::make_unique<Sprite>("Data/Sprite/number.png");
 	sprite_text = std::make_unique<Sprite>("Data/Sprite/残り時間.png");
+
+	spriteUI = std::make_unique<Sprite>("Data/Sprite/ok.png");
 	
 
 	//カメラ初期設定
@@ -115,7 +117,7 @@ void SceneGame::Initialize()
 	}
 
 	//マウス位置の取得とロック
-	Input::Instance().GetMouse().Lock();
+	//Input::Instance().GetMouse().Lock();
 }
 
 // 終了化
@@ -164,6 +166,18 @@ void SceneGame::Update(float elapsedTime)
 	//if (gamePad.GetButtonDown() & anyButton)
 	{
 		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult));
+	}
+
+
+	if (player.get()->GetPrev() == false)
+	{
+		//マウス位置の取得とロック
+		Input::Instance().GetMouse().Lock();
+		cameraController->MouseCamera(elapsedTime);
+	}
+	else
+	{
+		Input::Instance().GetMouse().Unlock();
 	}
 
 }
@@ -218,6 +232,8 @@ void SceneGame::Render()
 
 	// 2Dスプライト描画
 	{
+		//RenderUI(rc);
+
 		sprite->Render(rc,
 			610, 335, 0, 64.0f, 64.0f,
 			0,
@@ -249,7 +265,7 @@ void SceneGame::Render()
 void SceneGame::DrawGUI()
 {
 	//プレーヤーデバッグ処理
-	//player->DrawDebugGUI();
+	player->DrawDebugGUI();
 
 	ImGui::Begin("Debug");
 
@@ -257,4 +273,42 @@ void SceneGame::DrawGUI()
 	ImGui::DragFloat("zDis", &zDis, 0.1f);
 
 	ImGui::End();
+}
+
+void SceneGame::RenderUI(RenderContext rc)
+{
+	// スクリーンサイズ取得
+	float screenWidth = Graphics::Instance().GetScreenWidth();
+	float screenHeight = Graphics::Instance().GetScreenHeight();
+
+	Camera& camera = Camera::Instance();
+	DirectX::XMMATRIX view = DirectX::XMLoadFloat4x4(&camera.GetView());
+	DirectX::XMMATRIX projection = DirectX::XMLoadFloat4x4(&camera.GetProjection());
+	DirectX::XMMATRIX world = DirectX::XMMatrixIdentity();
+
+	DirectX::XMFLOAT3 plyPos = player.get()->GetPosition();
+	plyPos.y += 2.0f;
+
+	DirectX::XMVECTOR worldPlyPos = DirectX::XMLoadFloat3(&plyPos);
+
+	DirectX::XMVECTOR screenPlyPos, screenPly2Pos;
+	screenPlyPos = DirectX::XMVector3Project(
+		worldPlyPos,
+		0.0f, 0.0f, screenWidth, screenHeight,
+		0.0f, 1.0f, projection, view, world
+	);
+
+	DirectX::XMFLOAT2 screenPlyPosition;
+	DirectX::XMStoreFloat2(&screenPlyPosition, screenPlyPos);
+
+	//ゲージ描画
+	const float gaugeWidth = 120.0f;
+	const float gaugeHeight = 20.0f;
+
+	/*spriteUI->Render(rc,
+		-4.946f, 2.0f, -14.102f,
+		10.0f,10.
+		0,
+		0, 1, 1, 1
+	);*/
 }

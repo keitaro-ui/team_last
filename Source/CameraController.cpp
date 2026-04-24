@@ -1,8 +1,9 @@
 #include"System/Input.h"
 #include"CameraController.h"
 #include"Camera.h"
-#include<System/Graphics.h>
+#include <System/Graphics.h>
 #include "imgui.h"
+#include "Game/PlayerManager.h"
 
 void CameraController::Initialize()
 {
@@ -14,8 +15,6 @@ void CameraController::Update(float elapsedTime)
 {
 	/*GamePad& gamePad = Input::Instance().GetGamePad();*/
 	Mouse& mouse = Input::Instance().GetMouse();
-
-	CameraController::MouseCamera(elapsedTime);
 
 	//float mouseDeltaPosX = mouse.GetPositionX() - mouse.GetOldPositionX();
 	//float mouseDeltaPosY = mouse.GetPositionY() - mouse.GetOldPositionY();
@@ -66,6 +65,7 @@ void CameraController::Update(float elapsedTime)
 	eye.x = target.x - front.x;// *range;
 	eye.y = target.y + front.y;// *range;
 	eye.z = target.z - front.z;// *range;
+
 
 	//向いている方向のベクトルを計算で出す
 	dir.x = target.x - eye.x;

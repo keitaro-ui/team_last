@@ -54,7 +54,7 @@ void Player::Update(float elapsedTime)
 	coolgun(elapsedTime);
 
 	//弾丸入力処理
-	InputProjectile();
+	//InputProjectile();
 
 	//速力処理更新
 	UpdateVelocity(elapsedTime);
@@ -70,7 +70,7 @@ void Player::Update(float elapsedTime)
 
 	
 	//マウス操作
-	SStws();
+	//SStws();
 
 	//オブジェクト行列を更新
 	UpdateTransform();
@@ -90,9 +90,9 @@ void Player::Update(float elapsedTime)
 
 	//mouse.Update();
 	Mouse& mouse = Input::Instance().GetMouse();
-	static bool prevRight = false;
+	
 
-	bool nowRight = (mouse.GetButtonDown() & Mouse::BTN_RIGHT) != 0;
+	bool nowRight = (GetAsyncKeyState('E') & 0x8000) != 0;
 
 	// 押した瞬間だけ反転
 	if (nowRight && !prevRight)
@@ -101,7 +101,6 @@ void Player::Update(float elapsedTime)
 	}
 
 	// ShowCursorは状態が変わったときだけ呼ぶのが安全
-	static bool prevShow = false;
 	if (showcussor != prevShow)
 	{
 		ShowCursor(showcussor);
@@ -281,6 +280,12 @@ void Player::DrawDebugGUI()
 	//	}
 	//}
 	//ImGui::End();
+
+	ImGui::Begin("player");
+
+	ImGui::InputFloat3("Position", &position.x);
+
+	ImGui::End();
 }
 
 //描画処理

@@ -31,6 +31,8 @@ public:
 	// GUI•`‰æ
 	void DrawGUI() override;
 
+	void RenderUI(RenderContext rc);
+
 private:
 	float game_timer;
 
@@ -44,6 +46,8 @@ private:
 	std::unique_ptr<Sprite> sprite = nullptr;
 	std::unique_ptr<Sprite> sprite_number = nullptr;
 	std::unique_ptr<Sprite> sprite_text = nullptr;
+
+	std::unique_ptr<Sprite>spriteUI = nullptr;
 
 	std::unique_ptr<CameraController> cameraController = nullptr;
 

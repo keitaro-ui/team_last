@@ -80,6 +80,10 @@ private:
 
     bool showcussor = false;
 
+    bool prevRight = false;
+
+    bool prevShow = false;
+
     //“–‚½‚è”»’è‚Ì”¼Œa
     float hitRadius = 0.55f;
 
@@ -96,15 +100,15 @@ public:
     void coolgun(float elapsedTime);
 
     // Getter
-    bool GetShowCursor() const
+    bool GetPrev() const
     {
         return showcussor;
     }
 
     // Setter
-    void SetShowCursor(bool value)
+    void SetPrev(bool value)
     {
-        showcussor = value;
+        prevShow = value;
     }
 
     float GethitRadius() { return hitRadius; }
