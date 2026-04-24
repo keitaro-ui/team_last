@@ -34,22 +34,18 @@ public:
 	void RenderUI(RenderContext rc);
 
 private:
-	float game_timer;
-
-	//Stage* stage = nullptr;
+	// unique_ptr
 	std::unique_ptr<Stage> stage = nullptr;
-
-	//Player* player = nullptr;
 	std::unique_ptr<Player> player = nullptr;
+	std::unique_ptr<CameraController> cameraController = nullptr;
 
-	//レティクル関数
+	// sprite定義
 	std::unique_ptr<Sprite> sprite = nullptr;
 	std::unique_ptr<Sprite> sprite_number = nullptr;
 	std::unique_ptr<Sprite> sprite_text = nullptr;
-
 	std::unique_ptr<Sprite>spriteUI = nullptr;
 
-	std::unique_ptr<CameraController> cameraController = nullptr;
+	float game_timer;
 
 	//当たり判定
 	PhysicsSystem2d physics;
@@ -57,6 +53,11 @@ private:
 	float zDis = 0.0f;
 	DirectX::XMFLOAT3 obbPos = { 0,0,0 };
 	DirectX::XMFLOAT3 blockSize = {0.0f, 0.0f, 0.0f};
+
+	// ゴール
+	DirectX::XMFLOAT3 goalPos = { 0.0f, 0.0f, 0.0f };
+	bool playBoss();
+
 public:
 
 };
