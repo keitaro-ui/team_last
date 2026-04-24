@@ -6,7 +6,9 @@ Stage::Stage()
 {
 	//ステージモデルを読み込み
 	model = new Model("Data/Model/Stage/Noroof_offeceroom_scale(1).mdl");
+	//model = new Model("Data/Model/Stage/battleroom_2.mdl");
 	scale.x = scale.y = scale.z = 0.1f;
+	//scale.x = scale.y = scale.z = 1.0f;
 }
 
 Stage::~Stage()
