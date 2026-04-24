@@ -55,6 +55,7 @@ private:
 	PhysicsSystem2d physics;
 	float xDis = 0.0f;
 	float zDis = 0.0f;
+	DirectX::XMFLOAT3 obbPos = { 0,0,0 };
 	DirectX::XMFLOAT3 blockSize = {0.0f, 0.0f, 0.0f};
 public:
 

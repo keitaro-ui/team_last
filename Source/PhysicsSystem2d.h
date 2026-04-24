@@ -69,4 +69,5 @@ public:
     //デバッグプリミティブ描画
     void RenderDebugPrimitive(const RenderContext& rc, ShapeRenderer* renderer);
 
+    void Clear();
 };

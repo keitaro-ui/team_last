@@ -571,3 +571,8 @@ void PhysicsSystem2d::RenderDebugPrimitive(const RenderContext& rc, ShapeRendere
     	}
     }
 }
+
+void PhysicsSystem2d::Clear()
+{
+    obbs.clear();
+}

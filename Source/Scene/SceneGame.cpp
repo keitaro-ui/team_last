@@ -24,14 +24,16 @@ void SceneGame::Initialize()
 
 	//プレイヤー初期化
 	player = std::make_unique<Player>();
+	player->SetPosition({ 2.0f, 1.0f, 0.0f });
 
-	//モデル読み込み
+	//Sprite読み込み
 	sprite = std::make_unique<Sprite>("Data/Sprite/レティクル.png");
 	sprite_number = std::make_unique<Sprite>("Data/Sprite/number.png");
 	sprite_text = std::make_unique<Sprite>("Data/Sprite/残り時間.png");
-
 	spriteUI = std::make_unique<Sprite>("Data/Sprite/ok.png");
 	
+	//3DModel読み込み
+
 
 	//カメラ初期設定
 	Graphics& graphics = Graphics::Instance();
@@ -58,62 +60,22 @@ void SceneGame::Initialize()
 
 	//当たり判定
 	{
-		xDis = 900.0f;
-		zDis = 600.0f;
-		//debugDoorSize = 2.5f;
-		blockSize = { 3.0f, 0.0f, 1.6f };
-
+		//debug
+		xDis = 50.0f;
+		zDis = 50.0f;
+		obbPos = { 0,0,0 };
+		//physics.AddObb(obbPos, { xDis, 0, zDis }, 0);
+		
 		//外枠
-		physics.AddObb({ 0, 0, 0 }, { xDis, 0, zDis }, 0);
-
-		//int map[5][6] =
-		//{
-		//	// 1列目
-		//	{ 1, 1, 0, 1, 1, 1 },
-
-		//	// 2列目
-		//	{ 1, -1, 1, 0, 0, -1 },
-
-		//	// 3列目
-		//	{ 1, 1, 1, 0, 1, 1 },
-
-		//	// 4列目
-		//	{ -1, 0, -1, 1, 1, 0 },
-
-		//	// 5列目
-		//	{ 0, 1, 0, -1, 0, 1 }
-		//};
-
-		//for (int z = 0; z < 5; z++)
-		//{
-		//	for (int x = 0; x < 6; x++)
-		//	{
-		//		DirectX::XMFLOAT3 pos = { -22.5f + x * xDis, 0.0f, zDis * (2 - z) };
-
-		//		int v = map[z][x];
-
-		//		if (v == 0)
-		//		{
-		//			// 壁
-		//			physics.AddObb(pos, blockSize, 0.0f);
-		//		}
-		//		else
-		//		{
-		//			// ドアの方向
-		//			//DirectX::XMFLOAT3 dir = { 0, 0, (float)v };
-		//			//physics.AddDoorObb(pos, blockSize, 0.0f, dir, debugDoorSize, 3.05f);
-		//		}
-		//	}
-		//}
-
-		//通路塞ぐ壁
-		{
-			/*physics.AddObb({ -22.5f + 3 * xDis, 0.0f, zDis * 1.5f }, blockSize, 0.0f);
-			physics.AddObb({ -22.5f + 3 * xDis, 0.0f, zDis * 0.5f }, blockSize, 0.0f);
-
-			physics.AddObb({ -22.5f + 2 * xDis, 0.0f, zDis * -0.5f }, blockSize, 0.0f);
-			physics.AddObb({ 0.0f, 0.0f, 0.0f }, blockSize, 0.0f);*/
-		}
+		physics.AddObb({-8.9f, 0.0f, -34.5f}, {14.4f, 0.0f, 43.1f}, 0);
+		physics.AddObb({-25.9f, 0.0f, 0.0f}, {6.2f, 0.0f, 19.5f}, 0);
+		//手前、コピー機
+		physics.AddObb({-6.0f, 0.0f, -3.5f}, {6.4f, 0.0f, 14.7f}, 0);
+		physics.AddObb({-6.2f, 0.0f, -18.8f}, {3.1f, 0, 2.6f}, 0);
+		//中
+		physics.AddObb({-4.1f, 0.0f, -34.5f}, {11.6f, 0, 5.6f}, 0);
+		//奥
+		physics.AddObb({ -7.0f, 0.0f, -56.3f }, { 6.8f, 0.0f, 8.1f }, 0);
 	}
 
 	//マウス位置の取得とロック
@@ -269,10 +231,25 @@ void SceneGame::DrawGUI()
 
 	ImGui::Begin("Debug");
 
-	ImGui::DragFloat("xDis", &xDis, 0.1f);
-	ImGui::DragFloat("zDis", &zDis, 0.1f);
+	// 変更検知フラグ
+	bool changed = false;
+
+	// DragFloatは「値が変わったらtrue返す」
+	changed |= ImGui::DragFloat("xDis", &xDis, 0.1f);
+	changed |= ImGui::DragFloat("zDis", &zDis, 0.1f);
+	changed |= ImGui::DragFloat("obbPosX", &obbPos.x, 0.1f);
+	changed |= ImGui::DragFloat("obbPosY", &obbPos.y, 0.1f);
+	changed |= ImGui::DragFloat("obbPosZ", &obbPos.z, 0.1f);
 
 	ImGui::End();
+
+	// 値が変わったときだけ再生成
+	if (changed)
+	{
+		physics.Clear();
+
+		physics.AddObb(obbPos, { xDis, 0, zDis }, 0);
+	}
 }
 
 void SceneGame::RenderUI(RenderContext rc)
