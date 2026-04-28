@@ -12,6 +12,7 @@
 #include "SceneTitle.h"
 #include "SceneLoading.h"
 #include "SceneResult.h"
+#include "../Scene/SceneBoss.h"
 
 // 初期化
 void SceneGame::Initialize()
@@ -128,7 +129,7 @@ void SceneGame::Update(float elapsedTime)
 	//if (game_timer < 0)
 	//if (gamePad.GetButtonDown() & anyButton)
 	{
-		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult));
+		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneBoss));
 	}
 
 
