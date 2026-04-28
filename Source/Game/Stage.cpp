@@ -2,14 +2,14 @@
 #include <imgui.h>
 
 //コンストラクタ
-Stage::Stage()
+Stage::Stage(int num)
 {
 	//ステージモデルを読み込み
-	if (stageNum == 0)
+	if (num == 0)
 	{
 		model = new Model("Data/Model/Stage/Noroof_offeceroom_scale(1).mdl");
 	}
-	else if (stageNum == 1)
+	else if (num == 1)
 	{
 		model = new Model("Data/Model/Stage/Noroof_offeceroom_scale(1).mdl");
 	}
@@ -23,7 +23,6 @@ Stage::~Stage()
 {
 	//ステージモデルを破棄
 	delete model;
-	stageNum = -1;
 }
 
 //更新処理

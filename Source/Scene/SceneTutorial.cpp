@@ -16,7 +16,7 @@
 void SceneTutorial::Initialize()
 {
 	//ステージ初期化
-	stage = new Stage();
+	stage = new Stage(0);
 
 	//プレイヤー初期化
 	player = new Player();

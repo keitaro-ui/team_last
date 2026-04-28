@@ -7,9 +7,8 @@
 void SceneBoss::Initialize()
 {
 	//ステージ初期化
-	stage = std::make_unique<Stage>();
+	stage = std::make_unique<Stage>(1);
 	stage->SetPosition(DirectX::XMFLOAT3(10, -5, 10));
-	stage->SetStageNum(1);
 
 	//プレイヤー初期化
 	player = std::make_unique<Player>();

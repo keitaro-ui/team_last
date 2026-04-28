@@ -7,7 +7,7 @@
 class Stage:public Character
 {
 public:
-	Stage();
+	Stage(int num);
 	~Stage();
 
 	//XVˆ—
