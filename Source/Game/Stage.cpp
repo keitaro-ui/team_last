@@ -5,8 +5,16 @@
 Stage::Stage()
 {
 	//ステージモデルを読み込み
-	model = new Model("Data/Model/Stage/Noroof_offeceroom_scale(1).mdl");
-	//model = new Model("Data/Model/Stage/battleroom_2.mdl");
+	if (stageNum == 0)
+	{
+		model = new Model("Data/Model/Stage/Noroof_offeceroom_scale(1).mdl");
+	}
+	else if (stageNum == 1)
+	{
+		model = new Model("Data/Model/Stage/Noroof_offeceroom_scale(1).mdl");
+	}
+
+	// scale
 	scale.x = scale.y = scale.z = 0.1f;
 	//scale.x = scale.y = scale.z = 1.0f;
 }
@@ -15,6 +23,7 @@ Stage::~Stage()
 {
 	//ステージモデルを破棄
 	delete model;
+	stageNum = -1;
 }
 
 //更新処理

@@ -9,6 +9,7 @@ void SceneBoss::Initialize()
 	//ステージ初期化
 	stage = std::make_unique<Stage>();
 	stage->SetPosition(DirectX::XMFLOAT3(10, -5, 10));
+	stage->SetStageNum(1);
 
 	//プレイヤー初期化
 	player = std::make_unique<Player>();
@@ -54,6 +55,7 @@ void SceneBoss::Update(float elapsedTime)
 	//プレイヤー更新処理
 	player->Update(elapsedTime);
 
+	//debugのマウスカーソル
 	if (!player->GetPrev())
 	{
 		// マウス位置の取得とロック
