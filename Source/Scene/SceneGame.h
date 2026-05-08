@@ -40,7 +40,7 @@ private:
 	std::unique_ptr<Player> player = nullptr;
 	std::unique_ptr<CameraController> cameraController = nullptr;
 	std::unique_ptr<Typing>typing = nullptr;
-
+	
 	// sprite’è‹`
 	std::unique_ptr<Sprite> sprite = nullptr;
 	std::unique_ptr<Sprite> sprite_number = nullptr;

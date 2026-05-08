@@ -7,7 +7,7 @@
 
 void CameraController::Initialize()
 {
-
+	
 }
 
 //更新処理
@@ -76,6 +76,8 @@ void CameraController::Update(float elapsedTime)
 	dir.y /= len;
 	dir.z /= len;
 
+	
+
 	//カメラの視点と注視点を設定
 	Camera::Instance().SetLookAt(eye, target, DirectX::XMFLOAT3(0, 1, 0));
 
@@ -112,7 +114,7 @@ void CameraController::MouseCamera(float elapsedTime)
 		angle.y += moveX * 0.5f;
 		if (angle.y > DirectX::XM_PI)
 		{
-			angle.y -= DirectX::XM_2PI;
+			angle.y -= DirectX::XM_2PI;                                                               
 		}
 		else if (angle.y < -DirectX::XM_PI)
 		{

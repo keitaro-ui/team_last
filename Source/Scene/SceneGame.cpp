@@ -63,7 +63,7 @@ void SceneGame::Initialize()
 	//エネミー初期化
 	EnemyManager& enemyManager = EnemyManager::Instance();
 	//EnemySlime* target = new EnemySlime();
-	//enemyManager.Register(target);
+	//enemyManager.Register(targets[2]);
 
 	//当たり判定
 	{
@@ -111,7 +111,7 @@ void SceneGame::Update(float elapsedTime)
 
 	player->Update(elapsedTime);
 
-	typing->Update(elapsedTime);
+	//typing->Update(elapsedTime);
 
 	//ステージ更新処理
 	stage->Update(elapsedTime);

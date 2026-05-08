@@ -83,6 +83,12 @@ private:
 
     bool prevShow = false;
 
+    //bool camerachange = false;
+
+
+    DirectX::XMFLOAT3 camerapos = { -7.349f,1.0f,-36.349f };
+    bool camerachange = false;
+
     //“–‚½‚è”»’è‚Ì”¼Œa
     float hitRadius = 0.55f;
 
@@ -109,6 +115,18 @@ public:
     {
         prevShow = value;
     }
+
+    ////Getter
+    //bool GetCameChan()const
+    //{
+    //    return camerachange;
+    //}
+
+    ////Setter
+    //void SetCameChan(bool c)
+    //{
+    //    camerachange = c;
+    //}
 
     float GethitRadius() { return hitRadius; }
 };
