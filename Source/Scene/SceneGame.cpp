@@ -13,6 +13,7 @@
 #include "SceneLoading.h"
 #include "SceneResult.h"
 #include "../Scene/SceneBoss.h"
+#include "../Game/MiniGame.h"
 
 // 初期化
 void SceneGame::Initialize()
@@ -21,6 +22,10 @@ void SceneGame::Initialize()
 	stage = std::make_unique<Stage>(0);
 	stage->SetPosition(DirectX::XMFLOAT3(10, -5, 10));
 	goalPos = { -22.0f, 1.0f, -70.5f };
+
+	typing = std::make_unique<Typing>();
+	typing->SetPosition(DirectX::XMFLOAT3(10, -5, 10));
+	typing->SetScale(DirectX::XMFLOAT3(0.005f,0.005f,0.005f));
 
 	game_timer = 15;
 
@@ -106,6 +111,8 @@ void SceneGame::Update(float elapsedTime)
 
 	player->Update(elapsedTime);
 
+	typing->Update(elapsedTime);
+
 	//ステージ更新処理
 	stage->Update(elapsedTime);
 
@@ -180,6 +187,8 @@ void SceneGame::Render()
 		EnemyManager::Instance().Render(rc, modelRenderer);
 
 		player->RenderDebugPrimitive(rc, shapeRenderer);
+
+		//typing->Render(rc, modelRenderer);
 	}
 
 	// 3Dデバッグ描画
@@ -196,7 +205,7 @@ void SceneGame::Render()
 
 	// 2Dスプライト描画
 	{
-		//RenderUI(rc);
+		
 
 		sprite->Render(rc,
 			610, 335, 0, 64.0f, 64.0f,
@@ -223,6 +232,11 @@ void SceneGame::Render()
 				1, 1, 1, 1);
 		}
 	}
+
+	//UI
+	{
+		RenderUI(rc);
+	}
 }
 
 // GUI描画
@@ -230,6 +244,8 @@ void SceneGame::DrawGUI()
 {
 	//プレーヤーデバッグ処理
 	player->DrawDebugGUI();
+
+	typing->DrawDebugGUI();
 
 	ImGui::Begin("Debug");
 
@@ -254,6 +270,46 @@ void SceneGame::DrawGUI()
 	}
 }
 
+//void SceneGame::RenderUI(RenderContext rc)
+//{
+//	 //スクリーンサイズ取得
+//	float screenWidth = Graphics::Instance().GetScreenWidth();
+//	float screenHeight = Graphics::Instance().GetScreenHeight();
+//
+//	Camera& camera = Camera::Instance();
+//	DirectX::XMMATRIX view = DirectX::XMLoadFloat4x4(&camera.GetView());
+//	DirectX::XMMATRIX projection = DirectX::XMLoadFloat4x4(&camera.GetProjection());
+//	DirectX::XMMATRIX world = DirectX::XMMatrixIdentity();
+//
+//	DirectX::XMFLOAT3 plyPos = player.get()->GetPosition();
+//	plyPos.y += 2.0f;
+//
+//	DirectX::XMVECTOR worldPlyPos = DirectX::XMLoadFloat3(&plyPos);
+//
+//	DirectX::XMVECTOR screenPlyPos, screenPly2Pos;
+//	screenPlyPos = DirectX::XMVector3Project(
+//		worldPlyPos,
+//		0.0f, 0.0f, screenWidth, screenHeight,
+//		0.0f, 1.0f, projection, view, world
+//	);
+//
+//	DirectX::XMFLOAT2 screenPlyPosition;
+//	DirectX::XMStoreFloat3(&uiE, uiE);
+//
+//	//ゲージ描画
+//	const float gaugeWidth = 120.0f;
+//	const float gaugeHeight = 20.0f;
+//
+//	spriteUI->Render(rc,
+//		uiE.x, uiE.y, uiE.z,
+//		gaugeWidth * 2,
+//		gaugeHeight * 2,
+//		0,
+//		0, 1, 1, 1
+//	);
+//}
+
+//UI
 void SceneGame::RenderUI(RenderContext rc)
 {
 	// スクリーンサイズ取得
@@ -268,28 +324,34 @@ void SceneGame::RenderUI(RenderContext rc)
 	DirectX::XMFLOAT3 plyPos = player.get()->GetPosition();
 	plyPos.y += 2.0f;
 
-	DirectX::XMVECTOR worldPlyPos = DirectX::XMLoadFloat3(&plyPos);
+	DirectX::XMVECTOR worldPos = DirectX::XMLoadFloat3(&uiE);
 
-	DirectX::XMVECTOR screenPlyPos, screenPly2Pos;
-	screenPlyPos = DirectX::XMVector3Project(
-		worldPlyPos,
+	DirectX::XMVECTOR screenPos = DirectX::XMVector3Project(
+		worldPos,
 		0.0f, 0.0f, screenWidth, screenHeight,
-		0.0f, 1.0f, projection, view, world
+		0.0f, 1.0f,
+		projection, view, world
 	);
 
-	DirectX::XMFLOAT2 screenPlyPosition;
-	DirectX::XMStoreFloat2(&screenPlyPosition, screenPlyPos);
+	DirectX::XMFLOAT3 screen;
+	DirectX::XMStoreFloat3(&screen, screenPos);
+
+	if (screen.z < 0.0f || screen.z > 1.0f)
+	{
+		return; // 描画しない
+	}
 
 	//ゲージ描画
 	const float gaugeWidth = 120.0f;
 	const float gaugeHeight = 20.0f;
 
-	/*spriteUI->Render(rc,
-		-4.946f, 2.0f, -14.102f,
-		10.0f,10.
+	spriteUI->Render(rc,
+		screen.x,screen.y,0.0f,
+		gaugeWidth * 2,
+		gaugeHeight * 2,
 		0,
 		0, 1, 1, 1
-	);*/
+	);
 }
 
 // playerの当たり判定がgoalPosに当たったらtrue返すよ

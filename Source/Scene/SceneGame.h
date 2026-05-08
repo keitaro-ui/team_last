@@ -8,6 +8,7 @@
 #include "System/Sprite.h"
 #include <PhysicsSystem2d.h>
 #include "imgui.h"
+#include "../Source/Game/MiniGame.h"
 
 // ゲームシーン
 class SceneGame : public Scene
@@ -38,6 +39,7 @@ private:
 	std::unique_ptr<Stage> stage = nullptr;
 	std::unique_ptr<Player> player = nullptr;
 	std::unique_ptr<CameraController> cameraController = nullptr;
+	std::unique_ptr<Typing>typing = nullptr;
 
 	// sprite定義
 	std::unique_ptr<Sprite> sprite = nullptr;
@@ -56,6 +58,11 @@ private:
 
 	// ゴール
 	DirectX::XMFLOAT3 goalPos = { 0.0f, 0.0f, 0.0f };
+
+	DirectX::XMFLOAT3 uiE = { -7.746f,4.0f,-40.663f };
+	//ゲージ描画
+	const float gaugeWidth = 120.0f;
+	const float gaugeHeight = 20.0f;
 	bool playBoss();
 
 public:

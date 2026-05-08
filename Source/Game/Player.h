@@ -34,7 +34,6 @@ protected:
     //’…’n‚µ‚½‚Æ‚«‚ÉŒÄ‚Î‚ê‚é
     void OnLanding() override;
 
-
 private:
     Model* model = nullptr;
 

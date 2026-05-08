@@ -130,6 +130,7 @@
     <ClInclude Include="Source\Game\Enemy.h" />
     <ClInclude Include="Source\Game\EnemyManager.h" />
     <ClInclude Include="Source\Game\EnemySlime.h" />
+    <ClInclude Include="Source\Game\MiniGame.h" />
     <ClInclude Include="Source\Game\Player.h" />
     <ClInclude Include="Source\Game\PlayerManager.h" />
     <ClInclude Include="Source\Game\Stage.h" />
@@ -187,6 +188,7 @@
     <ClCompile Include="Source\Game\Enemy.cpp" />
     <ClCompile Include="Source\Game\EnemyManager.cpp" />
     <ClCompile Include="Source\Game\EnemySlime.cpp" />
+    <ClCompile Include="Source\Game\MiniGame.cpp" />
     <ClCompile Include="Source\Game\player.cpp" />
     <ClCompile Include="Source\Game\PlayerManager.cpp" />
     <ClCompile Include="Source\Game\Stage.cpp" />
