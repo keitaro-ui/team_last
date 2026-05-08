@@ -54,7 +54,7 @@ void Player::Update(float elapsedTime)
 	coolgun(elapsedTime);
 
 	//弾丸入力処理
-	//InputProjectile();
+	InputProjectile();
 
 	//速力処理更新
 	UpdateVelocity(elapsedTime);
@@ -99,7 +99,7 @@ void Player::Update(float elapsedTime)
 	{
 		showcussor = !showcussor;
 	}
-
+	
 	// ShowCursorは状態が変わったときだけ呼ぶのが安全
 	if (showcussor != prevShow)
 	{
@@ -109,6 +109,51 @@ void Player::Update(float elapsedTime)
 
 	prevRight = nowRight;
 
+	//ミニゲーム行くやつ
+	//if (GetAsyncKeyState('F' & 0x8000))
+	//{
+	//	camerachange = true;
+
+	//	//if()	//Fkeyの近くに来たらという処理
+	//	/*DirectX::XMFLOAT3 dir;
+
+	//	dir.x = position.x - camerapos.x;
+	//	dir.y = position.y - camerapos.y;*/
+	//}
+
+	if (GetAsyncKeyState('F') & 0x8000)
+	{
+		camerachange = true;
+	}
+
+	if (camerachange == true)
+	{
+	/*	DirectX::XMFLOAT3 DIR;
+
+		DIR.x = position.x - camerapos.x;
+		DIR.z =position.z - camerapos.z;
+
+		float an = atan2f(DIR.x, DIR.z);*/
+		//cameraController->angle.y = an;
+		DirectX::XMFLOAT3 DIR;
+
+		DIR.x = position.x - camerapos.x;
+		DIR.z = position.z - camerapos.z;
+
+		float an = atan2f(DIR.x, DIR.z);
+
+		float diff = an - angle.y;
+
+		while (diff > DirectX::XM_PI)
+			diff -= DirectX::XM_2PI;
+
+		while (diff < -DirectX::XM_PI)
+			diff += DirectX::XM_2PI;
+
+		angle.y += diff * 0.1f;
+	}
+	//else
+		
 }
 
 //移動入力処理

@@ -31,3 +31,28 @@ void Typing::Render(const RenderContext& rc, ModelRenderer* renderer)
 {
 	renderer->Render(rc, transform, model, ShaderId::Lambert);
 }
+
+
+Shooting::Shooting()
+{
+	sprite = std::make_unique<Sprite>("Data/Sprite/ok.png");
+}
+
+Shooting::~Shooting()
+{
+
+}
+
+void Shooting::Update(float elapsedTime)
+{
+	
+}
+
+void Shooting::DrawDebugGUI()
+{
+
+}
+void Shooting::Render(const RenderContext& rc, ModelRenderer* renderer)
+{
+	//sprite->Render(rc,)
+}

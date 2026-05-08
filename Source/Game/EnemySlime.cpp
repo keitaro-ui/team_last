@@ -3,12 +3,14 @@
 #include <random>
 //#include <algorithm>
 
-Model* models[4];
+Model* models[2];
 
 
 //コンストラクタ
 EnemySlime::EnemySlime()
 {
+	models[0] = new Model("Data/Model/Target/target_1.mdl");
+	models[1] = new Model("Data/Model/Target/target_2.mdl");
 
 	//モデルが大きいのでスケーリング
 	scale.x = scale.y = scale.z = 0.1f;
@@ -23,7 +25,8 @@ EnemySlime::EnemySlime()
 //デストラクタ
 EnemySlime::~EnemySlime()
 {
-	
+	delete models[0];
+	delete models[1];
 }
 
 //更新処理
@@ -45,7 +48,7 @@ void EnemySlime::Update(float elapsedTime)
 //描画処理
 void EnemySlime::Render(const RenderContext& rc, ModelRenderer* renderer)
 {
-	//renderer->Render(rc, transform, models[model_index], ShaderId::Lambert);
+	renderer->Render(rc, transform, models[model_index], ShaderId::Lambert);
 
 }
 

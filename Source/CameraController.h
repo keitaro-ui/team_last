@@ -31,4 +31,8 @@ private:
 
 	float					maxAngleY = DirectX::XMConvertToRadians(45);
 	float					minAngleY = DirectX::XMConvertToRadians(-45);
+
+
+
+
 };
