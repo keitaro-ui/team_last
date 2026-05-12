@@ -144,6 +144,10 @@
     <ClInclude Include="Source\Scene\SceneGame.h" />
     <ClInclude Include="Source\Scene\SceneLoading.h" />
     <ClInclude Include="Source\Scene\SceneManager.h" />
+    <ClInclude Include="Source\Scene\SceneMiniGame2048.h" />
+    <ClInclude Include="Source\Scene\SceneMiniGameShooting.h" />
+    <ClInclude Include="Source\Scene\SceneMiniGameSelect.h" />
+    <ClInclude Include="Source\Scene\SceneMiniGameTyping.h" />
     <ClInclude Include="Source\Scene\SceneResult.h" />
     <ClInclude Include="Source\Scene\SceneTitle.h" />
     <ClInclude Include="Source\Scene\SceneTutorial.h" />
@@ -202,6 +206,10 @@
     <ClCompile Include="Source\Scene\SceneGame.cpp" />
     <ClCompile Include="Source\Scene\SceneLoading.cpp" />
     <ClCompile Include="Source\Scene\SceneManager.cpp" />
+    <ClCompile Include="Source\Scene\SceneMiniGame2048.cpp" />
+    <ClCompile Include="Source\Scene\SceneMiniGameSelect.cpp" />
+    <ClCompile Include="Source\Scene\SceneMiniGameShooting.cpp" />
+    <ClCompile Include="Source\Scene\SceneMiniGameTyping.cpp" />
     <ClCompile Include="Source\Scene\SceneResult.cpp" />
     <ClCompile Include="Source\Scene\SceneTitle.cpp" />
     <ClCompile Include="Source\Scene\SceneTutorial.cpp" />
