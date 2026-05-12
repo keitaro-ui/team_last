@@ -121,37 +121,37 @@ void Player::Update(float elapsedTime)
 	//	dir.y = position.y - camerapos.y;*/
 	//}
 
-	if (GetAsyncKeyState('F') & 0x8000)
-	{
-		camerachange = true;
-	}
+	//if (GetAsyncKeyState('F') & 0x0001)
+	//{
+	//	camerachange = true;
+	//}
 
-	if (camerachange == true)
-	{
-	/*	DirectX::XMFLOAT3 DIR;
+	//if (camerachange == true)
+	//{
+	///*	DirectX::XMFLOAT3 DIR;
 
-		DIR.x = position.x - camerapos.x;
-		DIR.z =position.z - camerapos.z;
+	//	DIR.x = position.x - camerapos.x;
+	//	DIR.z =position.z - camerapos.z;
 
-		float an = atan2f(DIR.x, DIR.z);*/
-		//cameraController->angle.y = an;
-		DirectX::XMFLOAT3 DIR;
+	//	float an = atan2f(DIR.x, DIR.z);*/
+	//	//cameraController->angle.y = an;
+	//	DirectX::XMFLOAT3 DIR;
 
-		DIR.x = position.x - camerapos.x;
-		DIR.z = position.z - camerapos.z;
+	//	DIR.x = position.x - camerapos.x;
+	//	DIR.z = position.z - camerapos.z;
 
-		float an = atan2f(DIR.x, DIR.z);
+	//	float an = atan2f(DIR.x, DIR.z);
 
-		float diff = an - angle.y;
+	//	float diff = an - angle.y;
 
-		while (diff > DirectX::XM_PI)
-			diff -= DirectX::XM_2PI;
+	//	while (diff > DirectX::XM_PI)
+	//		diff -= DirectX::XM_2PI;
 
-		while (diff < -DirectX::XM_PI)
-			diff += DirectX::XM_2PI;
+	//	while (diff < -DirectX::XM_PI)
+	//		diff += DirectX::XM_2PI;
 
-		angle.y += diff * 0.1f;
-	}
+	//	cameraController->angle.y += diff * 0.1f;
+	//}
 	//else
 		
 }
