@@ -49,6 +49,9 @@ public:
 	// 現在のアニメーション再生時間取得
 	float GetCurrentAnimationSeconds() const { return currentAnimationSeconds; }
 
+	//アニメーション終了しているか
+	bool IsAnimationFinished() const;
+
 private:
 	std::shared_ptr<ModelResource>	resource;
 	std::vector<Node>				nodes;

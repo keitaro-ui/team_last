@@ -13,17 +13,28 @@
 
 
 //コンストラクタ
-Player::Player()
+Player::Player(int num)
 {
-	model = new Model("Data/Model/Player/pasted__pCube2.mdl");
+	if (num == 0)
+	{
+		model = new Model("Data/Model/Player/pasted__pCube2.mdl");
+		select = 1;
+		//モデルが大きいのでスケーリング
+		scale.x = scale.y = scale.z = 0.21f;
+		//ヒットSE読み込み
+		hitSE = Audio::Instance().LoadAudioSource("Data/Sound/Hit.wav");
+		shotSE = Audio::Instance().LoadAudioSource("Data/Sound/revolver.wav");
+		takeSE = Audio::Instance().LoadAudioSource("Data/Sound/take revolver.wav");
+	}
+	else if (num == 1)
+	{
+		select = 2;
+		model = new Model("Data/Model/Player/Business_Man.mdl");
+		//モデルが大きいのでスケーリング
+		scale.x = scale.y = scale.z = 0.21f;
 
-	//モデルが大きいのでスケーリング
-	scale.x = scale.y = scale.z = 0.21f;
-
-	//ヒットSE読み込み
-	hitSE = Audio::Instance().LoadAudioSource("Data/Sound/Hit.wav");
-	shotSE = Audio::Instance().LoadAudioSource("Data/Sound/revolver.wav");
-	takeSE = Audio::Instance().LoadAudioSource("Data/Sound/take revolver.wav");
+		model->PlayAnimation(8, false, 0.2f);
+	}
 }
 
 //デストラクタ
@@ -108,6 +119,23 @@ void Player::Update(float elapsedTime)
 	}
 
 	prevRight = nowRight;
+
+	if (select == 2)
+	{
+		if (model->IsAnimationFinished())
+		{
+			if (currentMotion == 0)
+			{
+				currentMotion = 1;
+				model->PlayAnimation(9, false);
+			}
+			else
+			{
+				currentMotion = 0;
+				model->PlayAnimation(8, false);
+			}
+		}
+	}
 
 	//ミニゲーム行くやつ
 	//if (GetAsyncKeyState('F' & 0x8000))

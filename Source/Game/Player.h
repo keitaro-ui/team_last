@@ -10,7 +10,7 @@
 class Player : public Character
 {
 public:
-    Player();
+    Player(int num);
     ~Player() override;
 
     //XVˆ—
@@ -91,6 +91,9 @@ private:
 
     //“–‚½‚è”»’è‚Ì”¼Œa
     float hitRadius = 0.55f;
+     
+    int select = 1;
+    int currentMotion = 0;
 
 public:
     CameraController* cameraController = nullptr;
@@ -115,6 +118,20 @@ public:
     {
         prevShow = value;
     }
+
+    enum class PlayerAnimation
+    {
+        Idle=0,
+        down,
+        ult,
+        punch,
+        kick,
+        hit,
+        ymca,
+        hiphop,
+        sadIdle,
+        sadIdlekick
+    };
 
     ////Getter
     //bool GetCameChan()const

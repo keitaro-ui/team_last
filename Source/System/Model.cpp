@@ -209,3 +209,9 @@ bool Model::IsPlayAnimation() const
 	if (currentAnimationIndex >= resource->GetAnimations().size()) return false;
 	return true;
 }
+
+//アニメーション終了しているか
+bool Model::IsAnimationFinished() const
+{
+	return animationEndFlag;
+}

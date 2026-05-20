@@ -2,6 +2,8 @@
 
 #include "System/Sprite.h"
 #include "Scene.h"
+#include "../Game/Player.h"
+#include "../Game/Stage.h"
 
 //タイトルシーン
 class SceneTitle :public Scene
@@ -30,4 +32,9 @@ private:
 	std::unique_ptr<Sprite> sprite2 = nullptr;
 	std::unique_ptr<Sprite> sprite3 = nullptr;
 	
+	std::unique_ptr<Player>player = nullptr;
+
+	std::unique_ptr<Stage> titlestage = nullptr;
+
+	DirectX::XMFLOAT3 pos = { 0,0,0 };
 };
