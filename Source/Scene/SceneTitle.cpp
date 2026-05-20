@@ -7,6 +7,7 @@
 #include "System/Mouse.h"
 #include "../Game/Player.h"
 #include "../Scene/SceneTutorial.h"
+#include "../Scene/SceneMiniGameTyping.h"
 
 //‰Šú‰»
 void SceneTitle::Initialize()
@@ -56,7 +57,10 @@ void SceneTitle::Update(float elapsedTime)
         {
             if (cursorPos.y >= 600 && cursorPos.y <= 670)
             {
-                SceneManager::Instance().ChangeScene(new SceneLoading(new SceneTutorial));
+                //SceneManager::Instance().ChangeScene(new SceneLoading(new SceneMiniGameTyping));
+                TypingChecker checker;
+                checker.Update();
+                checker.Render();
             }
         }
     }
