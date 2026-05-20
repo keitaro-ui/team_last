@@ -1,0 +1,361 @@
+#include "Grid.h"
+#include "Player.h"
+#include "./Game/PlayerManager.h"
+#include "Scene/SceneManager.h"
+#include"Scene/SceneLoading.h"
+#include"Scene/SceneGame.h"
+#include"Scene/SceneResult.h"
+
+Grid::Grid()
+{
+	std::memset(map, 0, sizeof(map));
+	std::memset(merged, false, sizeof(merged));
+	std::memset(pmap, 0, sizeof(pmap));
+}
+
+void Grid::deleteMap()
+{
+	for (int x = 0; x < GRID_MAX; x++)
+	{
+		for (int y = 0; y < GRID_MAX; y++)
+		{
+			map[x][y] = 0;
+			merged[x][y] = 0;
+			pmap[x][y] = 0;
+		}
+	}
+}
+
+//方向キーでBox動かす関数
+bool Grid::MoveRight()
+{
+	std::memset(merged, false, sizeof(merged));
+	moved = false;
+
+	for (int y = 0; y < GRID_MAX; y++)
+	{
+		for (int x = GRID_MAX - 1; x >= 0; x--)
+		{
+			if (map[y][x] != 0)
+			{
+				BoxAnimeData bad;
+				bad.x = bad.oldX = x;
+				bad.y = bad.oldY = y;
+				bad.num = map[y][x];
+
+				int cx = x;
+				while (cx < GRID_MAX - 1)
+				{
+					//一個右が0なら移動させる
+					if (map[y][cx + 1] == 0)
+					{
+						map[y][cx + 1] = map[y][cx];
+						map[y][cx] = 0;
+						cx++;
+						PlayerDie(cx, y);
+						moved = true;
+						bad.x++;
+					}
+					//一個右と一緒なら合体
+					else if (map[y][cx + 1] == map[y][cx]
+						&& !merged[y][cx + 1])
+					{
+						Score(map[y][cx + 1]);
+						if (map[y][cx + 1] >= 11)
+							map[y][cx + 1] = 1;
+						else
+							map[y][cx + 1]++;
+						map[y][cx] = 0;
+						merged[y][cx + 1] = true;
+						moved = true;
+						bad.x++;
+						break;
+					}
+					// 一個右が0じゃなくて、違う数字ならそのまま
+					else break;
+				}
+				//push_back
+				boxAnimeData.push_back(bad);
+			}
+		}
+	}
+	return moved;
+}
+
+bool Grid::MoveLeft()
+{
+	std::memset(merged, false, sizeof(merged));
+	moved = false;
+
+	for (int y = 0; y < GRID_MAX; y++)
+	{
+		for (int x = 0; x < GRID_MAX; x++)
+		{
+			if (map[y][x] != 0)
+			{
+				BoxAnimeData bad;
+				bad.x = bad.oldX = x;
+				bad.y = bad.oldY = y;
+				bad.num = map[y][x];
+
+				int cx = x;
+				while (cx > 0)
+				{
+					//一個左が0なら移動させる
+					if (map[y][cx - 1] == 0)
+					{
+						map[y][cx - 1] = map[y][cx];
+						map[y][cx] = 0;
+						cx--;
+						PlayerDie(cx, y);
+						moved = true;
+						bad.x--;
+					}
+					//一個左と一緒なら合体
+					else if (map[y][cx - 1] == map[y][cx]
+						&& !merged[y][cx - 1])
+					{
+						Score(map[y][cx - 1]);
+						if (map[y][cx - 1] >= 11)
+							map[y][cx - 1] = 1;
+						else
+							map[y][cx - 1]++;
+						map[y][cx] = 0;
+						merged[y][cx - 1] = true;
+						moved = true;
+						bad.x--;
+						break;
+					}
+					// 一個左が0じゃなくて、違う数字ならそのまま
+					else break;
+				}
+				//push_back
+				boxAnimeData.push_back(bad);
+			}
+		}
+	}
+	return moved;
+}
+
+bool Grid::MoveUp()
+{
+	std::memset(merged, false, sizeof(merged));
+	moved = false;
+
+	for (int x = 0; x < GRID_MAX; x++)
+	{
+		for (int y = 0; y < GRID_MAX; y++)
+		{
+			if (map[y][x] != 0)
+			{
+				BoxAnimeData bad;
+				bad.x = bad.oldX = x;
+				bad.y = bad.oldY = y;
+				bad.num = map[y][x];
+
+				int cy = y;
+				while (cy > 0)
+				{
+					//一個上が0なら移動させる
+					if (map[cy - 1][x] == 0)
+					{
+						map[cy - 1][x] = map[cy][x];
+						map[cy][x] = 0;
+						cy--;
+						PlayerDie(x, cy);
+						moved = true;
+						bad.y--;
+					}
+					//一個上と一緒なら合体
+					else if (map[cy - 1][x] == map[cy][x]
+						&& !merged[cy - 1][x])
+					{
+						Score(map[cy - 1][x]);
+						if (map[cy - 1][x] >= 11)
+							map[cy - 1][x] = 1;
+						else
+							map[cy - 1][x]++;
+						map[cy][x] = 0;
+						merged[cy - 1][x] = true;
+						moved = true;
+						bad.y--;
+						break;
+					}
+					// 一個上が0じゃなくて、違う数字ならそのまま
+					else break;
+				}
+				//push_back
+				boxAnimeData.push_back(bad);
+			}
+		}
+	}
+	return moved;
+}
+
+bool Grid::MoveDown()
+{
+	std::memset(merged, false, sizeof(merged));
+	moved = false;
+
+	for (int x = 0; x < GRID_MAX; x++)
+	{
+		for (int y = GRID_MAX - 1; y >= 0; y--)
+		{
+			if (map[y][x] != 0)
+			{
+				BoxAnimeData bad;
+				bad.x = bad.oldX = x;
+				bad.y = bad.oldY = y;
+				bad.num = map[y][x];
+
+				int cy = y;
+				while (cy < GRID_MAX - 1)
+				{
+					//PlayerDie(x, y);
+					//一個下が0なら移動させる
+					if (map[cy + 1][x] == 0)
+					{
+						map[cy + 1][x] = map[cy][x];
+						map[cy][x] = 0;
+						cy++;
+						PlayerDie(x, cy);
+						moved = true;
+						bad.y++;
+					}
+					//一個下と一緒なら合体
+					else if (map[cy + 1][x] == map[cy][x]
+						&& !merged[cy + 1][x])
+					{
+						Score(map[cy + 1][x]);
+						if (map[cy + 1][x] >= 11)
+							map[cy + 1][x] = 1;
+						else
+							map[cy + 1][x]++;
+						map[cy][x] = 0;
+						merged[cy + 1][x] = true;
+						moved = true;
+						bad.y++;
+						break;
+					}
+					// 一個下が0じゃなくて、違う数字ならそのまま
+					else break;
+				}
+				//push_back
+				boxAnimeData.push_back(bad);
+			}
+		}
+	}
+	return moved;
+}
+
+void Grid::Spawn()
+{
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<int>distX(0, GRID_MAX - 1);
+	std::uniform_int_distribution<int>distY(0, GRID_MAX - 1);
+	while (true)
+	{
+		int x = distX(gen);
+		int	y = distY(gen);
+
+		if (map[y][x] == 0)
+		{
+			int playerX = PlayerManager::Instance().GetPlayer2048()->GetPlayerX();
+			int playerY = PlayerManager::Instance().GetPlayer2048()->GetPlayerY();
+			//if (pmap[playerY][playerX] != map[y][x])
+			if (playerY != y || playerX != x)
+				//if (map[y][x] == 0 && pmap[y][x] != 1)
+			{
+				//2の箱だす
+				map[y][x] = 1;
+				break;
+			}
+		}
+	}
+}
+
+bool Grid::IsGameOver()
+{
+
+	// 空きマスがあればまだ終わらない
+	if (HasEmptyCell())
+		return false;
+
+	// 合体できるならまだ終わらない
+	if (CanMerge())
+		return false;
+
+	// 空きなし＆合体不可 → ゲームオーバー
+	return true;
+}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+void Grid::PlayerDie(int x, int y)
+{
+	int playerX = PlayerManager::Instance().GetPlayer2048()->GetPlayerX();
+	int playerY = PlayerManager::Instance().GetPlayer2048()->GetPlayerY();
+	if (playerY == y && playerX == x)
+	{
+		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneResult));
+	}
+}
+
+int Grid::Score(int c)
+{
+	int num = 4;
+	for (int i = 0; i < c - 2; i++)
+	{
+		num *= 2;
+	}
+	score += num;
+	return score;
+}
+
+bool Grid::HasEmptyCell()
+{
+	for (int y = 0; y < GRID_MAX; y++)
+	{
+		for (int x = 0; x < GRID_MAX; x++)
+		{
+			if (map[y][x] == 0)
+				return true;
+		}
+	}
+	return false;
+}
+
+bool Grid::CanMerge()
+{
+	for (int y = 0; y < GRID_MAX; y++)
+	{
+		for (int x = 0; x < GRID_MAX; x++)
+		{
+			int v = map[y][x];
+			if (v == 0) continue;
+
+			//右と下だけ見れば十分
+			if (x + 1 < GRID_MAX && map[y][x + 1] == v) return true;
+			if (y + 1 < GRID_MAX && map[y + 1][x] == v) return true;
+		}
+	}
+	return false;
+}
+
+void Grid::CanSlideW()
+{
+
+	//for (int y = 1; y < GRID_MAX; y++)
+	//{
+	//	for (int x = 0; x < GRID_MAX; x++)
+	//	{
+	//		//if (map[y][x] == 1 && map[y - 1][x] == 0)
+	//		if (map[y - 1][x] == 1)
+	//		{
+	//			IsW = true;
+	//			return; // 1個でも動けたらOK
+	//		}
+	//		else
+	//			IsW = false;
+	//	}
+	//}
+}

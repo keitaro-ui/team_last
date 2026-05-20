@@ -23,7 +23,7 @@ Balloon::~Balloon()
 void Balloon::Update(float elapsedTime)
 {
 	//速力更新処理
-	//UpdateVelocity(elapsedTime);
+	//UpdateVelocity(elapsedTime);A
 
 	//オブジェクト行列を更新
 	UpdateTransform();
