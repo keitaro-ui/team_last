@@ -19,7 +19,7 @@ void SceneTutorial::Initialize()
 	stage = new Stage(0);
 
 	//プレイヤー初期化
-	player = new Player();
+	player = new Player(1);
 
 	//レティクル関数
 	sprite = new Sprite("Data/Sprite/レティクル.png");

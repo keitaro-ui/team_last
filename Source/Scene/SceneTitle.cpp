@@ -17,6 +17,12 @@ void SceneTitle::Initialize()
     sprite3 = std::make_unique<Sprite>("Data/Sprite/tutorial.png");
 
     ShowCursor(true);
+
+    titlestage = std::make_unique<Stage>(3);
+    titlestage->SetPosition({ 0.0f, -3.0f, 3.8f });
+
+    player = std::make_unique<Player>(1);
+    //pos = player->GetPosition();
 }
 
 extern POINT cursorPos;
@@ -36,6 +42,8 @@ void SceneTitle::Update(float elapsedTime)
 
     Mouse& mouse = Input::Instance().GetMouse();
 
+    player->SetPosition(pos);
+    player->Update(elapsedTime);
 
     //左クリックで画面遷移
     //スタート
@@ -68,11 +76,16 @@ void SceneTitle::Render()
 	Graphics& graphics = Graphics::Instance();
 	ID3D11DeviceContext* dc = graphics.GetDeviceContext();
 	RenderState* renderState = graphics.GetRenderState();
+    ModelRenderer* modelRenderer = graphics.GetModelRenderer();
 
 	//描画準備
 	RenderContext rc;
 	rc.deviceContext = dc;
 	rc.renderState = graphics.GetRenderState();
+
+    {
+        player->Render(rc, modelRenderer);
+    }
 
 	//2Dスプライト描画
 	{
@@ -134,6 +147,7 @@ void SceneTitle::Render()
             }
 
 
+            DrawGUI();
 	}
 }
 
@@ -141,4 +155,9 @@ void SceneTitle::Render()
 void SceneTitle::DrawGUI()
 {
 
+    ImGui::Begin("Player Position");
+
+    ImGui::DragFloat3("Position", &pos.x, 0.1f);
+
+    ImGui::End();
 }
