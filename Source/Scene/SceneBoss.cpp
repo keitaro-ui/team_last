@@ -19,8 +19,8 @@ void SceneBoss::Initialize()
 	player->SetPosition({ -22.8f, 1.0f, -26.0f });
 	emp.hp = 1000;
 	emp.special = 150;
-	SetPlayerPunch();
-	SetPlayerKick();
+	punch = SetPlayerPunch();
+	kick = SetPlayerKick();
 
 	//エネミー初期設定
 	pre.hp = 1000;
@@ -50,11 +50,27 @@ void SceneBoss::Initialize()
 	screenHeight = Graphics::Instance().GetScreenHeight();
 
 	//sprite初期設定
-	triangle_black = std::make_unique<Sprite>("Data/Sprite/BLACK_TRIANGLE.png");
 	frames[0] = std::make_unique<Sprite>("Data/Sprite/page1.png");
 	frames[1] = std::make_unique<Sprite>("Data/Sprite/page2.png");
 	frames[2] = std::make_unique<Sprite>("Data/Sprite/page3.png");
 	frames[3] = std::make_unique<Sprite>("Data/Sprite/page4.png");
+	triangle_black = std::make_unique<Sprite>("Data/Sprite/BLACK_TRIANGLE.png");
+
+	enemyPunch = std::make_unique<Sprite>("Data/Sprite/敵パンチ.png");
+	enemyKick = std::make_unique<Sprite>("Data/Sprite/敵キック.png");
+	playerSpecial = std::make_unique<Sprite>("Data/Sprite/ラリアット.png");
+	if (punch == 1)
+		playerPunch = std::make_unique<Sprite>("Data/Sprite/プレイヤーパンチI.png");
+	else if(punch == 2)
+		playerPunch = std::make_unique<Sprite>("Data/Sprite/プレイヤーパンチII.png");
+	else if(punch == 3)
+		playerPunch = std::make_unique<Sprite>("Data/Sprite/プレイヤーパンチIII.png");
+	if (kick == 1)
+		playerKick = std::make_unique<Sprite>("Data/Sprite/プレイヤーキックI.png");
+	else if (kick == 2)
+		playerKick = std::make_unique<Sprite>("Data/Sprite/プレイヤーキックII.png");
+	else if (kick == 3)
+		playerKick = std::make_unique<Sprite>("Data/Sprite/プレイヤーキックIII.png");
 
 	//変数宣言
 	state = NONE;
@@ -308,12 +324,17 @@ int SceneBoss::BossRoulette(float elapsedTime, int maxCount)
 
 		// 結果位置に来たら停止 敵モーション終わってからに変更予定
 		if (rouletteIndex == resultIndex &&
-			rouletteInterval >= 0.45f)
+			rouletteInterval >= 0.45f/* && player->GetAnimationEnd()*/)
 		{
-			isRoulette = false;
-			isRouletteStop = false;
-			resultIndex = -1;
-			rouletteInterval = 0.1f;
+			stopTimer += elapsedTime;
+
+			if (stopTimer >= 1.5f)
+			{
+				isRoulette = false;
+				isRouletteStop = false;
+				resultIndex = -1;
+				rouletteInterval = 0.1f;
+			}
 		}
 	}
 
@@ -601,7 +622,7 @@ void SceneBoss::levelUp(float elapsedTime)
 
 }
 
-void SceneBoss::SetPlayerPunch()
+int SceneBoss::SetPlayerPunch()
 {
 	int level = 1;
 	if (level == 1)
@@ -616,9 +637,10 @@ void SceneBoss::SetPlayerPunch()
 	{
 		emp.punch == 45;
 	}
+	return level;
 }
 
-void SceneBoss::SetPlayerKick()
+int SceneBoss::SetPlayerKick()
 {
 	int level = 1;
 	if (level == 1)
@@ -633,4 +655,5 @@ void SceneBoss::SetPlayerKick()
 	{
 		emp.kick = 70;
 	}
+	return level;
 }
