@@ -25,9 +25,13 @@ public:
 	//GUI描画
 	void DrawGUI() override;
 
-	void answerCheck();
-
 private:
-	Sprite* sprite = nullptr;
-	Sprite* sprite_number = nullptr;
+	std::unique_ptr<Sprite> sprite = nullptr;
+
+	// スクリーンサイズ
+	float screenWidth = 0.0f;;
+	float screenHeight = 0.0f;
+
+	// クリア状態
+	bool gameClear = false;
 };

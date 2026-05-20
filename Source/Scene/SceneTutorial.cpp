@@ -62,7 +62,7 @@ void SceneTutorial::Initialize()
 		board = new Board();
 
 		//Box* box = new Box();
-		box = new Box();
+		box = new Box(i);
 		/*box->setobjnum(i);*/
 
 
@@ -92,8 +92,6 @@ void SceneTutorial::Initialize()
 		enemyManager.Register(box);
 		balloon->box = box;
 	}
-
-	
 
 	//マウス位置の取得とロック
 	Input::Instance().GetMouse().Lock();

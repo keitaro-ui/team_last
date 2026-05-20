@@ -3,6 +3,7 @@
 #include <set>
 #include<vector>
 #include"Player.h"
+#include"Player2048.h"
 
 //エネミーマネージャー
 class PlayerManager
@@ -29,9 +30,12 @@ public:
 	void RenderDebugPrimitive(const RenderContext& rc, ShapeRenderer* renderer);
 
 	void Register(Player* p) { player = p; }
+	void Register2048(Player2048* p) { player2048 = p; }
 
 	Player* GetPlayer() { return player; }
+	Player2048* GetPlayer2048() { return player2048; }
 
 private:
 	Player* player;
+	Player2048* player2048;
 };
