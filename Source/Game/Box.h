@@ -7,7 +7,7 @@
 class Box : public Enemy
 {
 public:
-	Box();
+	Box(int num);
 	~Box() override;
 
 	//XVˆ—

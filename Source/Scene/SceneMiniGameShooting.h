@@ -1,7 +1,7 @@
 //#pragma once
 
 #include "../Source/Game/Stage.h"
-#include "../Source/Game/Player.h"
+#include "../Source/Game/PlayerShooting.h"
 #include "CameraController.h"
 #include "DirectXMath.h"
 #include "Scene.h"
@@ -9,13 +9,14 @@
 #include <PhysicsSystem2d.h>
 #include "imgui.h"
 #include "../Source/Game/MiniGame.h"
+#include "../Game/Balloon.h"
 
 // ÉQÅ[ÉÄÉVÅ[Éì
-class SceneGame : public Scene
+class SceneGameShooting : public Scene
 {
 public:
-	SceneGame() {};
-	~SceneGame() override {};
+	SceneGameShooting() {};
+	~SceneGameShooting() override {};
 
 	// èâä˙âª
 	void Initialize() override;
@@ -37,10 +38,11 @@ public:
 private:
 	// unique_ptr
 	std::unique_ptr<Stage> stage = nullptr;
-	std::unique_ptr<Player> player = nullptr;
+	std::unique_ptr<PlayerShooting> player = nullptr;
 	std::unique_ptr<CameraController> cameraController = nullptr;
-	std::unique_ptr<Typing>typing = nullptr;
-	
+	//std::vector<std::unique_ptr<Balloon>>balloon;
+	Balloon* balloon = nullptr;
+
 	// spriteíËã`
 	std::unique_ptr<Sprite> sprite = nullptr;
 	std::unique_ptr<Sprite> sprite_number = nullptr;
@@ -54,7 +56,7 @@ private:
 	float xDis = 0.0f;
 	float zDis = 0.0f;
 	DirectX::XMFLOAT3 obbPos = { 0,0,0 };
-	DirectX::XMFLOAT3 blockSize = {0.0f, 0.0f, 0.0f};
+	DirectX::XMFLOAT3 blockSize = { 0.0f, 0.0f, 0.0f };
 
 	// ÉSÅ[Éã
 	DirectX::XMFLOAT3 goalPos = { 0.0f, 0.0f, 0.0f };
@@ -63,7 +65,6 @@ private:
 	//ÉQÅ[ÉWï`âÊ
 	const float gaugeWidth = 120.0f;
 	const float gaugeHeight = 20.0f;
-	bool playBoss();
 
 public:
 

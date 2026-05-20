@@ -7,11 +7,11 @@
 #include "System/AudioSource.h"
 
 //プレイヤー
-class Player : public Character
+class PlayerShooting : public Character
 {
 public:
-    Player();
-    ~Player() override;
+    PlayerShooting();
+    ~PlayerShooting() override;
 
     //更新処理
     void Update(float elapsedTime);
@@ -23,16 +23,12 @@ public:
     void DrawDebugGUI();
 
     //ジャンプ入力処理
-    void InputJump();
+    /*void InputJump();*/
 
     //デバッグプリミティブ描画
     void RenderDebugPrimitive(const RenderContext& rc, ShapeRenderer* renderer) override;
 
     bool GetShot() { return interval; }
-
-protected:
-    //着地したときに呼ばれる
-    void OnLanding() override;
 
 private:
     Model* model = nullptr;
@@ -59,7 +55,7 @@ private:
 
     float turnSpeed = DirectX::XMConvertToRadians(720);
 
-    float                  jumpSpeed = 12.0f;
+    float                jumpSpeed = 12.0f;
 
     int                    jumpCount = 0;
     int                    jumpLimit = 2;
@@ -77,20 +73,9 @@ private:
 
     float v_angle = 0;
 
-    bool showcussor = false;
-
-    bool prevRight = false;
-
-    bool prevShow = false;
-
-    //bool camerachange = false;
-
-
-    DirectX::XMFLOAT3 camerapos = { -7.349f,1.0f,-36.349f };
-    bool camerachange = false;
-
-    //当たり判定の半径
-    float hitRadius = 0.55f;
+    //マウス操作用の変数
+    POINT cursorPos;
+    DirectX::XMFLOAT3 ndc = {};
 
 public:
     CameraController* cameraController = nullptr;
@@ -104,29 +89,4 @@ public:
 
     void coolgun(float elapsedTime);
 
-    // Getter
-    bool GetPrev() const
-    {
-        return showcussor;
-    }
-
-    // Setter
-    void SetPrev(bool value)
-    {
-        prevShow = value;
-    }
-
-    ////Getter
-    //bool GetCameChan()const
-    //{
-    //    return camerachange;
-    //}
-
-    ////Setter
-    //void SetCameChan(bool c)
-    //{
-    //    camerachange = c;
-    //}
-
-    float GethitRadius() { return hitRadius; }
 };

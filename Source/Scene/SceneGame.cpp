@@ -14,6 +14,8 @@
 #include "SceneResult.h"
 #include "../Scene/SceneBoss.h"
 #include "../Game/MiniGame.h"
+#include "../Scene/SceneMiniGame2048.h"
+#include "../Scene/SceneMiniGameShooting.h"
 
 // 初期化
 void SceneGame::Initialize()
@@ -63,7 +65,7 @@ void SceneGame::Initialize()
 	//エネミー初期化
 	EnemyManager& enemyManager = EnemyManager::Instance();
 	//EnemySlime* target = new EnemySlime();
-	//enemyManager.Register(target);
+	//enemyManager.Register(targets[2]);
 
 	//当たり判定
 	{
@@ -111,7 +113,7 @@ void SceneGame::Update(float elapsedTime)
 
 	player->Update(elapsedTime);
 
-	typing->Update(elapsedTime);
+	//typing->Update(elapsedTime);
 
 	//ステージ更新処理
 	stage->Update(elapsedTime);
@@ -139,7 +141,47 @@ void SceneGame::Update(float elapsedTime)
 		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneBoss));
 	}
 
+	//sceneminigameselectに行く
+	//if (GetAsyncKeyState('F') & 0x0001)
+	//{
+	//	camerachange = true;
+	//}
 
+	//if (camerachange == true)
+	//{
+	///*	DirectX::XMFLOAT3 DIR;
+
+	//	DIR.x = position.x - camerapos.x;
+	//	DIR.z =position.z - camerapos.z;
+
+	//	float an = atan2f(DIR.x, DIR.z);*/
+	//	//cameraController->angle.y = an;
+	//	DirectX::XMFLOAT3 DIR;
+
+	//	DIR.x = position.x - camerapos.x;
+	//	DIR.z = position.z - camerapos.z;
+
+	//	float an = atan2f(DIR.x, DIR.z);
+
+	//	float diff = an - angle.y;
+
+	//	while (diff > DirectX::XM_PI)
+	//		diff -= DirectX::XM_2PI;
+
+	//	while (diff < -DirectX::XM_PI)
+	//		diff += DirectX::XM_2PI;
+
+	//	cameraController->angle.y += diff * 0.1f;
+	//}
+
+	//次のシーンが完了したらシーンを切り替える
+	if (GetAsyncKeyState('F') & 0x0001)
+	{
+		//SceneManager::Instance().ChangeScene(new SceneLoading(new SceneMiniGame2048));
+		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneGameShooting));
+	}
+
+	//Ekey lock
 	if (player.get()->GetPrev() == false)
 	{
 		//マウス位置の取得とロック
@@ -184,7 +226,7 @@ void SceneGame::Render()
 
 		player->Render(rc, modelRenderer);
 
-		EnemyManager::Instance().Render(rc, modelRenderer);
+		//EnemyManager::Instance().Render(rc, modelRenderer);
 
 		player->RenderDebugPrimitive(rc, shapeRenderer);
 

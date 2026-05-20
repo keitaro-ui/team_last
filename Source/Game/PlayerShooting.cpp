@@ -1,4 +1,4 @@
-#include"Player.h"
+#include"PlayerShooting.h"
 #include"System/Input.h"
 #include<imgui.h>
 #include "Camera.h"
@@ -13,7 +13,7 @@
 
 
 //コンストラクタ
-Player::Player()
+PlayerShooting::PlayerShooting()
 {
 	model = new Model("Data/Model/Player/pasted__pCube2.mdl");
 
@@ -27,22 +27,18 @@ Player::Player()
 }
 
 //デストラクタ
-Player::~Player()
+PlayerShooting::~PlayerShooting()
 {
 	delete model;
 }
 
-//マウス操作用の変数
-POINT cursorPos;
-DirectX::XMFLOAT3 ndc = {};
-
 //更新処理
-void Player::Update(float elapsedTime)
+void PlayerShooting::Update(float elapsedTime)
 {
 	shottimer++;
 	//Mouse& mouse = Input::Instance().GetMouse();
 	////移動入力処理
-	InputMove(elapsedTime);
+	//InputMove(elapsedTime);
 
 	////ジャンプ入力処理
 	//InputJump();
@@ -68,9 +64,8 @@ void Player::Update(float elapsedTime)
 	//弾丸と敵の衝突処理
 	CollisionProjectilesVsEnemies();
 
-	
 	//マウス操作
-	//SStws();
+	SStws();
 
 	//オブジェクト行列を更新
 	UpdateTransform();
@@ -89,75 +84,10 @@ void Player::Update(float elapsedTime)
 	}
 
 	//mouse.Update();
-	Mouse& mouse = Input::Instance().GetMouse();
-	
-
-	bool nowRight = (GetAsyncKeyState('E') & 0x8000) != 0;
-
-	// 押した瞬間だけ反転
-	if (nowRight && !prevRight)
-	{
-		showcussor = !showcussor;
-	}
-	
-	// ShowCursorは状態が変わったときだけ呼ぶのが安全
-	if (showcussor != prevShow)
-	{
-		ShowCursor(showcussor);
-		prevShow = showcussor;
-	}
-
-	prevRight = nowRight;
-
-	//ミニゲーム行くやつ
-	//if (GetAsyncKeyState('F' & 0x8000))
-	//{
-	//	camerachange = true;
-
-	//	//if()	//Fkeyの近くに来たらという処理
-	//	/*DirectX::XMFLOAT3 dir;
-
-	//	dir.x = position.x - camerapos.x;
-	//	dir.y = position.y - camerapos.y;*/
-	//}
-
-	//if (GetAsyncKeyState('F') & 0x0001)
-	//{
-	//	camerachange = true;
-	//}
-
-	//if (camerachange == true)
-	//{
-	///*	DirectX::XMFLOAT3 DIR;
-
-	//	DIR.x = position.x - camerapos.x;
-	//	DIR.z =position.z - camerapos.z;
-
-	//	float an = atan2f(DIR.x, DIR.z);*/
-	//	//cameraController->angle.y = an;
-	//	DirectX::XMFLOAT3 DIR;
-
-	//	DIR.x = position.x - camerapos.x;
-	//	DIR.z = position.z - camerapos.z;
-
-	//	float an = atan2f(DIR.x, DIR.z);
-
-	//	float diff = an - angle.y;
-
-	//	while (diff > DirectX::XM_PI)
-	//		diff -= DirectX::XM_2PI;
-
-	//	while (diff < -DirectX::XM_PI)
-	//		diff += DirectX::XM_2PI;
-
-	//	cameraController->angle.y += diff * 0.1f;
-	//}
-	//else
-		
 }
 
 //移動入力処理
-void Player::InputMove(float elapsedTime)
+void PlayerShooting::InputMove(float elapsedTime)
 {
 	//進行ベクトル取得
 	DirectX::XMFLOAT3 moveVec = GetMoveVec();
@@ -171,7 +101,7 @@ void Player::InputMove(float elapsedTime)
 }
 
 //弾丸入力処理
-void Player::InputProjectile()
+void PlayerShooting::InputProjectile()
 {
 	GamePad& gamePad = Input::Instance().GetGamePad();
 
@@ -274,7 +204,7 @@ void Player::InputProjectile()
 #endif
 }
 
-void Player::coolgun(float elpasedTime)
+void PlayerShooting::coolgun(float elpasedTime)
 {
 	Camera& camera = Camera::Instance();
 	guntime -= elpasedTime;
@@ -284,7 +214,7 @@ void Player::coolgun(float elpasedTime)
 }
 
 //デバッグ用GUI描画
-void Player::DrawDebugGUI()
+void PlayerShooting::DrawDebugGUI()
 {
 	//ImVec2 pos = ImGui::GetMainViewport()->GetWorkPos();
 	//ImGui::SetNextWindowPos(ImVec2(pos.x + 10, pos.y + 10), ImGuiCond_Once);
@@ -325,18 +255,12 @@ void Player::DrawDebugGUI()
 	//	}
 	//}
 	//ImGui::End();
-
-	ImGui::Begin("player");
-
-	ImGui::InputFloat3("Position", &position.x);
-
-	ImGui::End();
 }
 
 //描画処理
-void Player::Render(const RenderContext& rc, ModelRenderer* renderer)
+void PlayerShooting::Render(const RenderContext& rc, ModelRenderer* renderer)
 {
-	//renderer->Render(rc, transform, model, ShaderId::Lambert);
+	renderer->Render(rc, transform, model, ShaderId::Lambert);
 
 	//弾丸描画処理
 	projectileManager.Render(rc, renderer);
@@ -353,7 +277,7 @@ void Player::Render(const RenderContext& rc, ModelRenderer* renderer)
 }
 
 //デバッグプリミティブ描画
-void Player::RenderDebugPrimitive(const RenderContext& rc, ShapeRenderer* renderer)
+void PlayerShooting::RenderDebugPrimitive(const RenderContext& rc, ShapeRenderer* renderer)
 {
 	//プレイヤーデバッグプリミティブ描画
 	//Character::RenderDebugPrimitive(rc, renderer);
@@ -363,7 +287,7 @@ void Player::RenderDebugPrimitive(const RenderContext& rc, ShapeRenderer* render
 }
 
 //スティック入力値から移動ベクトルを取得
-DirectX::XMFLOAT3 Player::GetMoveVec() const
+DirectX::XMFLOAT3 PlayerShooting::GetMoveVec() const
 {
 	//入力情報を取得
 	GamePad& gamePad = Input::Instance().GetGamePad();
@@ -414,7 +338,7 @@ DirectX::XMFLOAT3 Player::GetMoveVec() const
 }
 
 //プレイヤーと敵の衝突判定
-void Player::CollisionPlayerVsEnemies()
+void PlayerShooting::CollisionPlayerVsEnemies()
 {
 	EnemyManager& enemyManager = EnemyManager::Instance();
 
@@ -441,7 +365,7 @@ void Player::CollisionPlayerVsEnemies()
 
 
 //弾丸と敵の衝突処理
-void Player::CollisionProjectilesVsEnemies()
+void PlayerShooting::CollisionProjectilesVsEnemies()
 {
 	EnemyManager& enemyManager = EnemyManager::Instance();
 
@@ -466,6 +390,8 @@ void Player::CollisionProjectilesVsEnemies()
 				enemy->GetRadius(),
 				outPosition))
 			{
+				//answer = enemy->model_index;
+
 				//ダメージを与える
 				if (enemy->ApplyDamage(1, 0.5f))
 				{
@@ -480,7 +406,7 @@ void Player::CollisionProjectilesVsEnemies()
 }
 
 //マウス操作
-void Player::SStws()
+void PlayerShooting::SStws()
 {
 	// マウスカーソルの位置を格納する構造体
 	GetCursorPos(&cursorPos);
@@ -515,27 +441,25 @@ void Player::SStws()
 	w_pos = { STORE.x,STORE.y,STORE.z };
 }
 
-
-
-//着地したときに呼ばれる
-void Player::OnLanding()
-{
-	jumpCount = 0;
-}
-
-//ジャンプ入力処理
-void Player::InputJump()
-{
-	//ボタン入力でジャンプ（回数制限つき）
-	GamePad& gamePad = Input::Instance().GetGamePad();
-	if (gamePad.GetButtonDown() & GamePad::BTN_A)
-	{
-		//ジャンプ回数制限
-		if (jumpCount < jumpLimit)
-		{
-			Jump(jumpSpeed);
-			jumpCount++;
-		}
-	}
-}
+////着地したときに呼ばれる
+//void PlayerShooting::OnLanding()
+//{
+//	jumpCount = 0;
+//}
+//
+////ジャンプ入力処理
+//void PlayerShooting::InputJump()
+//{
+//	//ボタン入力でジャンプ（回数制限つき）
+//	GamePad& gamePad = Input::Instance().GetGamePad();
+//	if (gamePad.GetButtonDown() & GamePad::BTN_A)
+//	{
+//		//ジャンプ回数制限
+//		if (jumpCount < jumpLimit)
+//		{
+//			Jump(jumpSpeed);
+//			jumpCount++;
+//		}
+//	}
+//}
 

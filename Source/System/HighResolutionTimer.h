@@ -5,6 +5,13 @@
 class HighResolutionTimer
 {
 public:
+
+	static HighResolutionTimer& Instance()
+	{
+		static HighResolutionTimer instance;
+		return instance;
+	}
+
 	HighResolutionTimer() : delta_time(-1.0), paused_time(0), stopped(false)
 	{
 		LONGLONG counts_per_sec;
