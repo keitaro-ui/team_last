@@ -55,6 +55,8 @@ public:
 	// シェイプレンダラ取得
 	ShapeRenderer* GetShapeRenderer() const { return shapeRenderer.get(); }
 
+	void SetFullScreen(bool fullscreen);
+
 	// モデルレンダラ取得
 	ModelRenderer* GetModelRenderer() const { return modelRenderer.get(); }
 
@@ -73,4 +75,9 @@ private:
 	std::unique_ptr<RenderState>					renderState;
 	std::unique_ptr<ShapeRenderer>					shapeRenderer;
 	std::unique_ptr<ModelRenderer>					modelRenderer;
+
+
+	RECT window_rect{};
+	DWORD windowed_style{};
+	Microsoft::WRL::ComPtr<ID3D11Texture2D> depthBuffer;
 };
