@@ -9,6 +9,7 @@
 #include <PhysicsSystem2d.h>
 #include "imgui.h"
 #include "../Source/Game/MiniGame.h"
+#include "Game/EnemySlime.h"
 
 // ƒQ[ƒ€ƒV[ƒ“
 class SceneGame : public Scene
@@ -65,6 +66,7 @@ private:
 	const float gaugeHeight = 20.0f;
 	bool playBoss();
 
+	EnemySlime* enemy;
 public:
 
 };

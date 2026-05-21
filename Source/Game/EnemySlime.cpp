@@ -13,11 +13,14 @@ EnemySlime::EnemySlime()
 	//models[1] = new Model("Data/Model/Target/target_2.mdl");
 
 	//モデルが大きいのでスケーリング
-	scale.x = scale.y = scale.z = 0.1f;
+	scale = { 0.02f, 0.02f, 0.02f };
 
 	//幅、高さ設定
 	/*radius = 0.2f;
 	height = 0.0f;*/
+
+	if (titleSwitch == true)
+		model[0]->PlayAnimation(4, true, 0.2f);
 
 	CreateModel();
 }
@@ -36,11 +39,14 @@ void EnemySlime::Update(float elapsedTime)
 	//UpdateVelocity(elapsedTime);
 
 	model[0]->UpdateAnimation(elapsedTime);
+
+	
+
 	//オブジェクト行列を更新
 	UpdateTransform();
 
 	//モデル行列更新
-	//model->UpdateTransform();
+	model[0]->UpdateTransform();
 
 	//無敵時間更新
 	UpdateInvincibleTimer(elapsedTime);

@@ -32,6 +32,8 @@ void SceneTitle::Initialize()
     //pos = player->GetPosition();
 
     boss = std::make_unique<EnemySlime>();
+    boss->SetScale({ 0.06f,0.06f,0.06f });
+    boss->SetPosition({ 12.5f,-1.1f,3.1f });
     //EnemyManager::Instance().Register(boss.get());
     //EnemyManager::Instance().GetEnemy(0)->SetPosition({-10.0f, -3.0f, 6.8f});
 
@@ -59,6 +61,7 @@ void SceneTitle::Initialize()
         1000.0f//クリップ距離（遠）
     );
     
+    boss->SetTitleSwitch(true);
 }
 
 extern POINT cursorPos;
@@ -75,6 +78,7 @@ void SceneTitle::Update(float elapsedTime)
 {
     titlestage->Update(elapsedTime);
     player->Update(elapsedTime);
+    boss->Update(elapsedTime);
 
     GetCursorPos(&cursorPos);
     HWND hwnd = GetForegroundWindow();
@@ -82,6 +86,7 @@ void SceneTitle::Update(float elapsedTime)
 
     Mouse& mouse = Input::Instance().GetMouse();
 
+    
 
     //左クリックで画面遷移
     //スタート
@@ -130,6 +135,7 @@ void SceneTitle::Render()
         titlestage->UpdateTransform();
         titlestage->Render(rc, modelRenderer);
         player->Render(rc, modelRenderer);
+        boss->UpdateTransform();
         boss->Render(rc, modelRenderer);
     }
 
@@ -196,6 +202,7 @@ void SceneTitle::Render()
             //DrawGUI();
 
             player->DrawDebugGUI();
+            boss->DrawDebugGUI();
 	}
     
 }

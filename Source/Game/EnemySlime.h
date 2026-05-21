@@ -17,16 +17,24 @@ public:
 	void Render(const RenderContext& rc, ModelRenderer* renderer) override;
 
 	void CreateModel();
+	void DrawDebugGUI();
+
+	// getter
+	bool GetTitleSwitch() const { return titleSwitch; }
+
+	// setter
+	void SetTitleSwitch(bool flag) { titleSwitch = flag; }
 
 protected:
 	//Ž€–S‚µ‚½‚Æ‚«‚ÉŒÄ‚Î‚ê‚é
 	void OnDead() override;
 
-	void DrawDebugGUI();
 
 private:
 
 	Model* model[2];
+
+	bool titleSwitch = false;
 
 	enum class BossAnimation
 	{
