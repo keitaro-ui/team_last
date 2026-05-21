@@ -28,10 +28,15 @@ public:
 private:
 	std::unique_ptr<Sprite> sprite = nullptr;
 
+	std::unique_ptr<Sprite> win = nullptr;
+	std::unique_ptr<Sprite> lose = nullptr;
+
 	// スクリーンサイズ
 	float screenWidth = 0.0f;;
 	float screenHeight = 0.0f;
 
 	// クリア状態
 	bool gameClear = false;
+
+
 };

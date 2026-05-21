@@ -9,6 +9,7 @@
 #include "../Source/Scene/SceneGame.h"
 
 #include "../Source/Scene/SceneTitle.h"
+#include "../Source/Scene/SceneResult.h"
 #include "../Source/Scene/SceneManager.h"
 #include"System/Audio.h"
 
@@ -29,12 +30,14 @@ Framework::Framework(HWND hWnd)
 
 	// グラフィックス初期化
 	Graphics::Instance().Initialize(hWnd);
+	Graphics::Instance().SetFullScreen(false);
 
 	// IMGUI初期化
 	ImGuiRenderer::Initialize(hWnd, Graphics::Instance().GetDevice(), Graphics::Instance().GetDeviceContext());
 
 	// シーン初期化
-	SceneManager::Instance().ChangeScene(new SceneTitle);
+	//SceneManager::Instance().ChangeScene(new SceneTitle);
+	SceneManager::Instance().ChangeScene(new SceneResult);
 }
 
 // デストラクタ

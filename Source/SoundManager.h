@@ -6,13 +6,14 @@ enum SoundList
 {
 	titleBGM = 0,
 	gameBGM,
+	fightingBGM,
 	resultOverBGM,
 	resultClearBGM,
-	walkSE,
-	numSE,
-	flagSE,
-	startSE,
-	heartSE,
+	punchSE,
+	kickSE,
+	LariatSE,
+	//startSE,
+	//heartSE,
 
 	SoundCount
 };
