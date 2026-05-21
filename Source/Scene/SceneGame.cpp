@@ -62,7 +62,7 @@ void SceneGame::Initialize()
 	cameraController = std::make_unique<CameraController>();
 	player->cameraController = cameraController.get();
 
-	enemy->SetTitleSwitch(false);
+	//enemy->SetTitleSwitch(false);
 
 	//エネミー初期化
 	//EnemyManager& enemyManager = EnemyManager::Instance();

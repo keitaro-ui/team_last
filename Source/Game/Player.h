@@ -4,6 +4,7 @@
 #include "Character.h"
 #include <ProjectileManager.h>
 #include "CameraController.h"
+#include "CameraController2048.h"
 #include "System/AudioSource.h"
 
 //ÉvÉåÉCÉÑÅ[
@@ -85,6 +86,11 @@ private:
 
     //bool camerachange = false;
 
+    bool punch = false;
+
+    bool kick = false;
+
+    bool lariat = false;
 
     DirectX::XMFLOAT3 camerapos = { -7.349f,1.0f,-36.349f };
     bool camerachange = false;
@@ -97,6 +103,7 @@ private:
 
 public:
     CameraController* cameraController = nullptr;
+    CameraController2048* cameraController2048 = nullptr;
 
     float recoiltimer = 3.0f;
     bool interval = true;
@@ -146,4 +153,14 @@ public:
     //}
 
     float GethitRadius() { return hitRadius; }
+
+    void Motion();
+
+    void SetPunch(bool flag) { punch = flag; }
+    void SetKick(bool flag) { kick = flag; }
+    void SetLariat(bool flag) { lariat = flag; }
+
+    bool GetPunch() const { return punch; }
+    bool GetKick() const { return kick; }
+    bool GetLariat() const { return lariat; }
 };
