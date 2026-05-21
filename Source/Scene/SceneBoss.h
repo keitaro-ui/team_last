@@ -114,6 +114,8 @@ private:
 	std::unique_ptr<Sprite> playerDance;
 	std::unique_ptr<Sprite> enemyPunch;
 	std::unique_ptr<Sprite> enemyKick;
+	std::unique_ptr<Sprite> underHp;
+	std::unique_ptr<Sprite> topHp;
 
 	DirectX::XMFLOAT3 postionpl = {-40.925f, 1.0f,41.388f};
 	DirectX::XMFLOAT3 postionboss = {-41.925f, 1.0f,79.016f};
@@ -141,4 +143,6 @@ private:
 	int SetPlayerKick();
 
 	void Motion();
+	float php = 0;
+	float ehp = 0;
 };

@@ -49,6 +49,7 @@ private:
 	std::unique_ptr<Sprite> sprite_text = nullptr;
 	std::unique_ptr<Sprite>spriteUI = nullptr;
 
+	float timer = 10.0f;
 	float game_timer;
 
 	//“–‚½‚è”»’è

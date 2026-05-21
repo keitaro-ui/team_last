@@ -16,6 +16,7 @@
 #include "../Game/MiniGame.h"
 #include "../Scene/SceneMiniGame2048.h"
 #include "vector"
+#include"Scene/SceneGame.h"
 
 // 初期化
 void SceneGameShooting::Initialize()
@@ -129,12 +130,14 @@ void SceneGameShooting::Finalize()
 // 更新処理
 void SceneGameShooting::Update(float elapsedTime)
 {
+	
 	//カメラコントローラー更新処理
 	DirectX::XMFLOAT3 target = player->GetPosition();
 	target.y += 0.5f;
 	cameraController->SetTarget(target);
 	cameraController->Update(elapsedTime);
 
+	timer -= elapsedTime;
 	player->Update(elapsedTime);
 
 	//typing->Update(elapsedTime);
@@ -153,6 +156,11 @@ void SceneGameShooting::Update(float elapsedTime)
 
 	const GamePadButton anyButton =
 		GamePad::BTN_B;
+	
+	if (timer<=0.0f)
+	{
+		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneGame));
+	}
 
 	//次のシーンが完了したらシーンを切り替える
 	if (GetAsyncKeyState('F') & 0x0001)
