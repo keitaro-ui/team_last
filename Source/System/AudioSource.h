@@ -12,7 +12,7 @@ public:
 	~AudioSource();
 
 	// çƒê∂
-	void Play(bool loop);
+	void Play(bool loop, float volume);
 
 	// í‚é~
 	void Stop();
@@ -21,6 +21,6 @@ public:
 	void SetVolume(float volume);
 
 private:
-	IXAudio2SourceVoice*			sourceVoice = nullptr;
+	IXAudio2SourceVoice* sourceVoice = nullptr;
 	std::shared_ptr<AudioResource>	resource;
 };

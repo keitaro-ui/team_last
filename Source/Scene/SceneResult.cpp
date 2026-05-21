@@ -7,6 +7,7 @@
 #include "SceneLoading.h"
 #include <imgui.h>
 #include "SceneTitle.h"
+#include <SoundManager.h>
 
 //‰Šú‰»
 void SceneResult::Initialize()
@@ -20,6 +21,11 @@ void SceneResult::Initialize()
 	SceneBoss sceneBoss;
 	gameClear = sceneBoss.GetGameClear();
 
+	if(gameClear)
+		SoundManager::Instance().GetSound(SoundList::resultClearBGM)->Play(true, 0.7f);
+	else
+		SoundManager::Instance().GetSound(SoundList::resultOverBGM)->Play(true, 0.7f);
+
 	//gameClear = true;
 }
 
@@ -28,6 +34,9 @@ void SceneResult::Finalize()
 {
 	ShowCursor(true);
 	gameClear = false;
+
+	SoundManager::Instance().GetSound(SoundList::resultClearBGM)->Stop();
+	SoundManager::Instance().GetSound(SoundList::resultOverBGM)->Stop();
 }
 
 //XVˆ—

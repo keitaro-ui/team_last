@@ -132,7 +132,7 @@ void Character::UpdateVelocity(float elapsedTime)
 	//’n–Ê”»’è
 	if (position.y < 0.0f)
 	{
-		position.y = 0.0f;
+		//position.y = 0.0f;
 		velocity.y = 0.0f;
 
 		//’…’n‚µ‚½

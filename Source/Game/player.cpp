@@ -92,7 +92,7 @@ void Player::Update(float elapsedTime)
 			float amp = 0.4f; // U•
 			//cameraController->angle.x = amp * sinf(v_angle);
 			cameraController->angle.x = amp * ((sinf(v_angle) + 1.0) * 0.5);
-			takeSE->Play(false);
+			takeSE->Play(false, 1.0f);
 		}
 	}
 
@@ -222,7 +222,7 @@ void Player::InputProjectile()
 			//’¼i’eŠÛ”­ŽË
 			if (mouse.GetButtonDown() & Mouse::BTN_LEFT)
 			{
-				shotSE->Play(false);
+				shotSE->Play(false, 1.0f);
 				guntime = 1.3f;		//’e‚Ì”­ŽËŠÔŠu
 				v_guntime = 0.7f;
 				v_angle = 0;
@@ -370,6 +370,19 @@ void Player::DrawDebugGUI()
 	// Position
 	ImGui::DragFloat3("Position", &position.x, 0.1f);
 
+	// RotationiDegree•\Ž¦—pj
+	DirectX::XMFLOAT3 rotDeg;
+	rotDeg.x = DirectX::XMConvertToDegrees(angle.x);
+	rotDeg.y = DirectX::XMConvertToDegrees(angle.y);
+	rotDeg.z = DirectX::XMConvertToDegrees(angle.z);
+
+	if (ImGui::DragFloat3("Rotation", &rotDeg.x, 1.0f))
+	{
+		angle.x = DirectX::XMConvertToRadians(rotDeg.x);
+		angle.y = DirectX::XMConvertToRadians(rotDeg.y);
+		angle.z = DirectX::XMConvertToRadians(rotDeg.z);
+	}
+
 	// Scale
 	ImGui::DragFloat3("Scale", &scale.x, 0.01f, 0.01f, 10.0f);
 
@@ -387,11 +400,25 @@ void Player::DrawDebugGUI()
 		scale = { 1.0f, 1.0f, 1.0f };
 	}
 
+	ImGui::SameLine();
+
+	if (ImGui::Button("Reset Rotation"))
+	{
+		angle = { 0.0f, 0.0f, 0.0f };
+	}
+
 	// Œ»ÝˆÊ’u•\Ž¦
 	ImGui::Text("Now Position");
 	ImGui::Text("X : %.2f", position.x);
 	ImGui::Text("Y : %.2f", position.y);
 	ImGui::Text("Z : %.2f", position.z);
+
+	ImGui::Separator();
+
+	ImGui::Text("Now Rotation");
+	ImGui::Text("X : %.2f", rotDeg.x);
+	ImGui::Text("Y : %.2f", rotDeg.y);
+	ImGui::Text("Z : %.2f", rotDeg.z);
 
 	ImGui::End();
 }
@@ -542,7 +569,7 @@ void Player::CollisionProjectilesVsEnemies()
 				{
 					//’eŠÛ”jŠü
 					projectile->Destroy();
-					hitSE->Play(false);
+					hitSE->Play(false, 1.0f);
 				}
 				break;
 			}

@@ -91,6 +91,8 @@ void SceneGame::Initialize()
 
 	//マウス位置の取得とロック
 	//Input::Instance().GetMouse().Lock();
+
+	SoundManager::Instance().GetSound(SoundList::gameBGM)->Play(true, 0.7f);
 }
 
 // 終了化
@@ -100,6 +102,7 @@ void SceneGame::Finalize()
 
 	//エネミー終了化
 	//EnemyManager::Instance().Clear();
+	SoundManager::Instance().GetSound(SoundList::gameBGM)->Stop();
 
 	game_timer = 0;
 }

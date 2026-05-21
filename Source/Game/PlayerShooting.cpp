@@ -80,7 +80,7 @@ void PlayerShooting::Update(float elapsedTime)
 		float amp = 0.4f; // U•
 		//cameraController->angle.x = amp * sinf(v_angle);
 		cameraController->angle.x = amp * ((sinf(v_angle) + 1.0) * 0.5);
-		takeSE->Play(false);
+		takeSE->Play(false, 1.0f);
 	}
 
 	//mouse.Update();
@@ -113,7 +113,7 @@ void PlayerShooting::InputProjectile()
 			//’¼i’eŠÛ”­ŽË
 			if (mouse.GetButtonDown() & Mouse::BTN_LEFT)
 			{
-				shotSE->Play(false);
+				shotSE->Play(false, 1.0f);
 				guntime = 1.3f;		//’e‚Ì”­ŽËŠÔŠu
 				v_guntime = 0.7f;
 				v_angle = 0;
@@ -397,7 +397,7 @@ void PlayerShooting::CollisionProjectilesVsEnemies()
 				{
 					//’eŠÛ”jŠü
 					projectile->Destroy();
-					hitSE->Play(false);
+					hitSE->Play(false, 1.0f);
 				}
 				break;
 			}

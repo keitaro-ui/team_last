@@ -10,12 +10,13 @@
 #include "Game/PlayerManager.h"
 #include"Camera.h"
 #include"Game/EnemyManager.h"
+#include <SoundManager.h>
 
 //初期化
 void SceneTitle::Initialize()
 {
     //スプライト初期化
-    sprite = std::make_unique<Sprite>("Data/Sprite/ok.png");
+    sprite = std::make_unique<Sprite>("Data/Sprite/newtitle.png");
     sprite2 = std::make_unique<Sprite>("Data/Sprite/start.png");
     sprite3 = std::make_unique<Sprite>("Data/Sprite/tutorial.png");
 
@@ -62,6 +63,8 @@ void SceneTitle::Initialize()
     );
     
     boss->SetTitleSwitch(true);
+
+    SoundManager::Instance().GetSound(SoundList::titleBGM)->Play(true, 0.7f);
 }
 
 extern POINT cursorPos;
@@ -69,6 +72,8 @@ extern POINT cursorPos;
 //終了化
 void SceneTitle::Finalize()
 {
+    SoundManager::Instance().GetSound(SoundList::titleBGM)->Stop();
+
     ShowCursor(false);	
     delete cameraController;
 }
@@ -131,79 +136,83 @@ void SceneTitle::Render()
     rc.view = camera.GetView();
     rc.projection = camera.GetProjection();
 
-    {
-        titlestage->UpdateTransform();
-        titlestage->Render(rc, modelRenderer);
-        player->Render(rc, modelRenderer);
-        boss->UpdateTransform();
-        boss->Render(rc, modelRenderer);
-    }
-
 	//2Dスプライト描画
-	{
-		float screenWidth = static_cast<float>(graphics.GetScreenWidth());
-		float screenHeight = static_cast<float>(graphics.GetScreenHeight());
+    {
+        float screenWidth = static_cast<float>(graphics.GetScreenWidth());
+        float screenHeight = static_cast<float>(graphics.GetScreenHeight());
+        //タイトル画像
         sprite->Render(rc,
-            0, 0, 0, screenWidth, screenHeight,
+            0, -135, 0,
+            screenWidth, screenHeight,
             0,
             1, 1, 1, 1);
-            //スタートとチュートリアルの描画と拡大
-            if (cursorPos.x >= 505 && cursorPos.x <= 765)
-            {
-                //スタート
-                if (cursorPos.y >= 520 && cursorPos.y <= 585)
-                {
-                    //拡大
-                    sprite2->Render(rc,
-                        60, 25, 0, 1200, 700,
-                        0,
-                        1, 1, 1, 1);
-                }
-                else
-                {
-                    sprite2->Render(rc,
-                        150, 100, 0, 1000, 600,
-                        0,
-                        1, 1, 1, 1);
-                }
 
-                //チュートリアル
-                if (cursorPos.y >= 600 && cursorPos.y <= 670)
-                {
-                    //拡大
-                    sprite3->Render(rc,
-                        60, 20, 0, 1200, 700,
-                        0,
-                        1, 1, 1, 1);
-                }
-                else
-                {
-                    sprite3->Render(rc,
-                        150, 100, 0, 1000, 600,
-                        0,
-                        1, 1, 1, 1);
-                }
+        //スタートとチュートリアルの描画と拡大
+        if (cursorPos.x >= 505 && cursorPos.x <= 765)
+        {
+            //スタート
+            if (cursorPos.y >= 520 && cursorPos.y <= 585)
+            {
+                //拡大
+                sprite2->Render(rc,
+                    60, 25, 0, 1200, 700,
+                    0,
+                    1, 1, 1, 1);
             }
             else
             {
-                //通常時の描画
                 sprite2->Render(rc,
                     150, 100, 0, 1000, 600,
                     0,
                     1, 1, 1, 1);
+            }
 
+            //チュートリアル
+            if (cursorPos.y >= 600 && cursorPos.y <= 670)
+            {
+                //拡大
+                sprite3->Render(rc,
+                    60, 20, 0, 1200, 700,
+                    0,
+                    1, 1, 1, 1);
+            }
+            else
+            {
                 sprite3->Render(rc,
                     150, 100, 0, 1000, 600,
                     0,
                     1, 1, 1, 1);
             }
+        }
+        else
+        {
+            //通常時の描画
+            sprite2->Render(rc,
+                150, 100, 0, 1000, 600,
+                0,
+                1, 1, 1, 1);
+
+            sprite3->Render(rc,
+                150, 100, 0, 1000, 600,
+                0,
+                1, 1, 1, 1);
+        }
+
+        // 3Dモデル描画
+        {
+            titlestage->UpdateTransform();
+            titlestage->Render(rc, modelRenderer);
+            player->Render(rc, modelRenderer);
+            boss->UpdateTransform();
+            boss->Render(rc, modelRenderer);
+        }
 
 
-            //DrawGUI();
+        //DrawGUI();
 
-            player->DrawDebugGUI();
-            boss->DrawDebugGUI();
-	}
+        player->DrawDebugGUI();
+        boss->DrawDebugGUI();
+    }
     
 }
 

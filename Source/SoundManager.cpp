@@ -3,14 +3,15 @@
 
 void SoundManager::Initialize()
 {
-	sounds[SoundList::titleBGM] = Audio::Instance().LoadAudioSource("Data/Sound/title.mp3");
-	sounds[SoundList::gameBGM] = Audio::Instance().LoadAudioSource("Data/Sound/office.mp3");
-	sounds[SoundList::fightingBGM] = Audio::Instance().LoadAudioSource("Data/Sound/fighting1.mp3");
-	sounds[SoundList::resultOverBGM] = Audio::Instance().LoadAudioSource("Data/Sound/lose.mp3");
-	sounds[SoundList::resultClearBGM] = Audio::Instance().LoadAudioSource("Data/Sound/win.mp3");
-	sounds[SoundList::punchSE] = Audio::Instance().LoadAudioSource("Data/Sound/punch.mp3");
-	sounds[SoundList::kickSE] = Audio::Instance().LoadAudioSource("Data/Sound/kick.mp3");
-	sounds[SoundList::LariatSE] = Audio::Instance().LoadAudioSource("Data/Sound/Lariat.mp3");
+	sounds[SoundList::titleBGM] = Audio::Instance().LoadAudioSource("Data/Sound/title.wav");
+	sounds[SoundList::gameBGM] = Audio::Instance().LoadAudioSource("Data/Sound/office.wav");
+	//sounds[SoundList::gameBGM] = Audio::Instance().LoadAudioSource("Data/Sound/BGM.wav");
+	sounds[SoundList::fightingBGM] = Audio::Instance().LoadAudioSource("Data/Sound/fighting1.wav");
+	sounds[SoundList::resultOverBGM] = Audio::Instance().LoadAudioSource("Data/Sound/lose.wav");
+	sounds[SoundList::resultClearBGM] = Audio::Instance().LoadAudioSource("Data/Sound/win.wav");
+	sounds[SoundList::punchSE] = Audio::Instance().LoadAudioSource("Data/Sound/punch.wav");
+	sounds[SoundList::kickSE] = Audio::Instance().LoadAudioSource("Data/Sound/kick.wav");
+	sounds[SoundList::LariatSE] = Audio::Instance().LoadAudioSource("Data/Sound/Lariat.wav");
 	//sounds[SoundList::startSE] = Audio::Instance().LoadAudioSource("Data/Sound/start.wav");
 	//sounds[SoundList::heartSE] = Audio::Instance().LoadAudioSource("Data/Sound/heart.wav");
 

@@ -6,12 +6,13 @@
 #include "System/Input.h"
 #include "System/Graphics.h"
 #include "System/ImGuiRenderer.h"
-#include "../Source/Scene/SceneGame.h"
-#include "../Source/Scene/SceneBoss.h"
-
 #include "../Source/Scene/SceneTitle.h"
+#include "../Source/Scene/SceneGame.h"
+#include "../Source/Scene/SceneMiniGameSelect.h"
+#include "../Source/Scene/SceneBoss.h"
 #include "../Source/Scene/SceneResult.h"
 #include "../Source/Scene/SceneManager.h"
+#include "SoundManager.h"
 #include"System/Audio.h"
 
 // 垂直同期間隔設定
@@ -23,6 +24,7 @@ Framework::Framework(HWND hWnd)
 {
 	//オーディオ初期化
 	Audio::Instance().Initialize();
+	SoundManager::Instance().Initialize();
 
 	hDC = GetDC(hWnd);
 
@@ -36,8 +38,9 @@ Framework::Framework(HWND hWnd)
 	// IMGUI初期化
 	ImGuiRenderer::Initialize(hWnd, Graphics::Instance().GetDevice(), Graphics::Instance().GetDeviceContext());
 
-	// シーン初期化
-	SceneManager::Instance().ChangeScene(new SceneTitle);
+	// シーン初期
+	//SceneManager::Instance().ChangeScene(new SceneTitle);
+	SceneManager::Instance().ChangeScene(new SceneMiniGameSelect);
 	//SceneManager::Instance().ChangeScene(new SceneBoss);
 	//SceneManager::Instance().ChangeScene(new SceneResult);
 }
@@ -76,7 +79,7 @@ void Framework::Render(float elapsedTime)
 	ID3D11DeviceContext* dc = Graphics::Instance().GetDeviceContext();
 
 	// 画面クリア
-	Graphics::Instance().Clear(0, 0, 1, 1);
+	Graphics::Instance().Clear(1, 1, 1, 1);
 
 	// レンダーターゲット設定
 	Graphics::Instance().SetRenderTargets();
