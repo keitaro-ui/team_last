@@ -20,13 +20,13 @@ void SceneBoss::Initialize()
 	player = std::make_unique<Player>(1);
 	player->SetPosition({ -11.025f, 1.0f, -21.912f });
 	player->SetScale({ 0.009f,0.009f,0.009f });
-	emp.hp = 1000;
+	emp.hp = 500;
 	emp.special = 150;
 	punch = SetPlayerPunch();
 	kick = SetPlayerKick();
 
 	//エネミー初期設定
-	pre.hp = 1000;
+	pre.hp = 500;
 	pre.punch = 50;
 	pre.kick = 100;
 	boss = new EnemySlime();
@@ -87,6 +87,9 @@ void SceneBoss::Initialize()
 	frames[3] = std::make_unique<Sprite>("Data/Sprite/page4.png");
 	triangle_black = std::make_unique<Sprite>("Data/Sprite/BLACK_TRIANGLE.png");
 
+	underHp = std::make_unique<Sprite>("Data/Sprite/HP下地.png");
+	topHp = std::make_unique<Sprite>("Data/Sprite/HPバー.png");
+
 	enemyPunch = std::make_unique<Sprite>("Data/Sprite/敵パンチ.png");
 	enemyKick = std::make_unique<Sprite>("Data/Sprite/敵キック.png");
 	playerSpecial = std::make_unique<Sprite>("Data/Sprite/ラリアット.png");
@@ -108,6 +111,8 @@ void SceneBoss::Initialize()
 	state = NONE;
 	slideSize = screenWidth / 3;
 	upSlideSize = 0.0f;
+	php = pre.hp;
+	ehp = emp.hp;
 }
 
 void SceneBoss::Finalize()
@@ -272,6 +277,29 @@ void SceneBoss::Render()
 	{
 		// サイズをまとめる
 		DirectX::XMINT3 size = { screenWidth / 3 * 2, screenHeight / 3, 0 };
+
+		//HP 
+		// president
+		underHp->Render(rc,
+			screenWidth / 1.5f - 10.0f, 10.0f, 0.0f,
+			screenWidth / 5 + 30.0f, screenHeight / 15, 0,
+			1, 1, 1, 1);
+
+		topHp->Render(rc,
+			screenWidth / 1.5f, 16.0f, 0.0f,
+			screenWidth / 5 * pre.hp / php, screenHeight / 20, 0,
+			1, 1, 1, 1);
+
+		// employee
+		underHp->Render(rc,
+			screenWidth / 6 - 10.0f, screenHeight / 10, 0,
+			screenWidth / 5 + 30.0f, screenHeight / 15, 0,
+			1, 1, 1, 1);
+
+		topHp->Render(rc,
+			screenWidth / 6, screenHeight / 10 + 7.5f, 0,
+			screenWidth / 5 * emp.hp / ehp, screenHeight / 20, 0,
+			1, 1, 1, 1);
 
 		// ルーレット
 		if (isRoulette)

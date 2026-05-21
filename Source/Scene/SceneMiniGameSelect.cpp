@@ -13,7 +13,7 @@ void SceneMiniGameSelect::Initialize()
 	screenWidth = static_cast<float>(graphics.GetScreenWidth());
 	screenHeight = static_cast<float>(graphics.GetScreenHeight());
 
-	size = { screenWidth / 3 * 2, screenHeight / 4 * 3};
+	size = { screenWidth / 10 * 4, screenHeight / 4 * 3};
 
 	select = true;
 	ShowCursor(true);
@@ -57,7 +57,7 @@ void SceneMiniGameSelect::Update(float elapsedTime)
 	{
 		if (cursorPos.x >= xPos && cursorPos.x <= size.x)
 		{
-			if (cursorPos.y >= yPos && cursorPos.y <= yPos + size.y)
+			if (cursorPos.y >= yPos - 150.0f && cursorPos.y <= yPos + size.y - 150.0f)
 			{
 				modeFlow = true;
 			}
@@ -100,13 +100,13 @@ void SceneMiniGameSelect::Render()
 		if (select)
 		{
 			flow->Render(rc,
-				/*screenWidth + */50.0f, screenHeight / 3, 0,
+				/*screenWidth + */50.0f, screenHeight / 3 - 150.0f, 0,
 				size.x, size.y, 0,
 				1, 1, 1, 1);
 
 			shot->Render(rc,
 				screenWidth / 2 + 50.0f, screenHeight / 3, 0,
-				size.x, size.y / 4, 0,
+				size.x, size.y / 2, 0,
 				1, 1, 1, 1);
 		}
 
