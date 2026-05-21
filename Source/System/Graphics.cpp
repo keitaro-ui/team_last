@@ -151,3 +151,70 @@ void Graphics::Present(UINT syncInterval)
 {
 	swapchain->Present(syncInterval, 0);
 }
+
+void Graphics::SetFullScreen(bool fullscreen)
+{
+	if (!swapchain) return;
+
+	renderTargetView.Reset();
+	depthStencilView.Reset();
+	depthBuffer.Reset();
+
+	HRESULT hr = swapchain->SetFullscreenState(fullscreen, nullptr);
+	_ASSERT_EXPR(SUCCEEDED(hr), "Failed");
+
+	UINT bufferWidth = static_cast<UINT>(screenWidth);
+	UINT bufferHeight = static_cast<UINT>(screenHeight);
+
+	if (fullscreen)
+	{
+		Microsoft::WRL::ComPtr<IDXGIOutput> output;
+		if (SUCCEEDED(swapchain->GetContainingOutput(&output)))
+		{
+			DXGI_OUTPUT_DESC desc;
+			if (SUCCEEDED(output->GetDesc(&desc)))
+			{
+				bufferWidth = desc.DesktopCoordinates.right - desc.DesktopCoordinates.left;
+				bufferHeight = desc.DesktopCoordinates.bottom - desc.DesktopCoordinates.top;
+
+				screenWidth = (float)bufferWidth;
+				screenHeight = (float)bufferHeight;
+			}
+		}
+
+	}
+
+	hr = swapchain->ResizeBuffers(0, bufferWidth, bufferHeight, DXGI_FORMAT_UNKNOWN, 0);
+
+	Microsoft::WRL::ComPtr<ID3D11Texture2D> backBuffer;
+	hr = swapchain->GetBuffer(0, __uuidof(ID3D11Texture2D),
+		reinterpret_cast<void**>(backBuffer.GetAddressOf()));
+
+	hr = device->CreateRenderTargetView(backBuffer.Get(), nullptr, renderTargetView.GetAddressOf());
+
+
+	D3D11_TEXTURE2D_DESC depthDesc{};
+	backBuffer->GetDesc(&depthDesc);
+	depthDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	depthDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	depthDesc.MipLevels = 1;
+	depthDesc.ArraySize = 1;
+	depthDesc.Usage = D3D11_USAGE_DEFAULT;
+	depthDesc.SampleDesc.Count = 1;
+	depthDesc.SampleDesc.Quality = 0;
+
+	hr = device->CreateTexture2D(&depthDesc, nullptr, depthBuffer.GetAddressOf());
+
+	hr = device->CreateDepthStencilView(depthBuffer.Get(), nullptr, depthStencilView.GetAddressOf());
+
+
+	viewport.Width = static_cast<float>(depthDesc.Width);
+	viewport.Height = static_cast<float>(depthDesc.Height);
+	viewport.TopLeftX = 0.0f;
+	viewport.TopLeftY = 0.0f;
+	viewport.MinDepth = 0.0f;
+	viewport.MaxDepth = 1.0f;
+
+	SetRenderTargets();
+
+}

@@ -13,10 +13,14 @@ void SceneResult::Initialize()
 {
 	//スプライト
 	sprite = std::make_unique<Sprite>("Data/Sprite/result.png");
+	win = std::make_unique<Sprite>("Data/Sprite/newwin.png");
+	lose = std::make_unique<Sprite>("Data/Sprite/newlose.png");
 
 	// クリア状態をセット
 	SceneBoss sceneBoss;
 	gameClear = sceneBoss.GetGameClear();
+
+	//gameClear = true;
 }
 
 //終了化
@@ -37,7 +41,17 @@ void SceneResult::Update(float elapsedTime)
 	{
 		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneTitle));
 		//SceneManager::Instance().ChangeScene((new SceneGameproject));
+
+		if (gameClear = false)
+		{
+
+		}
+		else
+		{
+
+		}
 	}
+	
 }
 
 //描画処理
@@ -57,9 +71,25 @@ void SceneResult::Render()
 	rc.renderState = graphics.GetRenderState();
 
 	//2Dスプライト描画
-	{
+	/*{
 
 		sprite->Render(rc,
+			0, 0, 0, screenWidth, screenHeight,
+			0,
+			1, 1, 1, 1);
+
+	}*/
+	if (gameClear == false)
+	{
+		lose->Render(rc,
+			0, 0, 0, screenWidth, screenHeight,
+			0,
+			1, 1, 1, 1);
+
+	}
+	if (gameClear == true)
+	{
+		win->Render(rc,
 			0, 0, 0, screenWidth, screenHeight,
 			0,
 			1, 1, 1, 1);
