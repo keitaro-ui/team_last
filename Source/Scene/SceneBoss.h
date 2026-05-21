@@ -65,9 +65,20 @@ private:
 	float rouletteTimer = 0.0f;
 	float rouletteInterval = 0.1f;
 	float cooltime;
-	bool attack = 0;
 	bool isRoulette = false;
 	bool isRouletteStop = false;
+	float stopTimer = 0.0f;
+
+	// その他
+	bool attack = 0;
+	int punch = 0;
+	int kick = 0;
+	bool punchPlayer = false;
+	bool kickPlayer = false;
+	bool specialPlayer = false;
+	bool punchEnemy = false;
+	bool kickEnemy = false;
+	bool dancePlayer = false;
 
 	// spacekey用変数
 	enum state
@@ -82,11 +93,11 @@ private:
 	static constexpr int commands = 7;
 
 	// レベルアップ用変数
-	int nowLevel = 0;
-	bool isLevelUp = false;
 	int slide = 0;
+	int nowLevel = 0;
 	float slideSize = 0.0f;
 	float upSlideSize = 0.0f;
+	bool isLevelUp = false;
 
 	// unique_ptr
 	std::unique_ptr<Stage> stage = nullptr;
@@ -94,6 +105,12 @@ private:
 	std::unique_ptr<CameraController> cameraController = nullptr;
 	std::unique_ptr<Sprite> triangle_black = nullptr;
 	std::unique_ptr<Sprite> frames[commands];
+	std::unique_ptr<Sprite> playerPunch;
+	std::unique_ptr<Sprite> playerKick;
+	std::unique_ptr<Sprite> playerSpecial;
+	std::unique_ptr<Sprite> playerDance;
+	std::unique_ptr<Sprite> enemyPunch;
+	std::unique_ptr<Sprite> enemyKick;
 
 	// スクリーンサイズ
 	int screenWidth = 0;
@@ -106,7 +123,6 @@ private:
 	void levelUp(float elapsedTime);
 
 	// 技威力調整用関数
-	void SetPlayerPunch();
-	void SetPlayerKick();
-
+	int SetPlayerPunch();
+	int SetPlayerKick();
 };

@@ -15,12 +15,12 @@ void SceneBoss::Initialize()
 	stage->SetPosition(DirectX::XMFLOAT3(10, -5, 10));
 
 	//プレイヤー初期設定
-	player = std::make_unique<Player>();
+	player = std::make_unique<Player>(1);
 	player->SetPosition({ -22.8f, 1.0f, -26.0f });
 	emp.hp = 1000;
 	emp.special = 150;
-	SetPlayerPunch();
-	SetPlayerKick();
+	punch = SetPlayerPunch();
+	kick = SetPlayerKick();
 
 	//エネミー初期設定
 	pre.hp = 1000;
@@ -50,11 +50,28 @@ void SceneBoss::Initialize()
 	screenHeight = Graphics::Instance().GetScreenHeight();
 
 	//sprite初期設定
-	triangle_black = std::make_unique<Sprite>("Data/Sprite/BLACK_TRIANGLE.png");
 	frames[0] = std::make_unique<Sprite>("Data/Sprite/page1.png");
 	frames[1] = std::make_unique<Sprite>("Data/Sprite/page2.png");
 	frames[2] = std::make_unique<Sprite>("Data/Sprite/page3.png");
 	frames[3] = std::make_unique<Sprite>("Data/Sprite/page4.png");
+	triangle_black = std::make_unique<Sprite>("Data/Sprite/BLACK_TRIANGLE.png");
+
+	enemyPunch = std::make_unique<Sprite>("Data/Sprite/敵パンチ.png");
+	enemyKick = std::make_unique<Sprite>("Data/Sprite/敵キック.png");
+	playerSpecial = std::make_unique<Sprite>("Data/Sprite/ラリアット.png");
+	playerDance = std::make_unique<Sprite>("Data/Sprite/ラリアット.png");
+	if (punch == 1)
+		playerPunch = std::make_unique<Sprite>("Data/Sprite/プレイヤーパンチI.png");
+	else if(punch == 2)
+		playerPunch = std::make_unique<Sprite>("Data/Sprite/プレイヤーパンチII.png");
+	else if(punch == 3)
+		playerPunch = std::make_unique<Sprite>("Data/Sprite/プレイヤーパンチIII.png");
+	if (kick == 1)
+		playerKick = std::make_unique<Sprite>("Data/Sprite/プレイヤーキックI.png");
+	else if (kick == 2)
+		playerKick = std::make_unique<Sprite>("Data/Sprite/プレイヤーキックII.png");
+	else if (kick == 3)
+		playerKick = std::make_unique<Sprite>("Data/Sprite/プレイヤーキックIII.png");
 
 	//変数宣言
 	state = NONE;
@@ -114,6 +131,12 @@ void SceneBoss::Update(float elapsedTime)
 		{
 			attack = true;;
 			state = START;
+
+			punchPlayer = false;
+			kickPlayer = false;
+			specialPlayer = false;
+			punchEnemy = false;
+			kickEnemy = false;
 		}
 		cooltime = 0.0f;
 	}
@@ -188,7 +211,7 @@ void SceneBoss::Render()
 		if (isRoulette)
 		{
 			triangle_black->Render(rc,
-				screenWidth / 3 * 2 - screenWidth / 12, screenHeight / 3.1f + screenHeight / 11.8f * rouletteIndex, 0,
+				size.x - screenWidth / 12, size.y + screenHeight / 11.8f * rouletteIndex, size.z,
 				75, 70, 0,
 				1, 1, 1, 1);
 
@@ -211,6 +234,43 @@ void SceneBoss::Render()
 			frames[nextLevel]->Render(rc,
 				size.x - upSlideSize + slideSize, size.y, size.z,
 				screenWidth / 5, screenHeight / 5 * 3, 0,
+				1, 1, 1, 1);
+		}
+
+		// 技名表示
+		if (punchPlayer)
+		{
+			playerPunch->Render(rc,
+				screenWidth, screenHeight, size.z,
+				screenWidth / 6, screenHeight / 15, 0,
+				1, 1, 1, 1);
+		}
+		else if (kickPlayer)
+		{
+			playerKick->Render(rc,
+				screenWidth, screenHeight, size.z,
+				screenWidth / 6, screenHeight / 15, 0,
+				1, 1, 1, 1);
+		}
+		else if (specialPlayer)
+		{
+			playerSpecial->Render(rc,
+				screenWidth, screenHeight, size.z,
+				screenWidth / 6, screenHeight / 15, 0,
+				1, 1, 1, 1);
+		}
+		else if (punchEnemy)
+		{
+			enemyPunch->Render(rc,
+				screenWidth, screenHeight, size.z,
+				screenWidth / 6, screenHeight / 15, 0,
+				1, 1, 1, 1);
+		}
+		else if (kickEnemy)
+		{
+			enemyKick->Render(rc,
+				screenWidth, screenHeight, size.z,
+				screenWidth / 6, screenHeight / 15, 0,
 				1, 1, 1, 1);
 		}
 	}
@@ -308,12 +368,17 @@ int SceneBoss::BossRoulette(float elapsedTime, int maxCount)
 
 		// 結果位置に来たら停止 敵モーション終わってからに変更予定
 		if (rouletteIndex == resultIndex &&
-			rouletteInterval >= 0.45f)
+			rouletteInterval >= 0.45f/* && player->GetAnimationEnd()*/)
 		{
-			isRoulette = false;
-			isRouletteStop = false;
-			resultIndex = -1;
-			rouletteInterval = 0.1f;
+			stopTimer += elapsedTime;
+
+			if (stopTimer >= 1.5f)
+			{
+				isRoulette = false;
+				isRouletteStop = false;
+				resultIndex = -1;
+				rouletteInterval = 0.1f;
+			}
 		}
 	}
 
@@ -334,6 +399,7 @@ void SceneBoss::rouletteResult(int result)
 				attack = false;;
 			}
 			state = NONE;
+			punchEnemy = true;
 			break;
 
 		case 1:
@@ -346,6 +412,7 @@ void SceneBoss::rouletteResult(int result)
 		case 2:
 			// 踊り
 			state = NONE;
+			dancePlayer = true;
 			break;
 
 		case 3:
@@ -363,6 +430,7 @@ void SceneBoss::rouletteResult(int result)
 				attack = false;
 			}
 			state = NONE;
+			punchEnemy = true;
 			break;
 
 		case 5:
@@ -373,11 +441,13 @@ void SceneBoss::rouletteResult(int result)
 				attack = false;
 			}
 			state = NONE;
+			punchPlayer = true;
 			break;
 
 		case 6:
 			// 踊り
 			state = NONE;
+			dancePlayer = true;
 			break;
 		}
 	}
@@ -395,6 +465,7 @@ void SceneBoss::rouletteResult(int result)
 		case 1:
 			// 踊り
 			state = NONE;
+			dancePlayer = true;
 			break;
 
 		case 2:
@@ -405,6 +476,7 @@ void SceneBoss::rouletteResult(int result)
 				attack = false;
 			}
 			state = NONE;
+			kickPlayer = true;
 			break;
 
 		case 3:
@@ -415,6 +487,7 @@ void SceneBoss::rouletteResult(int result)
 				attack = false;
 			}
 			state = NONE;
+			kickPlayer = true;
 			break;
 
 		case 4:
@@ -425,6 +498,7 @@ void SceneBoss::rouletteResult(int result)
 				attack = false;
 			}
 			state = NONE;
+			kickEnemy = true;
 			break;
 
 		case 5:
@@ -442,6 +516,7 @@ void SceneBoss::rouletteResult(int result)
 				attack = false;
 			}
 			state = NONE;
+			kickEnemy = true;
 			break;
 		}
 	}
@@ -457,6 +532,7 @@ void SceneBoss::rouletteResult(int result)
 				attack = false;
 			}
 			state = NONE;
+			kickPlayer = true;
 			break;
 
 		case 1:
@@ -467,6 +543,7 @@ void SceneBoss::rouletteResult(int result)
 				attack = false;
 			}
 			state = NONE;
+			punchEnemy = true;
 			break;
 
 		case 2:
@@ -477,6 +554,7 @@ void SceneBoss::rouletteResult(int result)
 				attack = false;
 			}
 			state = NONE;
+			punchPlayer = true;
 			break;
 
 		case 3:
@@ -494,6 +572,7 @@ void SceneBoss::rouletteResult(int result)
 				attack = false;
 			}
 			state = NONE;
+			kickEnemy = true;
 			break;
 
 		case 5:
@@ -504,6 +583,7 @@ void SceneBoss::rouletteResult(int result)
 				attack = false;
 			}
 			state = NONE;
+			kickPlayer = true;
 			break;
 
 		case 6:
@@ -514,6 +594,7 @@ void SceneBoss::rouletteResult(int result)
 				attack = false;
 			}
 			state = NONE;
+			punchEnemy = true;
 			break;
 		}
 	}
@@ -529,11 +610,13 @@ void SceneBoss::rouletteResult(int result)
 				attack = false;
 			}
 			state = NONE;
+			specialPlayer = true;
 			break;
 
 		case 1:
 			// 踊り
 			state = NONE;
+			dancePlayer = true;
 			break;
 
 		case 2:
@@ -544,6 +627,7 @@ void SceneBoss::rouletteResult(int result)
 				attack = false;
 			}
 			state = NONE;
+			specialPlayer = true;
 			break;
 
 		case 3:
@@ -556,6 +640,7 @@ void SceneBoss::rouletteResult(int result)
 		case 4:
 			// 踊り
 			state = NONE;
+			dancePlayer = true;
 			break;
 
 		case 5:
@@ -566,11 +651,13 @@ void SceneBoss::rouletteResult(int result)
 				attack = false;
 			}
 			state = NONE;
+			specialPlayer = true;
 			break;
 
 		case 6:
 			// 踊り
 			state = NONE;
+			dancePlayer = true;
 			break;
 		}
 	}
@@ -601,7 +688,7 @@ void SceneBoss::levelUp(float elapsedTime)
 
 }
 
-void SceneBoss::SetPlayerPunch()
+int SceneBoss::SetPlayerPunch()
 {
 	int level = 1;
 	if (level == 1)
@@ -616,9 +703,10 @@ void SceneBoss::SetPlayerPunch()
 	{
 		emp.punch == 45;
 	}
+	return level;
 }
 
-void SceneBoss::SetPlayerKick()
+int SceneBoss::SetPlayerKick()
 {
 	int level = 1;
 	if (level == 1)
@@ -633,4 +721,5 @@ void SceneBoss::SetPlayerKick()
 	{
 		emp.kick = 70;
 	}
+	return level;
 }
