@@ -35,6 +35,7 @@ void EnemySlime::Update(float elapsedTime)
 	//速力更新処理
 	//UpdateVelocity(elapsedTime);
 
+	model[0]->UpdateAnimation(elapsedTime);
 	//オブジェクト行列を更新
 	UpdateTransform();
 

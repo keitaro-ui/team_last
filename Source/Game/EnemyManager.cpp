@@ -5,7 +5,7 @@
 //エネミー登録
 void EnemyManager::Register(Enemy* enemy)
 {
-	enemies.emplace_back(enemy);
+	enemies.emplace_back(std::move(enemy));
 }
 
 //エネミー削除
@@ -18,26 +18,42 @@ void EnemyManager::Remove(Enemy* enemy)
 //更新処理
 void EnemyManager::Update(float elapsedTime)
 {
+	int i = 0;
 	for (Enemy* enemy : enemies)
 	{
 		enemy->Update(elapsedTime);
+		i++;
 	}
 
 	//破棄処理
 	//　enemiesの範囲for文中でerase()すると不具合が発生してしまうため、
 	//　更新処理が終わった後に破棄リストに積まれたオブジェクトを削除する。
+	//for (Enemy* enemy : removes)
+	//{
+	//	//std::vectorから要素を削除する場合はイテレータで削除しなければならない
+	//	std::vector<Enemy*>::iterator it = std::find(enemies.begin(), enemies.end(), enemy);
+	//	if (it != enemies.end())
+	//	{
+	//		enemies.erase(it);
+	//	}
+
+	//	//削除
+	//	delete enemy;
+	//}
+
 	for (Enemy* enemy : removes)
 	{
-		//std::vectorから要素を削除する場合はイテレータで削除しなければならない
-		std::vector<Enemy*>::iterator it = std::find(enemies.begin(), enemies.end(), enemy);
+		auto it = std::find(enemies.begin(), enemies.end(), enemy);
+
 		if (it != enemies.end())
 		{
 			enemies.erase(it);
 		}
 
-		//削除
 		delete enemy;
 	}
+
+	removes.clear();
 	//破棄リストのクリア
 	removes.clear();
 

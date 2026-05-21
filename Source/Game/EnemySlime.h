@@ -27,4 +27,16 @@ protected:
 private:
 
 	Model* model[2];
+
+	enum class BossAnimation
+	{
+		punch = 0,
+		kick,
+		down,
+		damage,
+		title,
+		dance1,
+		dance2,
+		Idle,
+	};
 };
