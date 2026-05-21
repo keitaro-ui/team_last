@@ -79,6 +79,7 @@ private:
 	bool punchEnemy = false;
 	bool kickEnemy = false;
 	bool dancePlayer = false;
+	bool rightDown = false;
 
 	// spacekey—p•Ï”
 	enum state

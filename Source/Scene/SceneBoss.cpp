@@ -131,6 +131,7 @@ void SceneBoss::Update(float elapsedTime)
 		{
 			attack = true;;
 			state = START;
+			rightDown = false;
 
 			punchPlayer = false;
 			kickPlayer = false;
@@ -238,40 +239,43 @@ void SceneBoss::Render()
 		}
 
 		// ‹Z–¼•\Ž¦
-		if (punchPlayer)
+		if (rightDown)
 		{
-			playerPunch->Render(rc,
-				screenWidth, screenHeight, size.z,
-				screenWidth / 6, screenHeight / 15, 0,
-				1, 1, 1, 1);
-		}
-		else if (kickPlayer)
-		{
-			playerKick->Render(rc,
-				screenWidth, screenHeight, size.z,
-				screenWidth / 6, screenHeight / 15, 0,
-				1, 1, 1, 1);
-		}
-		else if (specialPlayer)
-		{
-			playerSpecial->Render(rc,
-				screenWidth, screenHeight, size.z,
-				screenWidth / 6, screenHeight / 15, 0,
-				1, 1, 1, 1);
-		}
-		else if (punchEnemy)
-		{
-			enemyPunch->Render(rc,
-				screenWidth, screenHeight, size.z,
-				screenWidth / 6, screenHeight / 15, 0,
-				1, 1, 1, 1);
-		}
-		else if (kickEnemy)
-		{
-			enemyKick->Render(rc,
-				screenWidth, screenHeight, size.z,
-				screenWidth / 6, screenHeight / 15, 0,
-				1, 1, 1, 1);
+			if (punchPlayer)
+			{
+				playerPunch->Render(rc,
+					screenWidth - screenWidth / 5, screenHeight - screenHeight / 12, size.z,
+					screenWidth / 6, screenHeight / 15, 0,
+					1, 1, 1, 1);
+			}
+			else if (kickPlayer)
+			{
+				playerKick->Render(rc,
+					screenWidth - screenWidth / 5, screenHeight - screenHeight / 12, size.z,
+					screenWidth / 6, screenHeight / 15, 0,
+					1, 1, 1, 1);
+			}
+			else if (specialPlayer)
+			{
+				playerSpecial->Render(rc,
+					screenWidth - screenWidth / 5, screenHeight - screenHeight / 12, size.z,
+					screenWidth / 6, screenHeight / 15, 0,
+					1, 1, 1, 1);
+			}
+			else if (punchEnemy)
+			{
+				enemyPunch->Render(rc,
+					screenWidth - screenWidth / 5, screenHeight - screenHeight / 12, size.z,
+					screenWidth / 6, screenHeight / 15, 0,
+					1, 1, 1, 1);
+			}
+			else if (kickEnemy)
+			{
+				enemyKick->Render(rc,
+					screenWidth - screenWidth / 5, screenHeight - screenHeight / 12, size.z,
+					screenWidth / 6, screenHeight / 15, 0,
+					1, 1, 1, 1);
+			}
 		}
 	}
 }
@@ -334,6 +338,24 @@ void SceneBoss::DrawGUI()
 
 		ImGui::End();
 	}
+
+	{
+		ImGui::Begin("Debug Action");
+
+		ImGui::Text("Player");
+		ImGui::Checkbox("Punch##Player", &punchPlayer);
+		ImGui::Checkbox("Kick##Player", &kickPlayer);
+		ImGui::Checkbox("Special##Player", &specialPlayer);
+		ImGui::Checkbox("Dance##Player", &dancePlayer);
+
+		ImGui::Separator();
+
+		ImGui::Text("Enemy");
+		ImGui::Checkbox("Punch##Enemy", &punchEnemy);
+		ImGui::Checkbox("Kick##Enemy", &kickEnemy);
+
+		ImGui::End();
+	}
 }
 
 int SceneBoss::BossRoulette(float elapsedTime, int maxCount)
@@ -368,12 +390,13 @@ int SceneBoss::BossRoulette(float elapsedTime, int maxCount)
 
 		// Œ‹‰ÊˆÊ’u‚É—ˆ‚½‚ç’âŽ~ “Gƒ‚[ƒVƒ‡ƒ“I‚í‚Á‚Ä‚©‚ç‚É•ÏX—\’è
 		if (rouletteIndex == resultIndex &&
-			rouletteInterval >= 0.45f/* && player->GetAnimationEnd()*/)
+			rouletteInterval >= 0.55f)
 		{
 			stopTimer += elapsedTime;
 
-			if (stopTimer >= 1.5f)
+			if (stopTimer >= 2.5f)
 			{
+				rightDown = true;
 				isRoulette = false;
 				isRouletteStop = false;
 				resultIndex = -1;
