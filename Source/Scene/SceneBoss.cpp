@@ -59,7 +59,7 @@ void SceneBoss::Initialize()
 	enemyPunch = std::make_unique<Sprite>("Data/Sprite/敵パンチ.png");
 	enemyKick = std::make_unique<Sprite>("Data/Sprite/敵キック.png");
 	playerSpecial = std::make_unique<Sprite>("Data/Sprite/ラリアット.png");
-	playerDance = std::make_unique<Sprite>("Data/Sprite/ラリアット.png");
+	playerDance = std::make_unique<Sprite>("Data/Sprite/踊っている.png");
 	if (punch == 1)
 		playerPunch = std::make_unique<Sprite>("Data/Sprite/プレイヤーパンチI.png");
 	else if(punch == 2)

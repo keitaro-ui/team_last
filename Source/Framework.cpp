@@ -7,6 +7,7 @@
 #include "System/Graphics.h"
 #include "System/ImGuiRenderer.h"
 #include "../Source/Scene/SceneGame.h"
+#include "../Source/Scene/SceneBoss.h"
 
 #include "../Source/Scene/SceneTitle.h"
 #include "../Source/Scene/SceneResult.h"
@@ -37,7 +38,8 @@ Framework::Framework(HWND hWnd)
 
 	// シーン初期化
 	//SceneManager::Instance().ChangeScene(new SceneTitle);
-	SceneManager::Instance().ChangeScene(new SceneResult);
+	SceneManager::Instance().ChangeScene(new SceneBoss);
+	//SceneManager::Instance().ChangeScene(new SceneResult);
 }
 
 // デストラクタ
