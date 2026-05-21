@@ -62,7 +62,7 @@ void SceneTitle::Initialize()
         1000.0f//クリップ距離（遠）
     );
     
-    boss->SetTitleSwitch(true);
+   // boss->SetTitleSwitch(true);
 
     SoundManager::Instance().GetSound(SoundList::titleBGM)->Play(true, 0.7f);
 }
