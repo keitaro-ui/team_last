@@ -73,6 +73,12 @@ private:
 	bool attack = 0;
 	int punch = 0;
 	int kick = 0;
+	bool punchPlayer = false;
+	bool kickPlayer = false;
+	bool specialPlayer = false;
+	bool punchEnemy = false;
+	bool kickEnemy = false;
+	bool dancePlayer = false;
 
 	// spacekey—p•Ï”
 	enum state
@@ -102,6 +108,7 @@ private:
 	std::unique_ptr<Sprite> playerPunch;
 	std::unique_ptr<Sprite> playerKick;
 	std::unique_ptr<Sprite> playerSpecial;
+	std::unique_ptr<Sprite> playerDance;
 	std::unique_ptr<Sprite> enemyPunch;
 	std::unique_ptr<Sprite> enemyKick;
 
