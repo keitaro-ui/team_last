@@ -13,17 +13,28 @@
 
 
 //コンストラクタ
-Player::Player()
+Player::Player(int num)
 {
-	model = new Model("Data/Model/Player/pasted__pCube2.mdl");
+	if (num == 0)
+	{
+		model = new Model("Data/Model/Player/pasted__pCube2.mdl");
+		select = 1;
+		//モデルが大きいのでスケーリング
+		scale.x = scale.y = scale.z = 0.21f;
+		//ヒットSE読み込み
+		hitSE = Audio::Instance().LoadAudioSource("Data/Sound/Hit.wav");
+		shotSE = Audio::Instance().LoadAudioSource("Data/Sound/revolver.wav");
+		takeSE = Audio::Instance().LoadAudioSource("Data/Sound/take revolver.wav");
+	}
+	else if (num == 1)
+	{
+		select = 2;
+		model = new Model("Data/Model/Player/Business_Man.mdl");
+		//モデルが大きいのでスケーリング
+		scale.x = scale.y = scale.z = 0.05f;
 
-	//モデルが大きいのでスケーリング
-	scale.x = scale.y = scale.z = 0.21f;
-
-	//ヒットSE読み込み
-	hitSE = Audio::Instance().LoadAudioSource("Data/Sound/Hit.wav");
-	shotSE = Audio::Instance().LoadAudioSource("Data/Sound/revolver.wav");
-	takeSE = Audio::Instance().LoadAudioSource("Data/Sound/take revolver.wav");
+		model->PlayAnimation(8, false, 0.2f);
+	}
 }
 
 //デストラクタ
@@ -39,6 +50,12 @@ DirectX::XMFLOAT3 ndc = {};
 //更新処理
 void Player::Update(float elapsedTime)
 {
+	/*if (cameraController == nullptr)
+	{
+		return;
+	}*/
+
+
 	shottimer++;
 	//Mouse& mouse = Input::Instance().GetMouse();
 	////移動入力処理
@@ -47,46 +64,51 @@ void Player::Update(float elapsedTime)
 	////ジャンプ入力処理
 	//InputJump();
 
-	angle.x = -cameraController->getAngle().x;
-	angle.y = cameraController->getAngle().y - DirectX::XM_PIDIV2;
+	if (select == 1)
+	{
 
-	//弾の間隔
-	coolgun(elapsedTime);
+		angle.x = -cameraController->getAngle().x;
+		angle.y = cameraController->getAngle().y - DirectX::XM_PIDIV2;
 
-	//弾丸入力処理
-	InputProjectile();
+		//弾の間隔
+		coolgun(elapsedTime);
+
+		//弾丸入力処理
+		InputProjectile();
+
+		//弾丸更新処理
+		projectileManager.Update(elapsedTime);
+
+		//弾丸と敵の衝突処理
+		CollisionProjectilesVsEnemies();
+
+
+		if (vibe_interval == false)
+		{
+			float w = 5.0f; // 角速度
+
+			v_angle += w * elapsedTime;
+
+			float amp = 0.4f; // 振幅
+			//cameraController->angle.x = amp * sinf(v_angle);
+			cameraController->angle.x = amp * ((sinf(v_angle) + 1.0) * 0.5);
+			takeSE->Play(false);
+		}
+	}
 
 	//速力処理更新
 	UpdateVelocity(elapsedTime);
-
-	//弾丸更新処理
-	projectileManager.Update(elapsedTime);
-
 	//プレイヤーとエネミーとの衝突処理
 	CollisionPlayerVsEnemies();
-
-	//弾丸と敵の衝突処理
-	CollisionProjectilesVsEnemies();
-
 	
 	//マウス操作
 	//SStws();
 
 	//オブジェクト行列を更新
 	UpdateTransform();
+	model->UpdateAnimation(elapsedTime);
 	model->UpdateTransform();
 
-	if (vibe_interval == false)
-	{
-		float w = 5.0f; // 角速度
-
-		v_angle += w * elapsedTime;
-
-		float amp = 0.4f; // 振幅
-		//cameraController->angle.x = amp * sinf(v_angle);
-		cameraController->angle.x = amp * ((sinf(v_angle) + 1.0) * 0.5);
-		takeSE->Play(false);
-	}
 
 	//mouse.Update();
 	Mouse& mouse = Input::Instance().GetMouse();
@@ -108,6 +130,23 @@ void Player::Update(float elapsedTime)
 	}
 
 	prevRight = nowRight;
+
+	if (select == 2)
+	{
+		if (model->IsAnimationFinished())
+		{
+			if (currentMotion == 0)
+			{
+				currentMotion = 1;
+				model->PlayAnimation(9, false);
+			}
+			else
+			{
+				currentMotion = 0;
+				model->PlayAnimation(8, false);
+			}
+		}
+	}
 
 	//ミニゲーム行くやつ
 	//if (GetAsyncKeyState('F' & 0x8000))
@@ -326,9 +365,33 @@ void Player::DrawDebugGUI()
 	//}
 	//ImGui::End();
 
-	ImGui::Begin("player");
+	ImGui::Begin("Player");
 
-	ImGui::InputFloat3("Position", &position.x);
+	// Position
+	ImGui::DragFloat3("Position", &position.x, 0.1f);
+
+	// Scale
+	ImGui::DragFloat3("Scale", &scale.x, 0.01f, 0.01f, 10.0f);
+
+	ImGui::Separator();
+
+	if (ImGui::Button("Reset Position"))
+	{
+		position = { 0.0f, 0.0f, 0.0f };
+	}
+
+	ImGui::SameLine();
+
+	if (ImGui::Button("Reset Scale"))
+	{
+		scale = { 1.0f, 1.0f, 1.0f };
+	}
+
+	// 現在位置表示
+	ImGui::Text("Now Position");
+	ImGui::Text("X : %.2f", position.x);
+	ImGui::Text("Y : %.2f", position.y);
+	ImGui::Text("Z : %.2f", position.z);
 
 	ImGui::End();
 }
@@ -339,11 +402,19 @@ void Player::Render(const RenderContext& rc, ModelRenderer* renderer)
 	//renderer->Render(rc, transform, model, ShaderId::Lambert);
 
 	//弾丸描画処理
-	projectileManager.Render(rc, renderer);
-	DirectX::XMFLOAT4X4 projectileTransform = model->GetNode("tipofPistol")->globalTransform;
-	DirectX::XMMATRIX projectileMATRIX = DirectX::XMLoadFloat4x4(&projectileTransform);
-	DirectX::XMMATRIX worldMatrix = DirectX::XMLoadFloat4x4(&transform);
-	DirectX::XMStoreFloat4x4(&projectileTransform, projectileMATRIX * worldMatrix);
+	if (select == 1)
+	{
+		projectileManager.Render(rc, renderer);
+		DirectX::XMFLOAT4X4 projectileTransform = model->GetNode("tipofPistol")->globalTransform;
+		DirectX::XMMATRIX projectileMATRIX = DirectX::XMLoadFloat4x4(&projectileTransform);
+		DirectX::XMMATRIX worldMatrix = DirectX::XMLoadFloat4x4(&transform);
+		DirectX::XMStoreFloat4x4(&projectileTransform, projectileMATRIX * worldMatrix);
+	}
+
+	else if (select == 2)
+	{
+		renderer->Render(rc, transform, model, ShaderId::Lambert);
+	}
 
 	//弾丸射出箇所の可視化
 	/*Graphics::Instance().GetShapeRenderer()->RenderSphere(rc,

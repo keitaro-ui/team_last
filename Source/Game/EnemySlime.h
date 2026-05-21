@@ -22,6 +22,9 @@ protected:
 	//Ž€–S‚µ‚½‚Æ‚«‚ÉŒÄ‚Î‚ê‚é
 	void OnDead() override;
 
+	void DrawDebugGUI();
+
 private:
 
+	Model* model[2];
 };

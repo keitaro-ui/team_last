@@ -32,7 +32,7 @@ void SceneGame::Initialize()
 	game_timer = 15;
 
 	//プレイヤー初期化
-	player = std::make_unique<Player>();
+	player = std::make_unique<Player>(0);
 	player->SetPosition({ -22.8f, 1.0f, -26.0f });
 
 	//Sprite読み込み

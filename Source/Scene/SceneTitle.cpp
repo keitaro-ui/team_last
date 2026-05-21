@@ -7,17 +7,58 @@
 #include "System/Mouse.h"
 #include "../Game/Player.h"
 #include "../Scene/SceneTutorial.h"
-#include "../Scene/SceneMiniGameTyping.h"
+#include "Game/PlayerManager.h"
+#include"Camera.h"
+#include"Game/EnemyManager.h"
 
 //初期化
 void SceneTitle::Initialize()
 {
-	//スプライト初期化
-	sprite = std::make_unique<Sprite>("Data/Sprite/title.png");
+    //スプライト初期化
+    sprite = std::make_unique<Sprite>("Data/Sprite/ok.png");
     sprite2 = std::make_unique<Sprite>("Data/Sprite/start.png");
     sprite3 = std::make_unique<Sprite>("Data/Sprite/tutorial.png");
 
     ShowCursor(true);
+
+    titlestage = std::make_unique<Stage>(3);
+    titlestage->SetPosition({ 0.0f, -3.0f, 3.8f });
+
+    player = std::make_unique<Player>(1);
+
+    PlayerManager::Instance().Register(player.get());
+    //PlayerManager::Instance().GetPlayer()->SetProv(true);
+    PlayerManager::Instance().GetPlayer()->SetPosition({ -10.0f, -3.0f, 6.8f });
+    //pos = player->GetPosition();
+
+    boss = std::make_unique<EnemySlime>();
+    EnemyManager::Instance().Register(boss.get());
+    EnemyManager::Instance().GetEnemy(0)->SetPosition({-10.0f, -3.0f, 6.8f});
+
+    //カメラコントローラー初期化
+    cameraController = new CameraController();
+    //cameraController->angle.y = DirectX::XMConvertToRadians(45.0f);
+    cameraController->angle.x = DirectX::XMConvertToRadians(78.0f);
+    cameraController->distance = 29.8f;
+    //player->cameraController = cameraController;
+    DirectX::XMFLOAT3 target = titlestage->GetPosition();
+    cameraController->SetTarget(target);
+
+    //カメラ初期設定
+    Graphics& graphics = Graphics::Instance();
+    Camera& camera = Camera::Instance();
+    camera.SetLookAt(
+        DirectX::XMFLOAT3(0, 7, 30),//視点
+        DirectX::XMFLOAT3(0, 0, 0),//注視点
+        DirectX::XMFLOAT3(0, 1, 0)//上方向
+    );
+    camera.SetPerspectiveFov(
+        DirectX::XMConvertToRadians(45),//視野角
+        graphics.GetScreenWidth() / graphics.GetScreenHeight(),//画面アスペクト比
+        0.1f,//クリップ距離（近）
+        1000.0f//クリップ距離（遠）
+    );
+    
 }
 
 extern POINT cursorPos;
@@ -26,11 +67,15 @@ extern POINT cursorPos;
 void SceneTitle::Finalize()
 {
     ShowCursor(false);	
+    delete cameraController;
 }
 
 //更新処理
 void SceneTitle::Update(float elapsedTime)
 {
+    titlestage->Update(elapsedTime);
+    player->Update(elapsedTime);
+
     GetCursorPos(&cursorPos);
     HWND hwnd = GetForegroundWindow();
     ScreenToClient(hwnd, &cursorPos);
@@ -57,10 +102,7 @@ void SceneTitle::Update(float elapsedTime)
         {
             if (cursorPos.y >= 600 && cursorPos.y <= 670)
             {
-                //SceneManager::Instance().ChangeScene(new SceneLoading(new SceneMiniGameTyping));
-                TypingChecker checker;
-                checker.Update();
-                checker.Render();
+                SceneManager::Instance().ChangeScene(new SceneLoading(new SceneTutorial));
             }
         }
     }
@@ -72,11 +114,24 @@ void SceneTitle::Render()
 	Graphics& graphics = Graphics::Instance();
 	ID3D11DeviceContext* dc = graphics.GetDeviceContext();
 	RenderState* renderState = graphics.GetRenderState();
+    ModelRenderer* modelRenderer = graphics.GetModelRenderer();
 
 	//描画準備
 	RenderContext rc;
 	rc.deviceContext = dc;
 	rc.renderState = graphics.GetRenderState();
+
+    //カメラパラメータ設定
+    Camera& camera = Camera::Instance();
+    rc.view = camera.GetView();
+    rc.projection = camera.GetProjection();
+
+    {
+        titlestage->UpdateTransform();
+        titlestage->Render(rc, modelRenderer);
+        player->Render(rc, modelRenderer);
+        boss->Render(rc, modelRenderer);
+    }
 
 	//2Dスプライト描画
 	{
@@ -138,11 +193,20 @@ void SceneTitle::Render()
             }
 
 
+            //DrawGUI();
+
+            player->DrawDebugGUI();
 	}
+    
 }
 
 //GUI描画
 void SceneTitle::DrawGUI()
 {
 
+    ImGui::Begin("Player Position");
+
+    ImGui::DragFloat3("Position", &pos.x, 0.1f);
+
+    ImGui::End();
 }

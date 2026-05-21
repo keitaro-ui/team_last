@@ -8,23 +8,27 @@ Stage::Stage(int num)
 	if (num == 0)
 	{
 		model = new Model("Data/Model/Stage/Noroof_offeceroom_scale(1).mdl");
+		scale.x = scale.y = scale.z = 0.1f;
 	}
 	else if (num == 1)
 	{
 		model = new Model("Data/Model/Stage/Noroof_offeceroom_scale(1).mdl");
+		scale.x = scale.y = scale.z = 0.1f;
 	}
 
 	else if (num == 2)
 	{
 		model = new Model("Data/Model/Stage/stage_2048.mdl");
+		scale.x = scale.y = scale.z = 1.2f;
 	}
 
 	else if (num == 3)
 	{
 		model = new Model("Data/Model/Stage/stage_1.mdl");
+		scale.x = scale.y = scale.z = 0.1f;
 	}
 	// scale
-	scale.x = scale.y = scale.z = 0.1f;
+	
 	//scale.x = scale.y = scale.z = 1.0f;
 }
 
