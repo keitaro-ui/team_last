@@ -32,8 +32,8 @@ void SceneTitle::Initialize()
     //pos = player->GetPosition();
 
     boss = std::make_unique<EnemySlime>();
-    EnemyManager::Instance().Register(boss.get());
-    EnemyManager::Instance().GetEnemy(0)->SetPosition({-10.0f, -3.0f, 6.8f});
+    //EnemyManager::Instance().Register(boss.get());
+    //EnemyManager::Instance().GetEnemy(0)->SetPosition({-10.0f, -3.0f, 6.8f});
 
     //カメラコントローラー初期化
     cameraController = new CameraController();

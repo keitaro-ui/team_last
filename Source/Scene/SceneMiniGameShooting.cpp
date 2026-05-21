@@ -106,7 +106,7 @@ void SceneGameShooting::Initialize()
 
 		num++;
 
-		enemyManager.Register(balloon);
+		enemyManager.Register(std::move(balloon));
 
 	}
 

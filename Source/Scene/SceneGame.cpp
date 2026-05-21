@@ -27,7 +27,7 @@ void SceneGame::Initialize()
 
 	typing = std::make_unique<Typing>();
 	typing->SetPosition(DirectX::XMFLOAT3(10, -5, 10));
-	typing->SetScale(DirectX::XMFLOAT3(0.005f,0.005f,0.005f));
+	typing->SetScale(DirectX::XMFLOAT3(0.005f, 0.005f, 0.005f));
 
 	game_timer = 15;
 
@@ -40,7 +40,7 @@ void SceneGame::Initialize()
 	sprite_number = std::make_unique<Sprite>("Data/Sprite/number.png");
 	sprite_text = std::make_unique<Sprite>("Data/Sprite/残り時間.png");
 	spriteUI = std::make_unique<Sprite>("Data/Sprite/ok.png");
-	
+
 	//3DModel読み込み
 
 
@@ -51,7 +51,7 @@ void SceneGame::Initialize()
 		DirectX::XMFLOAT3(0, 10, -10),//視点
 		DirectX::XMFLOAT3(0, 0, 0),//注視点
 		DirectX::XMFLOAT3(0, 1, 0)//上方向
-		);
+	);
 	camera.SetPerspectiveFov(
 		DirectX::XMConvertToRadians(45),//視野角
 		graphics.GetScreenWidth() / graphics.GetScreenHeight(),//画面アスペクト比
@@ -63,7 +63,7 @@ void SceneGame::Initialize()
 	player->cameraController = cameraController.get();
 
 	//エネミー初期化
-	EnemyManager& enemyManager = EnemyManager::Instance();
+	//EnemyManager& enemyManager = EnemyManager::Instance();
 	//EnemySlime* target = new EnemySlime();
 	//enemyManager.Register(targets[2]);
 
@@ -74,15 +74,15 @@ void SceneGame::Initialize()
 		zDis = 50.0f;
 		obbPos = { 0,0,0 };
 		//physics.AddObb(obbPos, { xDis, 0, zDis }, 0);
-		
+
 		//外枠
-		physics.AddObb({-8.9f, 0.0f, -34.5f}, {14.4f, 0.0f, 43.1f}, 0);
-		physics.AddObb({-25.9f, 0.0f, 0.0f}, {6.2f, 0.0f, 19.5f}, 0);
+		physics.AddObb({ -8.9f, 0.0f, -34.5f }, { 14.4f, 0.0f, 43.1f }, 0);
+		physics.AddObb({ -25.9f, 0.0f, 0.0f }, { 6.2f, 0.0f, 19.5f }, 0);
 		//手前、コピー機
-		physics.AddObb({-6.0f, 0.0f, -3.5f}, {6.4f, 0.0f, 14.7f}, 0);
-		physics.AddObb({-6.2f, 0.0f, -18.8f}, {3.1f, 0, 2.6f}, 0);
+		physics.AddObb({ -6.0f, 0.0f, -3.5f }, { 6.4f, 0.0f, 14.7f }, 0);
+		physics.AddObb({ -6.2f, 0.0f, -18.8f }, { 3.1f, 0, 2.6f }, 0);
 		//中
-		physics.AddObb({-4.1f, 0.0f, -34.5f}, {11.6f, 0, 5.6f}, 0);
+		physics.AddObb({ -4.1f, 0.0f, -34.5f }, { 11.6f, 0, 5.6f }, 0);
 		//奥
 		physics.AddObb({ -7.0f, 0.0f, -56.3f }, { 6.8f, 0.0f, 8.1f }, 0);
 	}
@@ -97,7 +97,7 @@ void SceneGame::Finalize()
 	Input::Instance().GetMouse().Unlock();
 
 	//エネミー終了化
-	EnemyManager::Instance().Clear();
+	//EnemyManager::Instance().Clear();
 
 	game_timer = 0;
 }
@@ -111,7 +111,7 @@ void SceneGame::Update(float elapsedTime)
 	cameraController->SetTarget(target);
 	cameraController->Update(elapsedTime);
 
-	player->Update(elapsedTime);
+	//player->Update(elapsedTime);
 
 	//typing->Update(elapsedTime);
 
@@ -123,7 +123,7 @@ void SceneGame::Update(float elapsedTime)
 	player->SetPosition(physics.CircleVsStage(player->GetPosition(), player->GethitRadius())); //当たり判定一旦消すならコメントして
 
 	//エネミー更新処理
-	EnemyManager::Instance().Update(elapsedTime);
+	//EnemyManager::Instance().Update(elapsedTime);
 
 	//シーン遷移
 	GamePad& gamePad = Input::Instance().GetGamePad();
@@ -134,9 +134,9 @@ void SceneGame::Update(float elapsedTime)
 	//game_timer++;
 	//game_timer -= elapsedTime;
 
-	if(playBoss())
-	//if (game_timer < 0)
-	//if (gamePad.GetButtonDown() & anyButton)
+	if (playBoss())
+		//if (game_timer < 0)
+		//if (gamePad.GetButtonDown() & anyButton)
 	{
 		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneBoss));
 	}
@@ -247,7 +247,7 @@ void SceneGame::Render()
 
 	// 2Dスプライト描画
 	{
-		
+
 
 		sprite->Render(rc,
 			610, 335, 0, 64.0f, 64.0f,
@@ -388,7 +388,7 @@ void SceneGame::RenderUI(RenderContext rc)
 	const float gaugeHeight = 20.0f;
 
 	spriteUI->Render(rc,
-		screen.x,screen.y,0.0f,
+		screen.x, screen.y, 0.0f,
 		gaugeWidth * 2,
 		gaugeHeight * 2,
 		0,
