@@ -59,7 +59,7 @@ void SceneBoss::Initialize()
 	enemyPunch = std::make_unique<Sprite>("Data/Sprite/敵パンチ.png");
 	enemyKick = std::make_unique<Sprite>("Data/Sprite/敵キック.png");
 	playerSpecial = std::make_unique<Sprite>("Data/Sprite/ラリアット.png");
-	playerDance = std::make_unique<Sprite>("Data/Sprite/ラリアット.png");
+	playerDance = std::make_unique<Sprite>("Data/Sprite/踊っている.png");
 	if (punch == 1)
 		playerPunch = std::make_unique<Sprite>("Data/Sprite/プレイヤーパンチI.png");
 	else if(punch == 2)
@@ -105,8 +105,8 @@ void SceneBoss::Update(float elapsedTime)
 	}
 
 	// ルーレットの中身の関数
-	if (isRouletteStop)
-		rouletteResult(roulette);
+	/*if (isRouletteStop)
+		rouletteResult(roulette);*/
 
 	// レベルアップ
 	levelUp(elapsedTime);
@@ -131,10 +131,12 @@ void SceneBoss::Update(float elapsedTime)
 		{
 			attack = true;;
 			state = START;
+			rightDown = false;
 
 			punchPlayer = false;
 			kickPlayer = false;
 			specialPlayer = false;
+			dancePlayer = false;
 			punchEnemy = false;
 			kickEnemy = false;
 		}
@@ -238,40 +240,50 @@ void SceneBoss::Render()
 		}
 
 		// 技名表示
-		if (punchPlayer)
+		if (rightDown)
 		{
-			playerPunch->Render(rc,
-				screenWidth, screenHeight, size.z,
-				screenWidth / 6, screenHeight / 15, 0,
-				1, 1, 1, 1);
-		}
-		else if (kickPlayer)
-		{
-			playerKick->Render(rc,
-				screenWidth, screenHeight, size.z,
-				screenWidth / 6, screenHeight / 15, 0,
-				1, 1, 1, 1);
-		}
-		else if (specialPlayer)
-		{
-			playerSpecial->Render(rc,
-				screenWidth, screenHeight, size.z,
-				screenWidth / 6, screenHeight / 15, 0,
-				1, 1, 1, 1);
-		}
-		else if (punchEnemy)
-		{
-			enemyPunch->Render(rc,
-				screenWidth, screenHeight, size.z,
-				screenWidth / 6, screenHeight / 15, 0,
-				1, 1, 1, 1);
-		}
-		else if (kickEnemy)
-		{
-			enemyKick->Render(rc,
-				screenWidth, screenHeight, size.z,
-				screenWidth / 6, screenHeight / 15, 0,
-				1, 1, 1, 1);
+			if (punchPlayer)
+			{
+				playerPunch->Render(rc,
+					screenWidth - screenWidth / 5, screenHeight - screenHeight / 12, size.z,
+					screenWidth / 6, screenHeight / 15, 0,
+					1, 1, 1, 1);
+			}
+			else if (kickPlayer)
+			{
+				playerKick->Render(rc,
+					screenWidth - screenWidth / 5, screenHeight - screenHeight / 12, size.z,
+					screenWidth / 6, screenHeight / 15, 0,
+					1, 1, 1, 1);
+			}
+			else if (specialPlayer)
+			{
+				playerSpecial->Render(rc,
+					screenWidth - screenWidth / 5, screenHeight - screenHeight / 12, size.z,
+					screenWidth / 6, screenHeight / 15, 0,
+					1, 1, 1, 1);
+			}
+			else if (dancePlayer)
+			{
+				playerDance->Render(rc,
+					screenWidth - screenWidth / 5, screenHeight - screenHeight / 12, size.z,
+					screenWidth / 6, screenHeight / 15, 0,
+					1, 1, 1, 1);
+			}
+			else if (punchEnemy)
+			{
+				enemyPunch->Render(rc,
+					screenWidth - screenWidth / 5, screenHeight - screenHeight / 12, size.z,
+					screenWidth / 6, screenHeight / 15, 0,
+					1, 1, 1, 1);
+			}
+			else if (kickEnemy)
+			{
+				enemyKick->Render(rc,
+					screenWidth - screenWidth / 5, screenHeight - screenHeight / 12, size.z,
+					screenWidth / 6, screenHeight / 15, 0,
+					1, 1, 1, 1);
+			}
 		}
 	}
 }
@@ -282,6 +294,8 @@ void SceneBoss::DrawGUI()
 		ImGui::Begin("Roulette Debug");
 
 		ImGui::Text("rouletteIndex : %d", rouletteIndex);
+
+		ImGui::Text("roulette : %d", roulette);
 
 		ImGui::Text("resultIndex : %d", resultIndex);
 
@@ -334,21 +348,44 @@ void SceneBoss::DrawGUI()
 
 		ImGui::End();
 	}
+
+	{
+		ImGui::Begin("Debug Action");
+
+		ImGui::Text("Player");
+		ImGui::Checkbox("Punch##Player", &punchPlayer);
+		ImGui::Checkbox("Kick##Player", &kickPlayer);
+		ImGui::Checkbox("Special##Player", &specialPlayer);
+		ImGui::Checkbox("Dance##Player", &dancePlayer);
+
+		ImGui::Separator();
+
+		ImGui::Text("Enemy");
+		ImGui::Checkbox("Punch##Enemy", &punchEnemy);
+		ImGui::Checkbox("Kick##Enemy", &kickEnemy);
+
+		ImGui::End();
+	}
 }
 
 int SceneBoss::BossRoulette(float elapsedTime, int maxCount)
 {
-	rouletteTimer += elapsedTime;
+	//rouletteTimer += elapsedTime;
 
-	if (rouletteTimer >= rouletteInterval)
+	if (!isStopping)
 	{
-		rouletteTimer = 0.0f;
+		rouletteTimer += elapsedTime;
 
-		rouletteIndex++;
-
-		if (rouletteIndex >= maxCount)
+		if (rouletteTimer >= rouletteInterval)
 		{
-			rouletteIndex = 0;
+			rouletteTimer = 0.0f;
+
+			rouletteIndex++;
+
+			if (rouletteIndex >= maxCount)
+			{
+				rouletteIndex = 0;
+			}
 		}
 	}
 
@@ -356,28 +393,45 @@ int SceneBoss::BossRoulette(float elapsedTime, int maxCount)
 	if (isRouletteStop)
 	{
 		// 徐々に減速
-		rouletteInterval += 0.001f;
+		rouletteInterval += elapsedTime * 0.25f;
 
 		// 最初の1回だけ結果決定
 		if (resultIndex == -1)
 		{
-			//resultIndex = rand() % maxCount;
-			resultIndex = 0;
+			resultIndex = rand() % maxCount;
 			roulette = resultIndex;
 		}
 
-		// 結果位置に来たら停止 敵モーション終わってからに変更予定
-		if (rouletteIndex == resultIndex &&
-			rouletteInterval >= 0.45f/* && player->GetAnimationEnd()*/)
+		// 結果位置に来た瞬間
+		if (!isStopping &&
+			rouletteIndex == resultIndex &&
+			rouletteInterval >= 0.35f)
+		{
+			isStopping = true;
+			stopTimer = 0.0f;
+		}
+
+		// 停止待機
+		if (isStopping)
 		{
 			stopTimer += elapsedTime;
 
-			if (stopTimer >= 1.5f)
+			if (stopTimer >= 0.5f)
 			{
+				rouletteIndex = resultIndex;
+				roulette = resultIndex;
+
+				rouletteResult(resultIndex);
+
+				rightDown = true;
+
 				isRoulette = false;
 				isRouletteStop = false;
+				isStopping = false;
+
 				resultIndex = -1;
 				rouletteInterval = 0.1f;
+				stopTimer = 0.0f;
 			}
 		}
 	}
@@ -675,6 +729,7 @@ void SceneBoss::levelUp(float elapsedTime)
 	// レベルアップ終了処理
 	if (slideSize < upSlideSize)
 	{
+		isRoulette = true;
 		isLevelUp = false;
 		upSlideSize = 0.0f;
 		nowLevel += 1;

@@ -68,6 +68,7 @@ private:
 	bool isRoulette = false;
 	bool isRouletteStop = false;
 	float stopTimer = 0.0f;
+	bool isStopping = false;
 
 	// ‚»‚Ì‘¼
 	bool attack = 0;
@@ -79,6 +80,7 @@ private:
 	bool punchEnemy = false;
 	bool kickEnemy = false;
 	bool dancePlayer = false;
+	bool rightDown = false;
 
 	// spacekey—p•Ï”
 	enum state
