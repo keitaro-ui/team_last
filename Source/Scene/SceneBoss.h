@@ -68,6 +68,7 @@ private:
 	bool isRoulette = false;
 	bool isRouletteStop = false;
 	float stopTimer = 0.0f;
+	bool isStopping = false;
 
 	// ‚»‚Ì‘¼
 	bool attack = 0;

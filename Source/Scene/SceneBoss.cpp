@@ -105,8 +105,8 @@ void SceneBoss::Update(float elapsedTime)
 	}
 
 	// ルーレットの中身の関数
-	if (isRouletteStop)
-		rouletteResult(roulette);
+	/*if (isRouletteStop)
+		rouletteResult(roulette);*/
 
 	// レベルアップ
 	levelUp(elapsedTime);
@@ -136,6 +136,7 @@ void SceneBoss::Update(float elapsedTime)
 			punchPlayer = false;
 			kickPlayer = false;
 			specialPlayer = false;
+			dancePlayer = false;
 			punchEnemy = false;
 			kickEnemy = false;
 		}
@@ -262,6 +263,13 @@ void SceneBoss::Render()
 					screenWidth / 6, screenHeight / 15, 0,
 					1, 1, 1, 1);
 			}
+			else if (dancePlayer)
+			{
+				playerDance->Render(rc,
+					screenWidth - screenWidth / 5, screenHeight - screenHeight / 12, size.z,
+					screenWidth / 6, screenHeight / 15, 0,
+					1, 1, 1, 1);
+			}
 			else if (punchEnemy)
 			{
 				enemyPunch->Render(rc,
@@ -286,6 +294,8 @@ void SceneBoss::DrawGUI()
 		ImGui::Begin("Roulette Debug");
 
 		ImGui::Text("rouletteIndex : %d", rouletteIndex);
+
+		ImGui::Text("roulette : %d", roulette);
 
 		ImGui::Text("resultIndex : %d", resultIndex);
 
@@ -360,17 +370,22 @@ void SceneBoss::DrawGUI()
 
 int SceneBoss::BossRoulette(float elapsedTime, int maxCount)
 {
-	rouletteTimer += elapsedTime;
+	//rouletteTimer += elapsedTime;
 
-	if (rouletteTimer >= rouletteInterval)
+	if (!isStopping)
 	{
-		rouletteTimer = 0.0f;
+		rouletteTimer += elapsedTime;
 
-		rouletteIndex++;
-
-		if (rouletteIndex >= maxCount)
+		if (rouletteTimer >= rouletteInterval)
 		{
-			rouletteIndex = 0;
+			rouletteTimer = 0.0f;
+
+			rouletteIndex++;
+
+			if (rouletteIndex >= maxCount)
+			{
+				rouletteIndex = 0;
+			}
 		}
 	}
 
@@ -378,29 +393,45 @@ int SceneBoss::BossRoulette(float elapsedTime, int maxCount)
 	if (isRouletteStop)
 	{
 		// 徐々に減速
-		rouletteInterval += 0.001f;
+		rouletteInterval += elapsedTime * 0.25f;
 
 		// 最初の1回だけ結果決定
 		if (resultIndex == -1)
 		{
-			//resultIndex = rand() % maxCount;
-			resultIndex = 0;
+			resultIndex = rand() % maxCount;
 			roulette = resultIndex;
 		}
 
-		// 結果位置に来たら停止 敵モーション終わってからに変更予定
-		if (rouletteIndex == resultIndex &&
-			rouletteInterval >= 0.55f)
+		// 結果位置に来た瞬間
+		if (!isStopping &&
+			rouletteIndex == resultIndex &&
+			rouletteInterval >= 0.35f)
+		{
+			isStopping = true;
+			stopTimer = 0.0f;
+		}
+
+		// 停止待機
+		if (isStopping)
 		{
 			stopTimer += elapsedTime;
 
-			if (stopTimer >= 2.5f)
+			if (stopTimer >= 0.5f)
 			{
+				rouletteIndex = resultIndex;
+				roulette = resultIndex;
+
+				rouletteResult(resultIndex);
+
 				rightDown = true;
+
 				isRoulette = false;
 				isRouletteStop = false;
+				isStopping = false;
+
 				resultIndex = -1;
 				rouletteInterval = 0.1f;
+				stopTimer = 0.0f;
 			}
 		}
 	}
@@ -698,6 +729,7 @@ void SceneBoss::levelUp(float elapsedTime)
 	// レベルアップ終了処理
 	if (slideSize < upSlideSize)
 	{
+		isRoulette = true;
 		isLevelUp = false;
 		upSlideSize = 0.0f;
 		nowLevel += 1;
