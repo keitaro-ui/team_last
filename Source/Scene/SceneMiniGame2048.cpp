@@ -198,12 +198,12 @@ void SceneMiniGame2048::Update(float elapsedTime)
 	//タイトル、リセットへの処理
 	if (GetAsyncKeyState('R') & 0x8000)
 	{
-		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneTitle));
+		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneMiniGame2048));
 	}
 
 	if (GetAsyncKeyState('Z') & 0x8000)
 	{
-		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneMiniGame2048));
+		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneTitle));
 	}
 
 	//ゲームオーバー処理

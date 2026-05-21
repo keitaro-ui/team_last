@@ -58,7 +58,8 @@ private:
 	DirectX::XMFLOAT3 blockSize = {0.0f, 0.0f, 0.0f};
 
 	// ÉSÅ[Éã
-	DirectX::XMFLOAT3 goalPos = { 0.0f, 0.0f, 0.0f };
+	DirectX::XMFLOAT3 goalPosi = {-14.950f, 0.0f,-15.522f };
+	DirectX::XMFLOAT3 goalPos = {0,0,0 };
 
 	DirectX::XMFLOAT3 uiE = { -7.746f,4.0f,-40.663f };
 	//ÉQÅ[ÉWï`âÊ
@@ -66,7 +67,10 @@ private:
 	const float gaugeHeight = 20.0f;
 	bool playBoss();
 
+	bool playMini();
+
 	EnemySlime* enemy;
+	DirectX::XMFLOAT3 screen;
 public:
 
 };
