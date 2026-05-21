@@ -4,7 +4,8 @@
 #include "Scene.h"
 #include "../Game/Player.h"
 #include "../Game/Stage.h"
-
+#include "CameraController.h"
+#include "Game/EnemySlime.h"	
 //タイトルシーン
 class SceneTitle :public Scene
 {
@@ -33,6 +34,9 @@ private:
 	std::unique_ptr<Sprite> sprite3 = nullptr;
 	
 	std::unique_ptr<Player>player = nullptr;
+	std::unique_ptr<EnemySlime>boss = nullptr;
+
+	CameraController* cameraController = nullptr;
 
 	std::unique_ptr<Stage> titlestage = nullptr;
 

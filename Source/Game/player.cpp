@@ -31,7 +31,7 @@ Player::Player(int num)
 		select = 2;
 		model = new Model("Data/Model/Player/Business_Man.mdl");
 		//ƒ‚ƒfƒ‹‚ª‘å‚«‚¢‚Ì‚ÅƒXƒP[ƒŠƒ“ƒO
-		scale.x = scale.y = scale.z = 0.21f;
+		scale.x = scale.y = scale.z = 0.05f;
 
 		model->PlayAnimation(8, false, 0.2f);
 	}
@@ -50,6 +50,12 @@ DirectX::XMFLOAT3 ndc = {};
 //XVˆ—
 void Player::Update(float elapsedTime)
 {
+	/*if (cameraController == nullptr)
+	{
+		return;
+	}*/
+
+
 	shottimer++;
 	//Mouse& mouse = Input::Instance().GetMouse();
 	////ˆÚ“®“ü—Íˆ—
@@ -58,46 +64,51 @@ void Player::Update(float elapsedTime)
 	////ƒWƒƒƒ“ƒv“ü—Íˆ—
 	//InputJump();
 
-	angle.x = -cameraController->getAngle().x;
-	angle.y = cameraController->getAngle().y - DirectX::XM_PIDIV2;
+	if (select == 1)
+	{
 
-	//’e‚ÌŠÔŠu
-	coolgun(elapsedTime);
+		angle.x = -cameraController->getAngle().x;
+		angle.y = cameraController->getAngle().y - DirectX::XM_PIDIV2;
 
-	//’eŠÛ“ü—Íˆ—
-	InputProjectile();
+		//’e‚ÌŠÔŠu
+		coolgun(elapsedTime);
+
+		//’eŠÛ“ü—Íˆ—
+		InputProjectile();
+
+		//’eŠÛXVˆ—
+		projectileManager.Update(elapsedTime);
+
+		//’eŠÛ‚Æ“G‚ÌÕ“Ëˆ—
+		CollisionProjectilesVsEnemies();
+
+
+		if (vibe_interval == false)
+		{
+			float w = 5.0f; // Šp‘¬“x
+
+			v_angle += w * elapsedTime;
+
+			float amp = 0.4f; // U•
+			//cameraController->angle.x = amp * sinf(v_angle);
+			cameraController->angle.x = amp * ((sinf(v_angle) + 1.0) * 0.5);
+			takeSE->Play(false);
+		}
+	}
 
 	//‘¬—Íˆ—XV
 	UpdateVelocity(elapsedTime);
-
-	//’eŠÛXVˆ—
-	projectileManager.Update(elapsedTime);
-
 	//ƒvƒŒƒCƒ„[‚ÆƒGƒlƒ~[‚Æ‚ÌÕ“Ëˆ—
 	CollisionPlayerVsEnemies();
-
-	//’eŠÛ‚Æ“G‚ÌÕ“Ëˆ—
-	CollisionProjectilesVsEnemies();
-
 	
 	//ƒ}ƒEƒX‘€ì
 	//SStws();
 
 	//ƒIƒuƒWƒFƒNƒgs—ñ‚ðXV
 	UpdateTransform();
+	model->UpdateAnimation(elapsedTime);
 	model->UpdateTransform();
 
-	if (vibe_interval == false)
-	{
-		float w = 5.0f; // Šp‘¬“x
-
-		v_angle += w * elapsedTime;
-
-		float amp = 0.4f; // U•
-		//cameraController->angle.x = amp * sinf(v_angle);
-		cameraController->angle.x = amp * ((sinf(v_angle) + 1.0) * 0.5);
-		takeSE->Play(false);
-	}
 
 	//mouse.Update();
 	Mouse& mouse = Input::Instance().GetMouse();
@@ -354,9 +365,33 @@ void Player::DrawDebugGUI()
 	//}
 	//ImGui::End();
 
-	ImGui::Begin("player");
+	ImGui::Begin("Player");
 
-	ImGui::InputFloat3("Position", &position.x);
+	// Position
+	ImGui::DragFloat3("Position", &position.x, 0.1f);
+
+	// Scale
+	ImGui::DragFloat3("Scale", &scale.x, 0.01f, 0.01f, 10.0f);
+
+	ImGui::Separator();
+
+	if (ImGui::Button("Reset Position"))
+	{
+		position = { 0.0f, 0.0f, 0.0f };
+	}
+
+	ImGui::SameLine();
+
+	if (ImGui::Button("Reset Scale"))
+	{
+		scale = { 1.0f, 1.0f, 1.0f };
+	}
+
+	// Œ»ÝˆÊ’u•\Ž¦
+	ImGui::Text("Now Position");
+	ImGui::Text("X : %.2f", position.x);
+	ImGui::Text("Y : %.2f", position.y);
+	ImGui::Text("Z : %.2f", position.z);
 
 	ImGui::End();
 }
@@ -367,11 +402,19 @@ void Player::Render(const RenderContext& rc, ModelRenderer* renderer)
 	//renderer->Render(rc, transform, model, ShaderId::Lambert);
 
 	//’eŠÛ•`‰æˆ—
-	projectileManager.Render(rc, renderer);
-	DirectX::XMFLOAT4X4 projectileTransform = model->GetNode("tipofPistol")->globalTransform;
-	DirectX::XMMATRIX projectileMATRIX = DirectX::XMLoadFloat4x4(&projectileTransform);
-	DirectX::XMMATRIX worldMatrix = DirectX::XMLoadFloat4x4(&transform);
-	DirectX::XMStoreFloat4x4(&projectileTransform, projectileMATRIX * worldMatrix);
+	if (select == 1)
+	{
+		projectileManager.Render(rc, renderer);
+		DirectX::XMFLOAT4X4 projectileTransform = model->GetNode("tipofPistol")->globalTransform;
+		DirectX::XMMATRIX projectileMATRIX = DirectX::XMLoadFloat4x4(&projectileTransform);
+		DirectX::XMMATRIX worldMatrix = DirectX::XMLoadFloat4x4(&transform);
+		DirectX::XMStoreFloat4x4(&projectileTransform, projectileMATRIX * worldMatrix);
+	}
+
+	else if (select == 2)
+	{
+		renderer->Render(rc, transform, model, ShaderId::Lambert);
+	}
 
 	//’eŠÛŽËo‰ÓŠ‚Ì‰ÂŽ‹‰»
 	/*Graphics::Instance().GetShapeRenderer()->RenderSphere(rc,
