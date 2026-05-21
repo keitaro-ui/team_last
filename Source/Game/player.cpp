@@ -59,11 +59,12 @@ void Player::Update(float elapsedTime)
 	shottimer++;
 	//Mouse& mouse = Input::Instance().GetMouse();
 	////移動入力処理
-	InputMove(elapsedTime);
 
 	////ジャンプ入力処理
 	//InputJump();
 
+	//動くやつ
+	InputMove(elapsedTime);
 	if (select == 1)
 	{
 
@@ -82,6 +83,7 @@ void Player::Update(float elapsedTime)
 		//弾丸と敵の衝突処理
 		CollisionProjectilesVsEnemies();
 
+		UpdateVelocity(elapsedTime);
 
 		if (vibe_interval == false)
 		{
@@ -97,7 +99,6 @@ void Player::Update(float elapsedTime)
 	}
 
 	//速力処理更新
-	UpdateVelocity(elapsedTime);
 	//プレイヤーとエネミーとの衝突処理
 	CollisionPlayerVsEnemies();
 	
@@ -109,6 +110,7 @@ void Player::Update(float elapsedTime)
 	model->UpdateAnimation(elapsedTime);
 	model->UpdateTransform();
 
+	Motion();
 
 	//mouse.Update();
 	Mouse& mouse = Input::Instance().GetMouse();
@@ -394,6 +396,16 @@ void Player::DrawDebugGUI()
 	ImGui::Text("Z : %.2f", position.z);
 
 	ImGui::End();
+
+
+	ImGui::SameLine();
+	ImGui::Begin("Action State");
+
+	ImGui::Checkbox("Punch", &punch);
+	ImGui::Checkbox("Kick", &kick);
+	ImGui::Checkbox("Lariat", &lariat);
+
+	ImGui::End();
 }
 
 //描画処理
@@ -610,3 +622,25 @@ void Player::InputJump()
 	}
 }
 
+
+
+void Player::Motion()
+{
+	//攻撃パンチ
+	if (punch == true)
+	{
+		model->PlayAnimation(3, false);
+	}
+
+	//攻撃キック
+	if (kick == true)
+	{
+		model->PlayAnimation(4, false);
+	}
+
+	//攻撃ラリアット
+	if (lariat == true)
+	{
+		model->PlayAnimation(2, false);
+	}
+}

@@ -1,7 +1,7 @@
 #pragma once
 #include "../Source/Game/Stage.h"
 #include "../Source/Game/Player.h"
-#include "CameraController.h"
+#include "Game/CameraController2048.h"
 #include "DirectXMath.h"
 #include "../Source/Scene/Scene.h"
 #include "System/Sprite.h"
@@ -9,6 +9,7 @@
 #include "imgui.h"
 #include <functional>
 #include "../Game/Player.h"
+#include "Game/EnemySlime.h"
 
 class SceneBoss : public Scene
 {
@@ -104,7 +105,7 @@ private:
 	// unique_ptr
 	std::unique_ptr<Stage> stage = nullptr;
 	std::unique_ptr<Player> player = nullptr;
-	std::unique_ptr<CameraController> cameraController = nullptr;
+	std::unique_ptr<CameraController2048> cameraController = nullptr;
 	std::unique_ptr<Sprite> triangle_black = nullptr;
 	std::unique_ptr<Sprite> frames[commands];
 	std::unique_ptr<Sprite> playerPunch;
@@ -113,6 +114,17 @@ private:
 	std::unique_ptr<Sprite> playerDance;
 	std::unique_ptr<Sprite> enemyPunch;
 	std::unique_ptr<Sprite> enemyKick;
+
+	DirectX::XMFLOAT3 postionpl = {-40.925f, 1.0f,41.388f};
+	DirectX::XMFLOAT3 postionboss = {-41.925f, 1.0f,79.016f};
+	DirectX::XMFLOAT3 scalepl{ 0.1f,0.1f,0.1f };
+
+	DirectX::XMFLOAT3 EYE = { -18,22, 36 };
+	DirectX::XMFLOAT3 TARGET = { -284,-91,243 };
+	
+	DirectX::XMFLOAT3 angleboss = { 0,66.0f,0 };
+
+	EnemySlime* boss = nullptr;
 
 	// スクリーンサイズ
 	int screenWidth = 0;
@@ -127,4 +139,6 @@ private:
 	// 技威力調整用関数
 	int SetPlayerPunch();
 	int SetPlayerKick();
+
+	void Motion();
 };

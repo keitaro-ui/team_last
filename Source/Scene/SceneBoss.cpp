@@ -4,6 +4,8 @@
 #include <Camera.h>
 #include <System/Input.h>
 #include <ctime>
+#include "SceneManager.h"
+#include "SceneLoading.h"
 
 void SceneBoss::Initialize()
 {
@@ -16,7 +18,8 @@ void SceneBoss::Initialize()
 
 	//プレイヤー初期設定
 	player = std::make_unique<Player>(1);
-	player->SetPosition({ -22.8f, 1.0f, -26.0f });
+	player->SetPosition({ -11.025f, 1.0f, -21.912f });
+	player->SetScale({ 0.009f,0.009f,0.009f });
 	emp.hp = 1000;
 	emp.special = 150;
 	punch = SetPlayerPunch();
@@ -26,12 +29,15 @@ void SceneBoss::Initialize()
 	pre.hp = 1000;
 	pre.punch = 50;
 	pre.kick = 100;
+	boss = new EnemySlime();
+	boss->SetPosition( {-41.302f,1.0f,79.016f});
+	boss->SetScale( {0.12f, 0.12f,0.12f});
 
-	//カメラ初期設定
+	////カメラ初期設定
 	Graphics& graphics = Graphics::Instance();
 	Camera& camera = Camera::Instance();
 	camera.SetLookAt(
-		DirectX::XMFLOAT3(0, 10, -10),//視点
+		DirectX::XMFLOAT3(0, 7, 30),//視点
 		DirectX::XMFLOAT3(0, 0, 0),//注視点
 		DirectX::XMFLOAT3(0, 1, 0)//上方向
 	);
@@ -42,8 +48,33 @@ void SceneBoss::Initialize()
 		1000.0f//クリップ距離（遠）
 	);
 	//カメラコントローラー初期化
-	cameraController = std::make_unique<CameraController>();
-	player->cameraController = cameraController.get();
+	cameraController = std::make_unique<CameraController2048>();
+	player->cameraController2048 = cameraController.get();
+
+	//カメラコントローラー初期化
+	//cameraController = std::make_unique<CameraController2048>();
+	//Camera& camera = Camera::Instance();
+	////cameraController->angle.y = DirectX::XMConvertToRadians(45.0f);
+	//cameraController->angle.x = DirectX::XMConvertToRadians(78.0f);
+	//cameraController->distance = 29.8f;
+	////player->cameraController = cameraController;
+	//DirectX::XMFLOAT3 target =stage->GetPosition();
+	//cameraController->SetTarget(target);
+
+	////カメラ初期設定
+	//Graphics& graphics = Graphics::Instance();
+	////Camera& camera = Camera::Instance();
+	//camera.SetLookAt(
+	//	DirectX::XMFLOAT3(0, 7, 30),//視点
+	//	DirectX::XMFLOAT3(0, 0, 0),//注視点
+	//	DirectX::XMFLOAT3(0, 1, 0)//上方向
+	//);
+	//camera.SetPerspectiveFov(
+	//	DirectX::XMConvertToRadians(45),//視野角
+	//	graphics.GetScreenWidth() / graphics.GetScreenHeight(),//画面アスペクト比
+	//	0.1f,//クリップ距離（近）
+	//	1000.0f//クリップ距離（遠）
+	//);
 
 	// スクリーンサイズ取得
 	screenWidth = Graphics::Instance().GetScreenWidth();
@@ -98,15 +129,37 @@ void SceneBoss::Update(float elapsedTime)
 	//プレイヤー更新処理
 	player->Update(elapsedTime);
 
+	boss->Update(elapsedTime);
+	Motion();
+
+	Camera::Instance().SetLookAt(
+		EYE,
+		TARGET,
+		DirectX::XMFLOAT3(0, 1, 0));
+
+	player->SetPosition({ postionpl });
+	player->SetScale({ scalepl });
+
+	boss->SetAngle(angleboss);
+
+
 	// ルーレット開始、resultに結果をintで返す
 	if (isRoulette)
 	{
 		resultHitCount = BossRoulette(elapsedTime, commands);
 	}
 
-	// ルーレットの中身の関数
-	/*if (isRouletteStop)
-		rouletteResult(roulette);*/
+	// GameClearかどうか
+	if (pre.hp <= 0)
+	{
+		gameClear = true;
+		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneBoss));
+	}
+	else if (emp.hp <= 0)
+	{
+		gameClear = false;
+		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneBoss));
+	}
 
 	// レベルアップ
 	levelUp(elapsedTime);
@@ -154,7 +207,7 @@ void SceneBoss::Update(float elapsedTime)
 		{
 			isRoulette = true;
 		}*/
-	
+
 		// マウスカーソル
 		if (!player->GetPrev())
 		{
@@ -167,6 +220,12 @@ void SceneBoss::Update(float elapsedTime)
 			Input::Instance().GetMouse().Unlock();
 		}
 	}
+
+	/*Camera::Instance().SetLookAt(
+		cameraController->eye,
+		cameraController->target,*/
+		/*DirectX::XMFLOAT3(0, 1, 0));*/
+
 }
 
 void SceneBoss::Render()
@@ -195,6 +254,9 @@ void SceneBoss::Render()
 		player->Render(rc, modelRenderer);
 
 		player->RenderDebugPrimitive(rc, shapeRenderer);
+
+		boss->Render(rc, modelRenderer);
+		boss->UpdateTransform();
 	}
 
 	// 3Dデバッグ描画
@@ -202,6 +264,8 @@ void SceneBoss::Render()
 		//プレイヤーデバッグプリミティブ描画
 		//player->RenderDebugPrimitive(rc, shapeRenderer);
 
+		player->DrawDebugGUI();
+		boss->DrawDebugGUI();
 	}
 
 	// 2Dスプライト描画
@@ -364,6 +428,30 @@ void SceneBoss::DrawGUI()
 		ImGui::Checkbox("Punch##Enemy", &punchEnemy);
 		ImGui::Checkbox("Kick##Enemy", &kickEnemy);
 
+		ImGui::Separator();
+
+		ImGui::DragFloat3("Eye", &EYE.x);
+		ImGui::DragFloat3("Target", &TARGET.x);
+
+		ImGui::End();
+
+		ImGui::Separator();
+
+
+		ImGui::Begin("Player Transform");
+
+		ImGui::DragFloat3("Position", &postionpl.x, 0.1f);
+		ImGui::DragFloat3("Scale", &scalepl.x, 0.01f);
+
+		ImGui::DragFloat3("Angle", &angleboss.x, 1.0f);
+
+		DirectX::XMFLOAT3 angleRad =
+		{
+			DirectX::XMConvertToRadians(angleboss.x),
+			DirectX::XMConvertToRadians(angleboss.y),
+			DirectX::XMConvertToRadians(angleboss.z)
+		};
+
 		ImGui::End();
 	}
 }
@@ -398,7 +486,8 @@ int SceneBoss::BossRoulette(float elapsedTime, int maxCount)
 		// 最初の1回だけ結果決定
 		if (resultIndex == -1)
 		{
-			resultIndex = rand() % maxCount;
+			//resultIndex = rand() % maxCount;
+			resultIndex = 5;
 			roulette = resultIndex;
 		}
 
@@ -777,4 +866,15 @@ int SceneBoss::SetPlayerKick()
 		emp.kick = 70;
 	}
 	return level;
+}
+
+void SceneBoss::Motion()
+{
+	//パンチ　player
+	if (punchPlayer == true)
+	{
+		player->SetPunch(true);
+	}
+	else
+		player->SetPunch(false);
 }

@@ -12,8 +12,8 @@ Stage::Stage(int num)
 	}
 	else if (num == 1)
 	{
-		model = new Model("Data/Model/Stage/Noroof_offeceroom_scale(1).mdl");
-		scale.x = scale.y = scale.z = 0.1f;
+		model = new Model("Data/Model/Stage/battleroom_2.mdl");
+		scale.x = scale.y = scale.z = 3.0f;
 	}
 
 	else if (num == 2)

@@ -20,10 +20,10 @@ public:
 	void DrawDebugGUI();
 
 	// getter
-	bool GetTitleSwitch() const { return titleSwitch; }
+	//bool GetTitleSwitch() const { return titleSwitch; }
 
 	// setter
-	void SetTitleSwitch(bool flag) { titleSwitch = flag; }
+	//void SetTitleSwitch(bool flag) { titleSwitch = flag; }
 
 protected:
 	//Ž€–S‚µ‚½‚Æ‚«‚ÉŒÄ‚Î‚ê‚é
