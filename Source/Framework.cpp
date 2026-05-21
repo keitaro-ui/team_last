@@ -37,8 +37,8 @@ Framework::Framework(HWND hWnd)
 	ImGuiRenderer::Initialize(hWnd, Graphics::Instance().GetDevice(), Graphics::Instance().GetDeviceContext());
 
 	// ƒV[ƒ“‰Šú‰»
-	//SceneManager::Instance().ChangeScene(new SceneTitle);
-	SceneManager::Instance().ChangeScene(new SceneBoss);
+	SceneManager::Instance().ChangeScene(new SceneTitle);
+	//SceneManager::Instance().ChangeScene(new SceneBoss);
 	//SceneManager::Instance().ChangeScene(new SceneResult);
 }
 
