@@ -670,4 +670,29 @@ void Player::Motion()
 	{
 		model->PlayAnimation(2, false);
 	}
+
+	if (playerDown == true)
+	{
+		model->PlayAnimation(1, false);
+	}
+
+	if (playerHit == true)
+	{
+		model->PlayAnimation(5, false);
+	}
+
+	if (playerDance == true)
+	{
+		model->PlayAnimation(7, false);
+	}
+	
+	if (playerIdle == true)
+	{
+		model->PlayAnimation(0, true);
+	}
+
+	/*if (bossDown == true)
+	{
+		model->PlayAnimation(1, false);
+	}*/
 }

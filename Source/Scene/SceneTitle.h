@@ -39,6 +39,8 @@ private:
 	CameraController* cameraController = nullptr;
 
 	std::unique_ptr<Stage> titlestage = nullptr;
+	DirectX::XMFLOAT3 angleboss = { 0,0,0 };
+	DirectX::XMFLOAT3 anglepl = { 0,0,0 };
 
 	DirectX::XMFLOAT3 pos = { 0,0,0 };
 };

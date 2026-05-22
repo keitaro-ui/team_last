@@ -29,12 +29,12 @@ void SceneTitle::Initialize()
 
     PlayerManager::Instance().Register(player.get());
     //PlayerManager::Instance().GetPlayer()->SetProv(true);
-    PlayerManager::Instance().GetPlayer()->SetPosition({ -10.0f, -3.0f, 6.8f });
+    PlayerManager::Instance().GetPlayer()->SetPosition({ -10.0f, -5.7f, 6.8f });
     //pos = player->GetPosition();
 
     boss = std::make_unique<EnemySlime>();
     boss->SetScale({ 0.06f,0.06f,0.06f });
-    boss->SetPosition({ 12.5f,-1.1f,3.1f });
+    boss->SetPosition({ 12.5f,-8.0f,3.8f });
     //EnemyManager::Instance().Register(boss.get());
     //EnemyManager::Instance().GetEnemy(0)->SetPosition({-10.0f, -3.0f, 6.8f});
 
@@ -92,6 +92,8 @@ void SceneTitle::Update(float elapsedTime)
     Mouse& mouse = Input::Instance().GetMouse();
 
     
+    boss->SetAngle(angleboss);
+    PlayerManager::Instance().GetPlayer()->SetAngle(anglepl);
 
     //左クリックで画面遷移
     //スタート
@@ -224,5 +226,37 @@ void SceneTitle::DrawGUI()
 
     ImGui::DragFloat3("Position", &pos.x, 0.1f);
 
+    ImGui::Separator();
+
+    DirectX::XMFLOAT3 bossAngleDeg;
+    bossAngleDeg.x = DirectX::XMConvertToDegrees(angleboss.x);
+    bossAngleDeg.y = DirectX::XMConvertToDegrees(angleboss.y);
+    bossAngleDeg.z = DirectX::XMConvertToDegrees(angleboss.z);
+
+    if (ImGui::DragFloat3("Boss Angle", &bossAngleDeg.x, 1.0f))
+    {
+        angleboss.x = DirectX::XMConvertToRadians(bossAngleDeg.x);
+        angleboss.y = DirectX::XMConvertToRadians(bossAngleDeg.y);
+        angleboss.z = DirectX::XMConvertToRadians(bossAngleDeg.z);
+
+        boss->SetAngle(angleboss);
+    }
+
+    DirectX::XMFLOAT3 playerAngleDeg;
+    playerAngleDeg.x = DirectX::XMConvertToDegrees(anglepl.x);
+    playerAngleDeg.y = DirectX::XMConvertToDegrees(anglepl.y);
+    playerAngleDeg.z = DirectX::XMConvertToDegrees(anglepl.z);
+
+    if (ImGui::DragFloat3("Player Angle", &playerAngleDeg.x, 1.0f))
+    {
+        anglepl.x = DirectX::XMConvertToRadians(playerAngleDeg.x);
+        anglepl.y = DirectX::XMConvertToRadians(playerAngleDeg.y);
+        anglepl.z = DirectX::XMConvertToRadians(playerAngleDeg.z);
+
+        PlayerManager::Instance().GetPlayer()->SetAngle(anglepl);
+    }
+
     ImGui::End();
+
+
 }

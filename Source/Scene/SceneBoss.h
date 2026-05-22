@@ -145,4 +145,7 @@ private:
 	void Motion();
 	float php = 0;
 	float ehp = 0;
+	
+	float winTimer = 5.0f;
+	float loseTimer = 5.0f;
 };

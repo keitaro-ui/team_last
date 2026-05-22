@@ -19,7 +19,7 @@ EnemySlime::EnemySlime()
 	/*radius = 0.2f;
 	height = 0.0f;*/
 
-	if (titleSwitch == true)
+	//if (titleSwitch == true)
 		model[0]->PlayAnimation(4, true, 0.2f);
 
 	CreateModel();
@@ -144,6 +144,8 @@ void EnemySlime::DrawDebugGUI()
 	ImGui::Text("X : %.2f", position.x);
 	ImGui::Text("Y : %.2f", position.y);
 	ImGui::Text("Z : %.2f", position.z);
+
+	ImGui::Checkbox("TitleSwitch", &titleSwitch);
 
 	ImGui::End();
 }

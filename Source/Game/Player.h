@@ -87,10 +87,14 @@ private:
     //bool camerachange = false;
 
     bool punch = false;
-
     bool kick = false;
-
     bool lariat = false;
+
+    bool playerDown = false;
+    bool bossDown = false;
+    bool playerHit = false;
+    bool playerDance = false;
+    bool playerIdle = false;
 
     DirectX::XMFLOAT3 camerapos = { -7.349f,1.0f,-36.349f };
     bool camerachange = false;
@@ -163,4 +167,18 @@ public:
     bool GetPunch() const { return punch; }
     bool GetKick() const { return kick; }
     bool GetLariat() const { return lariat; }
+
+    // getter
+    bool GetPlayerDown() const { return playerDown; }
+    bool GetBossDown() const { return bossDown; }
+
+    // setter
+    void SetPlayerDown(bool flag) { playerDown = flag; }
+    void SetBossDown(bool flag) { bossDown = flag; }
+
+    bool GetPlayerHit()const { return playerHit; }
+    void SetPlayerHit(bool flag) { playerHit = flag; }
+
+    bool GetPlayerDance()const { return playerDance; }
+    void SetPlayerDance(bool flag) { playerDance = flag; }
 };

@@ -154,16 +154,25 @@ void SceneBoss::Update(float elapsedTime)
 		resultHitCount = BossRoulette(elapsedTime, commands);
 	}
 
+
 	// GameClearかどうか
 	if (pre.hp <= 0)
 	{
+		winTimer -= elapsedTime;
+		//player->SetBossDown(true);
+		if(winTimer<=0.0f)
 		gameClear = true;
 		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneBoss));
 	}
 	else if (emp.hp <= 0)
 	{
-		gameClear = false;
-		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneBoss));
+		loseTimer -= elapsedTime;
+		//player->SetPlayerDown(true);
+		if (loseTimer <= 0.0f)
+		{
+			gameClear = false;
+			SceneManager::Instance().ChangeScene(new SceneLoading(new SceneBoss));
+		}
 	}
 
 	// レベルアップ
@@ -515,7 +524,7 @@ int SceneBoss::BossRoulette(float elapsedTime, int maxCount)
 		if (resultIndex == -1)
 		{
 			//resultIndex = rand() % maxCount;
-			resultIndex = 5;
+			resultIndex = 4;
 			roulette = resultIndex;
 		}
 
@@ -905,4 +914,25 @@ void SceneBoss::Motion()
 	}
 	else
 		player->SetPunch(false);
+
+	if (kickPlayer == true)
+	{
+		player->SetKick(true);
+	}
+	else
+		player->SetKick(false);
+
+	if (specialPlayer == true)
+	{
+		player->SetLariat(true);
+	}
+	else
+		player->SetLariat(false);
+
+	if (dancePlayer == true)
+	{
+		player->SetPlayerDance(true);
+	}
+	else
+		player->SetPlayerDance(false);
 }
