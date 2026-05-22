@@ -33,27 +33,37 @@ public:
 	// GUI描画
 	void DrawGUI() override;
 
+	// scoreのゲッター
+	int GetScore() const
+	{
+		return score;
+	}
 private:
 
 	float game_timer;
+	float limit_timer;
 	const float coolTime = 1.0f;
 
 	std::unique_ptr<Stage> stage = nullptr;
 
 	std::unique_ptr<Player2048> player2048 = nullptr;
 
-	Sprite* sprite = nullptr;
-	Sprite* sprite_number = nullptr;
-	Sprite* sprite_text = nullptr;
+	std::unique_ptr<Sprite> sprite = nullptr;
+	std::unique_ptr<Sprite> sprite_number = nullptr;
+	std::unique_ptr<Sprite> sprite_text = nullptr;
+	std::unique_ptr<Sprite> sprite_black = nullptr;
 
 	CameraController2048* cameraController = nullptr;
+
+	// スクリーンサイズ
+	float screenWidth = 0;
+	float screenHeight = 0;
 
 	//使う箱の種類
 	std::unique_ptr<Box> boxes[11];
 
 	//重なったらtrue
 	bool overlap = false;
-
 	bool up = false;
 
 	//mapの1マスの間隔
@@ -62,6 +72,8 @@ private:
 	DirectX::XMFLOAT3 startPos;
 
 	int count;
+
+	int score;
 
 	void UpdateCursorToggle();
 };

@@ -60,7 +60,7 @@ void SceneGameShooting::Initialize()
 	player->cameraController = cameraController.get();
 
 	//エネミー初期化
-	EnemyManager& enemyManager = EnemyManager::Instance();
+	//EnemyManager& enemyManager = EnemyManager::Instance();
 	//EnemySlime* target = new EnemySlime();
 	//enemyManager.Register(targets[2]);
 
@@ -108,7 +108,6 @@ void SceneGameShooting::Initialize()
 		num++;
 
 		enemyManager.Register(std::move(balloon));
-
 	}
 
 	//マウス位置の取得とロック
@@ -156,6 +155,17 @@ void SceneGameShooting::Update(float elapsedTime)
 
 	const GamePadButton anyButton =
 		GamePad::BTN_B;
+
+	score = enemyManager.Size();
+
+	if (score < 5)
+		count = 3;
+	else if (score >= 5 && count < 15)
+		count = 2;
+	else
+		count = 3;
+
+
 	
 	if (timer<=0.0f)
 	{

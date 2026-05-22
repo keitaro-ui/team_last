@@ -15,6 +15,11 @@ void EnemyManager::Remove(Enemy* enemy)
 	removes.insert(enemy);
 }
 
+int EnemyManager::Size()
+{
+	return enemies.size();
+}
+
 //XVˆ—
 void EnemyManager::Update(float elapsedTime)
 {

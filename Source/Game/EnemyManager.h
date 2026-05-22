@@ -28,6 +28,9 @@ public:
 	//エネミー削除
 	void Remove(Enemy* enemy);
 
+	//エネミー数獲得
+	int Size();
+
 	//更新処理
 	void Update(float elapsedTime);
 

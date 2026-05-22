@@ -35,6 +35,11 @@ public:
 
 	void RenderUI(RenderContext rc);
 
+	int GetCount() const
+	{
+		return count;
+	}
+
 private:
 	// unique_ptr
 	std::unique_ptr<Stage> stage = nullptr;
@@ -66,6 +71,11 @@ private:
 	//ƒQ[ƒW•`‰æ
 	const float gaugeWidth = 120.0f;
 	const float gaugeHeight = 20.0f;
+
+	EnemyManager& enemyManager = EnemyManager::Instance();
+
+	int count;
+	int score;
 
 public:
 

@@ -8,6 +8,7 @@
 #include "algorithm"
 #include "SceneManager.h"
 #include "SceneTitle.h"
+#include "SceneGame.h"
 #include "SceneLoading.h"
 #include"../Game/PlayerManager.h"
 #include "../Game/GridManager.h"
@@ -34,9 +35,10 @@ void SceneMiniGame2048::Initialize()
 	//GridManager::Instance().Register(Grid::Instance().)
 
 	//レティクル関数
-	sprite = new Sprite("Data/Sprite/rzSprite.png");
-	sprite_number = new Sprite("Data/Sprite/number.png");
-	sprite_text = new Sprite("Data/Sprite/残り時間.png");
+	sprite = std::make_unique<Sprite>("Data/Sprite/rzSprite.png");
+	sprite_number = std::make_unique<Sprite>("Data/Sprite/number.png");
+	sprite_text = std::make_unique<Sprite>("Data/Sprite/残り時間.png");
+	sprite_black = std::make_unique<Sprite>("Data/Sprite/blackscreen.png");
 
 	//BOXモデル読み込み
 	for (int i = 0; i < 11; i++)
@@ -82,6 +84,13 @@ void SceneMiniGame2048::Initialize()
 
 	PlayerManager::Instance().GetPlayer2048()->SetProv(false);
 
+	// スクリーンサイズ取得
+	screenWidth = Graphics::Instance().GetScreenWidth();
+	screenHeight = Graphics::Instance().GetScreenHeight();
+
+	limit_timer = 30;
+	score = 0;
+
 	//debug
 	{
 		//Grid::Instance().map[4][3] = 1;
@@ -108,10 +117,6 @@ void SceneMiniGame2048::Finalize()
 		cameraController = nullptr;
 	}
 
-	delete sprite;
-	delete sprite_number;
-	delete sprite_text;
-
 	Grid::Instance().deleteMap();
 	Grid::Instance().boxAnimeData.clear();
 
@@ -127,6 +132,7 @@ void SceneMiniGame2048::Update(float elapsedTime)
 
 	//ゲームタイマー更新処理
 	game_timer += elapsedTime * 2;
+	limit_timer -= elapsedTime;
 
 	//ステージ更新処理
 	stage->Update(elapsedTime);
@@ -143,6 +149,19 @@ void SceneMiniGame2048::Update(float elapsedTime)
 	//シーン遷移
 	GamePad& gamePad = Input::Instance().GetGamePad();
 	const GamePadButton anyButton = GamePad::BTN_START;
+
+	if (limit_timer <= 1.0f)
+	{
+		int fullscore = Grid::Instance().GetScore();
+		if (fullscore < 100)
+			score = 1;
+		else if (fullscore < 200)
+			score = 2;
+		else
+			score = 3;
+
+		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneGame));
+	}
 
 	//方向キーでBox動かす関数
 	if (game_timer > coolTime)
@@ -233,6 +252,14 @@ void SceneMiniGame2048::Render()
 	Camera& camera = Camera::Instance();
 	rc.view = camera.GetView();
 	rc.projection = camera.GetProjection();
+
+	
+
+	// 背景色の黒を描画
+	sprite_black->Render(rc,
+		0, 0, 0,
+		screenWidth, screenHeight, 0,
+		1, 1, 1, 1);
 
 	// 3Dモデル描画
 	{
@@ -377,6 +404,60 @@ void SceneMiniGame2048::Render()
 					372.5f, 514,
 					0,
 					1, 1, 1, 1);
+			}
+
+			// 制限時間描画
+			{
+				int temp = static_cast<int>(limit_timer);
+
+				int digits[10];
+				int digitCount = 0;
+
+				if (temp == 0)
+				{
+					digits[digitCount++] = 0;
+				}
+				else
+				{
+					while (temp > 0)
+					{
+						digits[digitCount++] = temp % 10;
+						temp /= 10;
+					}
+				}
+
+				// 数字描画
+				float startX = 1150.0f;
+				float startY = 150.0f;
+
+				// 「残り時間」テキスト
+				sprite_text->Render(rc,
+					850.0f,
+					startY,
+					0,
+					256,
+					64,
+					0,
+					1, 1, 1, 1
+				);
+
+				for (int i = 0; i < digitCount; i++)
+				{
+					int num = digits[i];
+
+					sprite_number->Render(rc,
+						startX - (24 * 2 * i),
+						startY,
+						0,
+						32 * 2,
+						32 * 2,
+						372.5f * num,
+						0,
+						372.5f,
+						514,
+						0,
+						1, 1, 1, 1);
+				}
 			}
 		}
 	}
