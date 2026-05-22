@@ -101,6 +101,7 @@ private:
 
     //“–‚½‚è”»’è‚Ì”¼Œa
     float hitRadius = 0.55f;
+    float hitRadiusi = 2.0f;
      
     int select = 1;
     int currentMotion = 0;
@@ -109,7 +110,7 @@ public:
     CameraController* cameraController = nullptr;
     CameraController2048* cameraController2048 = nullptr;
 
-    float recoiltimer = 3.0f;
+    float recoiltimer = 4.0f;
     bool interval = true;
     bool vibe_interval = true;
 
@@ -157,6 +158,7 @@ public:
     //}
 
     float GethitRadius() { return hitRadius; }
+    float GethitRadiusi() { return hitRadiusi; }
 
     void Motion();
 

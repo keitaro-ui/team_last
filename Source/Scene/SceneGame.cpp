@@ -16,6 +16,7 @@
 #include "../Game/MiniGame.h"
 #include "../Scene/SceneMiniGame2048.h"
 #include "../Scene/SceneMiniGameShooting.h"
+#include"../Scene/SceneMiniGameSelect.h"
 
 // 初期化
 void SceneGame::Initialize()
@@ -39,7 +40,7 @@ void SceneGame::Initialize()
 	sprite = std::make_unique<Sprite>("Data/Sprite/レティクル.png");
 	sprite_number = std::make_unique<Sprite>("Data/Sprite/number.png");
 	sprite_text = std::make_unique<Sprite>("Data/Sprite/残り時間.png");
-	spriteUI = std::make_unique<Sprite>("Data/Sprite/ok.png");
+	spriteUI = std::make_unique<Sprite>("Data/Sprite/interact.png");
 
 	//3DModel読み込み
 
@@ -139,11 +140,16 @@ void SceneGame::Update(float elapsedTime)
 	//game_timer++;
 	//game_timer -= elapsedTime;
 
-	if (playBoss())
+	if (playBoss()/*&&GetAsyncKeyState(VK_SPACE) & 0x8000*/)
 		//if (game_timer < 0)
 		//if (gamePad.GetButtonDown() & anyButton)
 	{
 		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneBoss));
+	}
+
+	if (playMini()&& GetAsyncKeyState(VK_SPACE) & 0x8000)
+	{
+		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneMiniGameSelect));
 	}
 
 	//sceneminigameselectに行く
@@ -380,7 +386,7 @@ void SceneGame::RenderUI(RenderContext rc)
 		projection, view, world
 	);
 
-	DirectX::XMFLOAT3 screen;
+
 	DirectX::XMStoreFloat3(&screen, screenPos);
 
 	if (screen.z < 0.0f || screen.z > 1.0f)
@@ -395,7 +401,7 @@ void SceneGame::RenderUI(RenderContext rc)
 	spriteUI->Render(rc,
 		screen.x, screen.y, 0.0f,
 		gaugeWidth * 2,
-		gaugeHeight * 2,
+		gaugeHeight * 4,
 		0,
 		0, 1, 1, 1
 	);
@@ -410,6 +416,26 @@ bool SceneGame::playBoss()
 	// XZ平面で距離チェック（2D扱い）
 	float dx = playerPos.x - goalPos.x;
 	float dz = playerPos.z - goalPos.z;
+
+	// 距離²
+	float distSq = dx * dx + dz * dz;
+
+	// 半径内に入ったら
+	if (distSq <= radius * radius)
+		return true;
+	else
+		return false;
+}
+
+// playerの当たり判定がgoalPosに当たったらtrue返すよ
+bool SceneGame::playMini()
+{
+	DirectX::XMFLOAT3 playerPos = player->GetPosition();
+	float radius = player->GethitRadiusi();
+
+	// XZ平面で距離チェック（2D扱い）
+	float dx = playerPos.x - goalPosi.x;
+	float dz = playerPos.z - goalPosi.z;
 
 	// 距離²
 	float distSq = dx * dx + dz * dz;
