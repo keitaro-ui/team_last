@@ -525,8 +525,8 @@ int SceneBoss::BossRoulette(float elapsedTime, int maxCount)
 		// Å‰‚Ì1‰ñ‚¾‚¯Œ‹‰ÊŒˆ’è
 		if (resultIndex == -1)
 		{
-			//resultIndex = rand() % maxCount;
-			resultIndex = 4;
+			resultIndex = rand() % maxCount;
+			//resultIndex = 4;
 			roulette = resultIndex;
 		}
 
