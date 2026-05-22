@@ -6,6 +6,8 @@
 #include <ctime>
 #include "SceneManager.h"
 #include "SceneLoading.h"
+#include "SceneMiniGameShooting.h"
+#include "SceneMiniGame2048.h"
 
 void SceneBoss::Initialize()
 {
@@ -223,16 +225,16 @@ void SceneBoss::Update(float elapsedTime)
 		}*/
 
 		// マウスカーソル
-		if (!player->GetPrev())
-		{
-			// マウス位置の取得とロック
-			Input::Instance().GetMouse().Lock();
-			cameraController->MouseCamera(elapsedTime);
-		}
-		else
-		{
-			Input::Instance().GetMouse().Unlock();
-		}
+		//if (!player->GetPrev())
+		//{
+		//	// マウス位置の取得とロック
+		//	Input::Instance().GetMouse().Lock();
+		//	cameraController->MouseCamera(elapsedTime);
+		//}
+		//else
+		//{
+		//	Input::Instance().GetMouse().Unlock();
+		//}
 	}
 
 	/*Camera::Instance().SetLookAt(
@@ -391,7 +393,7 @@ void SceneBoss::Render()
 
 void SceneBoss::DrawGUI()
 {
-	{
+	/*{
 		ImGui::Begin("Roulette Debug");
 
 		ImGui::Text("rouletteIndex : %d", rouletteIndex);
@@ -490,7 +492,7 @@ void SceneBoss::DrawGUI()
 		};
 
 		ImGui::End();
-	}
+	}*/
 }
 
 int SceneBoss::BossRoulette(float elapsedTime, int maxCount)
@@ -871,7 +873,8 @@ void SceneBoss::levelUp(float elapsedTime)
 
 int SceneBoss::SetPlayerPunch()
 {
-	int level = 1;
+	SceneGameShooting scene;
+	int level = scene.GetCount();
 	if (level == 1)
 	{
 		emp.punch = 15;
@@ -889,7 +892,8 @@ int SceneBoss::SetPlayerPunch()
 
 int SceneBoss::SetPlayerKick()
 {
-	int level = 1;
+	SceneMiniGame2048 scene;
+	int level = scene.GetScore();
 	if (level == 1)
 	{
 		emp.kick = 30;

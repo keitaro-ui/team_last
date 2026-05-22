@@ -16,7 +16,7 @@
 void SceneTutorial::Initialize()
 {
 	spr1 = std::make_unique<Sprite>("Data/Sprite/tutorial_office1.png");
-	spr2 = std::make_unique<Sprite>("Data/Sprite/newlose.png");
+	spr2 = std::make_unique<Sprite>("Data/Sprite/fighting_tutorial.png");
 
 	//マウス位置の取得とロック
 	Input::Instance().GetMouse().Lock();

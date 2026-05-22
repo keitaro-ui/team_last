@@ -203,7 +203,7 @@ void SceneTitle::Render()
         // 3Dƒ‚ƒfƒ‹•`‰æ
         {
             titlestage->UpdateTransform();
-            titlestage->Render(rc, modelRenderer);
+            //titlestage->Render(rc, modelRenderer);
             player->Render(rc, modelRenderer);
             boss->UpdateTransform();
             boss->Render(rc, modelRenderer);
@@ -212,8 +212,8 @@ void SceneTitle::Render()
 
         //DrawGUI();
 
-        player->DrawDebugGUI();
-        boss->DrawDebugGUI();
+       /* player->DrawDebugGUI();
+        boss->DrawDebugGUI();*/
     }
     
 }
@@ -222,7 +222,7 @@ void SceneTitle::Render()
 void SceneTitle::DrawGUI()
 {
 
-    ImGui::Begin("Player Position");
+   /* ImGui::Begin("Player Position");
 
     ImGui::DragFloat3("Position", &pos.x, 0.1f);
 
@@ -256,7 +256,7 @@ void SceneTitle::DrawGUI()
         PlayerManager::Instance().GetPlayer()->SetAngle(anglepl);
     }
 
-    ImGui::End();
+    ImGui::End();*/
 
 
 }

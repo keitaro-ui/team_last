@@ -43,7 +43,7 @@ void SceneGame::Initialize()
 	spriteUI = std::make_unique<Sprite>("Data/Sprite/interact.png");
 
 	//3DModel読み込み
-
+	ShowCursor(true);
 
 	//カメラ初期設定
 	Graphics& graphics = Graphics::Instance();
@@ -106,6 +106,7 @@ void SceneGame::Finalize()
 	SoundManager::Instance().GetSound(SoundList::gameBGM)->Stop();
 
 	game_timer = 0;
+	ShowCursor(false);
 }
 
 // 更新処理
@@ -186,11 +187,11 @@ void SceneGame::Update(float elapsedTime)
 	//}
 
 	//次のシーンが完了したらシーンを切り替える
-	if (GetAsyncKeyState('F') & 0x0001)
-	{
-		//SceneManager::Instance().ChangeScene(new SceneLoading(new SceneMiniGame2048));
-		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneGameShooting));
-	}
+	//if (GetAsyncKeyState('F') & 0x0001)
+	//{
+	//	//SceneManager::Instance().ChangeScene(new SceneLoading(new SceneMiniGame2048));
+	//	SceneManager::Instance().ChangeScene(new SceneLoading(new SceneGameShooting));
+	//}
 
 	//Ekey lock
 	if (player.get()->GetPrev() == false)
@@ -253,7 +254,7 @@ void SceneGame::Render()
 		//EnemyManager::Instance().RenderDebugPrimitive(rc, shapeRenderer);
 
 		//当たり判定デバッグプリミティブ描画
-		physics.RenderDebugPrimitive(rc, shapeRenderer);
+		//physics.RenderDebugPrimitive(rc, shapeRenderer);
 	}
 
 	// 2Dスプライト描画
@@ -265,62 +266,62 @@ void SceneGame::Render()
 			0,
 			1, 1, 1, 1);
 
-		sprite_text->Render(rc,
-			950, 0, 0, 120, 80, 0, 1, 1, 1, 1);
+		//sprite_text->Render(rc,
+		//	950, 0, 0, 120, 80, 0, 1, 1, 1, 1);
 
-		int n[2]{};
-		//n[0] = static_cast<int>(game_timer) / 100 % 10;
-		n[0] = static_cast<int>(game_timer) / 10 % 10;
-		n[1] = static_cast<int>(game_timer) % 10;
+		//int n[2]{};
+		////n[0] = static_cast<int>(game_timer) / 100 % 10;
+		//n[0] = static_cast<int>(game_timer) / 10 % 10;
+		//n[1] = static_cast<int>(game_timer) % 10;
 
-		for (int i = 0; i < 2; i++)
-		{
-			sprite_number->Render(rc,
-				32 * 2 * i + 1100, 00,
-				0,
-				32 * 2, 32 * 2,
-				372.5 * n[i], 0,
-				372.5, 514,
-				0,
-				1, 1, 1, 1);
-		}
+		//for (int i = 0; i < 2; i++)
+		//{
+		//	sprite_number->Render(rc,
+		//		32 * 2 * i + 1100, 00,
+		//		0,
+		//		32 * 2, 32 * 2,
+		//		372.5 * n[i], 0,
+		//		372.5, 514,
+		//		0,
+		//		1, 1, 1, 1);
+		//}
 	}
 
 	//UI
 	{
-		RenderUI(rc);
+		//RenderUI(rc);
 	}
 }
 
 // GUI描画
 void SceneGame::DrawGUI()
 {
-	//プレーヤーデバッグ処理
-	player->DrawDebugGUI();
+	////プレーヤーデバッグ処理
+	//player->DrawDebugGUI();
 
-	typing->DrawDebugGUI();
+	//typing->DrawDebugGUI();
 
-	ImGui::Begin("Debug");
+	//ImGui::Begin("Debug");
 
-	// 変更検知フラグ
-	bool changed = false;
+	//// 変更検知フラグ
+	//bool changed = false;
 
-	// DragFloatは「値が変わったらtrue返す」
-	changed |= ImGui::DragFloat("xDis", &xDis, 0.1f);
-	changed |= ImGui::DragFloat("zDis", &zDis, 0.1f);
-	changed |= ImGui::DragFloat("obbPosX", &obbPos.x, 0.1f);
-	changed |= ImGui::DragFloat("obbPosY", &obbPos.y, 0.1f);
-	changed |= ImGui::DragFloat("obbPosZ", &obbPos.z, 0.1f);
+	//// DragFloatは「値が変わったらtrue返す」
+	//changed |= ImGui::DragFloat("xDis", &xDis, 0.1f);
+	//changed |= ImGui::DragFloat("zDis", &zDis, 0.1f);
+	//changed |= ImGui::DragFloat("obbPosX", &obbPos.x, 0.1f);
+	//changed |= ImGui::DragFloat("obbPosY", &obbPos.y, 0.1f);
+	//changed |= ImGui::DragFloat("obbPosZ", &obbPos.z, 0.1f);
 
-	ImGui::End();
+	//ImGui::End();
 
-	// 値が変わったときだけ再生成
-	if (changed)
-	{
-		physics.Clear();
+	//// 値が変わったときだけ再生成
+	//if (changed)
+	//{
+	//	physics.Clear();
 
-		physics.AddObb(obbPos, { xDis, 0, zDis }, 0);
-	}
+	//	physics.AddObb(obbPos, { xDis, 0, zDis }, 0);
+	//}
 }
 
 //void SceneGame::RenderUI(RenderContext rc)

@@ -50,7 +50,10 @@ void SceneMiniGameSelect::Update(float elapsedTime)
 	float xPos = 50.0f;
 	float yPos = screenHeight / 3;
 
-	if(modeFlow && mouse.GetButtonDown() & Mouse::BTN_LEFT && cooltime > 0.2f)
+	GamePad& gamePad = Input::Instance().GetGamePad();
+	if (gamePad.GetButtonDown() & GamePad::BTN_START && cooltime > 1.0f)
+
+	if(modeFlow && gamePad.GetButtonDown() & GamePad::BTN_START && cooltime > 0.2f)
 		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneMiniGame2048));
 
 	if (mouse.GetButtonDown() & Mouse::BTN_LEFT)
@@ -67,8 +70,8 @@ void SceneMiniGameSelect::Update(float elapsedTime)
 	if(modeShot2 && mouse.GetButtonDown() & Mouse::BTN_LEFT)
 		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneGameShooting));
 
-	if (modeShot1 && mouse.GetButtonDown() & Mouse::BTN_LEFT && cooltime > 0.2f)
-		modeShot2 = true;
+	if (gamePad.GetButtonDown()& GamePad::BTN_START&& cooltime > 0.2f)
+		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneGameShooting));
 		
 	if (mouse.GetButtonDown() & Mouse::BTN_LEFT)
 	{
@@ -76,7 +79,7 @@ void SceneMiniGameSelect::Update(float elapsedTime)
 		{
 			if (cursorPos.y >= yPos && cursorPos.y <= yPos + size.y)
 			{
-				modeShot1 = true;
+				modeShot2 = true;
 			}
 		}
 	}

@@ -175,7 +175,7 @@ void SceneGameShooting::Update(float elapsedTime)
 	//次のシーンが完了したらシーンを切り替える
 	if (GetAsyncKeyState('F') & 0x0001)
 	{
-		SceneManager::Instance().ChangeScene(new SceneLoading(new SceneMiniGame2048));
+		//SceneManager::Instance().ChangeScene(new SceneLoading(new SceneMiniGame2048));
 	}
 
 	////Ekey loxk
@@ -240,7 +240,7 @@ void SceneGameShooting::Render()
 		//EnemyManager::Instance().RenderDebugPrimitive(rc, shapeRenderer);
 
 		//当たり判定デバッグプリミティブ描画
-		physics.RenderDebugPrimitive(rc, shapeRenderer);
+		//physics.RenderDebugPrimitive(rc, shapeRenderer);
 	}
 
 	// 2Dスプライト描画

@@ -10,6 +10,7 @@
 #include "imgui.h"
 #include "../Source/Game/MiniGame.h"
 #include "../Game/Balloon.h"
+#include "Game/EnemyManager.h"
 
 // ƒQ[ƒ€ƒV[ƒ“
 class SceneGameShooting : public Scene
